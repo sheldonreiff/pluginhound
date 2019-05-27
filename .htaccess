@@ -1,0 +1,13 @@
+<Files phpinfo>
+    Order deny,allow
+    Deny from all
+    Allow from 127.0.0.1
+    Allow from 10.0.0.0/8
+</Files>
+
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^public
+RewriteRule ^(.*)$ public/$1 [L]
+
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]

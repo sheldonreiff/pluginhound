@@ -1,0 +1,54 @@
+version: '3'
+services:
+  app:
+    container_name: waves-saver-app
+    build:
+      context: ./
+      dockerfile: app.dockerfile
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./:/usr/local/apache2/htdocs/
+    networks:
+      - app-network
+  web:
+    container_name: waves-saver-web
+    build:
+      context: ./
+      dockerfile: web.dockerfile
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./:/usr/local/apache2/htdocs/
+    ports:
+      - 3002:80
+    networks:
+      - app-network
+  db:
+    container_name: waves-saver-db
+    restart: always
+    ports:
+      - 3003:3306
+    build:
+      context: ./
+      dockerfile: database.dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: dev
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+      MYSQL_DATABASE: waves-saver
+    tty: true
+    networks:
+        - app-network
+  redis:
+    container_name: waves-saver-redis
+    build:
+      context: ./
+      dockerfile: redis.dockerfile
+    ports:
+      - 3004:6379
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
