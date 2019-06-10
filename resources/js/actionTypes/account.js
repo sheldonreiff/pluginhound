@@ -1,0 +1,1 @@
+export const CHANGE_TAB = 'account/CHANGE_TAB';
