@@ -13,4 +13,5 @@ const mix = require('laravel-mix');
 
 mix.react('resources/js/index.js', 'public/js')
    .sass('resources/sass/overrides.scss', 'public/css')
-   .sass('resources/sass/app.scss', 'public/css');
+   .sass('resources/sass/app.scss', 'public/css')
+   .version();

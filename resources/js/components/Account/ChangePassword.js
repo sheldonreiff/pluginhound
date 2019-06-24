@@ -24,29 +24,25 @@ class ChangePassword extends React.Component{
         this.state = this.initialState;
     }
 
-    passwordsDoNotMatch = (isSubmit) => {
-        const { submittedOnce, newPassword, confirmNewPassword, noMatch  } = this.state;
+    // passwordsDoNotMatch = (isSubmit = false) => {
+    //     const { submittedOnce, newPassword, confirmNewPassword, noMatch  } = this.state;
         
-        if(isSubmit && !submittedOnce){
-            this.setState({ submittedOnce: true});
-        }
+    //     if(isSubmit && !submittedOnce){
+    //         this.setState({ submittedOnce: true});
+    //     }
 
-        if(isSubmit || submittedOnce){
-            const isNotMatch = newPassword !== confirmNewPassword;
+    //     if(isSubmit || submittedOnce){
+    //         const isNotMatch = newPassword !== confirmNewPassword;
 
-            if(isNotMatch !== noMatch){
-                this.setState({ noMatch: isNotMatch});
-            }
-            return isNotMatch;
-        }
-    }
+    //         if(isNotMatch !== noMatch){
+    //             this.setState({ noMatch: isNotMatch });
+    //         }
+    //         return isNotMatch;
+    //     }
+    // }
 
     handlePasswordSubmit = (e) => {
         e.preventDefault();
-        
-        if(this.passwordsDoNotMatch(true)){
-            this.setState({ noMatch: true });
-        }
     }
 
     handleChange = (key, value) => {

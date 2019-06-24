@@ -5,9 +5,9 @@ import LoginModal from './LoginModal';
 import { darken } from 'polished';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { toggleLoginModal } from '../../actions/user';
+import { toggleLoginModal, toggleRegisterModal } from '../../actions/user';
 import SignInOut from './SignInOut';
-import { NavLink } from 'react-router-dom';
+import RegisterModal from './RegisterModal';
 
 
 const NavContainer = styled.div`
@@ -111,11 +111,13 @@ class Header extends Component {
                                     >
                                         Login
                                     </LoginButton>
-                                    <RegisterButton
-                                        onClick={() => this.setState({ showRegister: true })}
-                                    >
-                                        Register
-                                    </RegisterButton>
+                                    {user.status !== 'REGISTERED' &&
+                                        <RegisterButton
+                                            onClick={() => this.props.toggleRegisterModal(true)}
+                                        >
+                                            Register
+                                        </RegisterButton>
+                                    }
                                 </Fragment>
                             }
                         </Navbar.Container>
@@ -126,13 +128,19 @@ class Header extends Component {
                     show={this.props.user.loginOpen}
                     close={() => this.props.toggleLoginModal(false)}
                 />
+
+                <RegisterModal
+                    show={this.props.user.registerOpen}
+                    close={() => this.props.toggleRegisterModal(false)}
+                />
             </Fragment>
         );
     }
 }
 
 const mapDispatchToProps = {
-    toggleLoginModal
+    toggleLoginModal,
+    toggleRegisterModal
 };
 
 const mapStateToProps = state => ({

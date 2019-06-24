@@ -20,6 +20,7 @@ import Home from './components/Home/Home';
 import Account from './components/Account/Account';
 import Header from './components/Header/Header';
 import ChangePassword from './components/Account/ChangePassword';
+import VerifyEmail from './components/VeifyEmail/VerifyEmail';
 
 export default class App extends Component
 {
@@ -36,6 +37,7 @@ export default class App extends Component
                         <Switch>
                             <Route path='/' exact component={Home} />
                             <Route path='/account' component={Account} />
+                            <Route path='/verify' component={VerifyEmail} />
                         </Switch> 
                         <Container>
                             <Route path='/account/password' exact component={ChangePassword} />

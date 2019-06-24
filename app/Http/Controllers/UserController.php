@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\User;
+use App\Rules\Password;
+
 
 class UserController extends Controller
 {
@@ -26,13 +28,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
-            'email' => 'email|required',
-            'name' => 'string|required|min:2',
-            'password' => 'string|required|min:10'
+            'email' => 'email|required|unique:users',
+            'first_name' => 'string|required|min:2',
+            'last_name' => 'string|required|min:2',
+            'password' => ['required', 'confirmed', new Password],
+            'password_confirmation' => 'required'
         ]);
 
-        User::register($request->email, $request->name, $request->password);
+        User::register($request->only(['email', 'first_name', 'last_name', 'password']))
+        ->sendEmailVerificationNotification();
     }
 
     /**

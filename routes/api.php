@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('jwt.auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -24,11 +24,19 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::get('me', 'AuthController@me');
+    Route::post('login', 'Auth\AuthController@login');
+    Route::post('logout', 'Auth\AuthController@logout');
+    Route::post('refresh', 'Auth\AuthController@refresh');
+    Route::get('me', 'Auth\AuthController@me');
+    Route::post('register', 'UserController@store');
 
 });
+
+
+Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice')->middleware('signed');;
+Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify')->middleware('signed');
+Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend')->middleware('jwt.auth');
+
+
 
 Route::post('user/register', 'UserController@store');

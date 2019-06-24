@@ -38,7 +38,7 @@ class LoginModal extends Component {
     render(){
 
         const { email, password } = this.state;
-        const { message, status, show, close } = this.props;
+        const { messages, status, show, close } = this.props;
 
         return <Modal show={show} onClose={close} closeOnBlur={true} >
                 <Modal.Content>
@@ -65,8 +65,15 @@ class LoginModal extends Component {
                                     />
                             </Form.Field>
                             {status === 'ERROR' &&
-                                <Notification color='danger'>
-                                    {message}
+                                messages.slice(0, 2).map(message =>
+                                    <Notification color='danger'>
+                                        {message}
+                                    </Notification>
+                                )
+                            }
+                            {status === 'REGISTERED' &&
+                                <Notification color='success'>
+                                    Thanks for signing up! Check your email for a confimration link to finish up.
                                 </Notification>
                             }
                             <Form.Control>
@@ -85,7 +92,7 @@ LoginModal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    message: state.user.message,
+    messages: state.user.messages,
     status: state.user.status
 });
 

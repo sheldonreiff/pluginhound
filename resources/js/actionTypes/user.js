@@ -1,3 +1,8 @@
+export const REGISTER_PROGRESS = 'user/REGISTER_PROGRESS';
+export const REGISTER_SUCCESS = 'user/REGISTER_SUCCESS';
+export const REGISTER_ERROR = 'user/REGISTER_ERROR';
+export const TOGGLE_REGISTER_MODAL = 'user/TOGGLE_REGISTER_MODAL';
+
 export const LOGIN_PROGRESS = 'user/LOGIN_PROGRESS';
 export const LOGIN_SUCCESS = 'user/LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'user/LOGIN_ERROR';
@@ -6,3 +11,7 @@ export const LOGOUT = 'user/LOGOUT';
 
 export const UPDATE_SUCCESS = 'user/UPDATE_SUCCESS';
 export const UPDATE_ERROR = 'user/UPDATE_ERROR';
+
+export const VERIFY_EMAIL_SUCCESS = 'user/VERIFY_EMAIL_SUCCESS';
+export const VERIFY_EMAIL_PROGRESS = 'user/VERIFY_EMAIL_PROGRESS';
+export const VERIFY_EMAIL_ERROR = 'user/VERIFY_EMAIL_ERROR';

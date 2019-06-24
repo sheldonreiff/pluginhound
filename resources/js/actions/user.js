@@ -7,6 +7,52 @@ import { createNotification, NOTIFICATION_TYPE_SUCCESS, NOTIFICATION_TYPE_ERROR 
 import axios from 'axios';
 import { NOTIFICATION_TYPE_INFO } from 'react-redux-notify/lib/modules/Notifications';
 
+export const register = ({ firstName, lastName, email, password, confirmPassword }) => {
+    return dispatch => {
+
+        dispatch({
+            type: UserActionTypes.REGISTER_PROGRESS
+        });
+        axios({
+            method: 'post',
+            url: '/api/auth/register',
+            data: {
+                first_name: firstName,
+                last_name: lastName,
+                email,
+                password,
+                password_confirmation: confirmPassword,
+            }
+        }).then(response => {
+
+            dispatch({
+                type: UserActionTypes.REGISTER_SUCCESS
+            });
+
+        }).catch(error => {
+            console.log(error);
+            dispatch({
+                type: UserActionTypes.REGISTER_ERROR,
+                payload: {
+                    error
+                }
+            });
+        });
+    }
+}
+
+export const toggleRegisterModal = (open) => {
+    return (dispatch) => {
+        dispatch({
+            type: UserActionTypes.TOGGLE_REGISTER_MODAL,
+            payload: {
+                open
+            }
+        });
+    }
+}
+
+
 export const login = ({ email, password }) => {
     return (dispatch) => {
         
@@ -113,5 +159,40 @@ export const toggleLoginModal = (open) => {
                 open
             }
         });
+    }
+}
+
+export const verifyEmail = () => {
+    return (dispatch, getState) => {
+        if(!getState().user.verifyEmailStatus){
+            
+            dispatch({
+                type: UserActionTypes.VERIFY_EMAIL_PROGRESS
+            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const signedUrl = urlParams.get('signedUrl');
+
+            axios({
+                method: 'get',
+                url: decodeURI(signedUrl),
+                headers:{
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+                responseType: 'json',
+            }).then(res => {
+                dispatch({
+                    type: UserActionTypes.VERIFY_EMAIL_SUCCESS
+                });
+            }).catch(error => {
+                dispatch({
+                    type: UserActionTypes.VERIFY_EMAIL_ERROR,
+                    payload: {
+                        error
+                    }
+                });
+            });
+        }
     }
 }

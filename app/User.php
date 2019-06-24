@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Hash;
+use App\Notifications\VerifyEmail;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -18,7 +18,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'password',
     ];
 
     /**
@@ -55,12 +55,18 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
-    public static function register($email, $name, $password)
+    public static function register($newUser)
     {
-        static::create([
-            'email' => $email,
-            'name' => $name,
-            'password' => Hash::make($password)
+        return static::create([
+            'email' => $newUser['email'],
+            'first_name' => $newUser['first_name'],
+            'last_name' => $newUser['last_name'],
+            'password' => Hash::make($newUser['password'])
         ]);
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmail);
     }
 }

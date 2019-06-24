@@ -55,7 +55,7 @@ const mapDisptachToProps = {
 }
 
 const mapStateToProps = state => ({
-    name: state.user.me.name
+    name: state.user.me.first_name
 });
 
 export default connect(mapStateToProps, mapDisptachToProps)(SignInOut);
