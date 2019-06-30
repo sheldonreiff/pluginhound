@@ -19,7 +19,8 @@ import Main from './components/Main/Main';
 import Home from './components/Home/Home';
 import Account from './components/Account/Account';
 import Header from './components/Header/Header';
-import ChangePassword from './components/Account/ChangePassword';
+import UpdatePassword from './components/Account/UpdatePassword';
+import UpdatePersonal from './components/Account/UpdatePersonal';
 import VerifyEmail from './components/VeifyEmail/VerifyEmail';
 
 export default class App extends Component
@@ -40,7 +41,8 @@ export default class App extends Component
                             <Route path='/verify' component={VerifyEmail} />
                         </Switch> 
                         <Container>
-                            <Route path='/account/password' exact component={ChangePassword} />
+                            <Route path='/account/password' exact component={UpdatePassword} />
+                            <Route path='/account/personal-info' exact component={UpdatePersonal} />
                         </Container>
                     </Router>
                 </ThemeProvider>

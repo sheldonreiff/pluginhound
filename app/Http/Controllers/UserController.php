@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\User;
 use App\Rules\Password;
+use Hash;
+use Auth;
 
 
 class UserController extends Controller
@@ -34,11 +36,26 @@ class UserController extends Controller
             'first_name' => 'string|required|min:2',
             'last_name' => 'string|required|min:2',
             'password' => ['required', 'confirmed', new Password],
-            'password_confirmation' => 'required'
         ]);
 
         User::register($request->only(['email', 'first_name', 'last_name', 'password']))
         ->sendEmailVerificationNotification();
+    }
+
+    protected function updatePassword($data)
+    {
+        if(!Hash::check($data['current_password'], Auth::user()->password)){
+            abort(400, 'Invalid current password');
+        }
+
+        Auth::user()->update(['password' => Hash::make($data['new_password'])]);
+    }
+
+    protected function updateEmail($data)
+    {
+        Auth::user()->update(['email' => $data['email']]);
+
+        Auth::user()->sendEmailVerificationNotification();
     }
 
     /**
@@ -59,9 +76,31 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        if($request->new_password || $request->current_password || $request->new_password_confirmation){
+            $request->validate([
+                'current_password' => 'required|min:2',
+                'new_password' => ['required', 'confirmed', new Password],
+            ]);
+
+            $this->updatePassword($request->only(['current_password', 'new_password']));
+        }
+
+        if($request->email){
+            $request->validate([
+                'email' => 'required|email'
+            ]);
+
+            $this->updateEmail($request->only(['email']));
+        }
+
+        $request->validate([
+            'first_name' => 'string|max:100|nullable',
+            'last_name' => 'string|max:100|nullable',
+        ]);
+
+        Auth::user()->update(array_filter($request->only(['first_name', 'last_name'])));
     }
 
     /**

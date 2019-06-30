@@ -18,10 +18,8 @@ Route::middleware('jwt.auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group([
-
     'middleware' => 'api',
     'prefix' => 'auth'
-
 ], function ($router) {
 
     Route::post('login', 'Auth\AuthController@login');
@@ -32,6 +30,17 @@ Route::group([
 
 });
 
+Route::group([
+    'middleware' => 'jwt.auth',
+    'prefix' => 'password'
+], function ($router) {
+
+    Route::post('update', 'UserController@updatePassword');
+    Route::post('reset', 'ResetPasswordController@resetPassword');
+
+});
+
+Route::patch('me', 'UserController@update');
 
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice')->middleware('signed');;
 Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify')->middleware('signed');

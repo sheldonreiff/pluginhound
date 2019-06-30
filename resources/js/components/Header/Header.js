@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { NavLink } from 'react-router-dom';
 import { Heading, Hero, Button, Modal, Navbar, Form } from 'react-bulma-components';
 import styled, { withTheme } from 'styled-components';
 import LoginModal from './LoginModal';
@@ -37,6 +38,27 @@ const RegisterButton = styled(Navbar.Item)`
     }
 `;
 
+const ExpandedNavLink = styled(NavLink)`
+    color: white;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+`;
+
+const TightNavbarItem = styled(Navbar.Item)`
+    padding: 0;
+`;
+
+const NavbarItem = props => <TightNavbarItem 
+        onClick={(e) => e.preventDefault()}
+    >
+        <ExpandedNavLink to={props.to}>
+            {props.children}
+        </ExpandedNavLink>
+    </TightNavbarItem>;
+
 
 class Header extends Component {
     constructor(){
@@ -74,16 +96,16 @@ class Header extends Component {
                         <Navbar.Container
                             position='end'
                         >
-                            <Navbar.Item>Best Deals</Navbar.Item>
+                            <NavbarItem to='best-deals'>Best Deals</NavbarItem>
                             {user.status === 'LOGGED_IN' && 
-                                <Navbar.Item renderAs='a' href='/my-alerts'>
+                                <NavbarItem to='/my-alerts'>
                                     My Alerts
-                                </Navbar.Item>
+                                </NavbarItem>
                             }
                             {user.status === 'LOGGED_IN' && 
-                                <Navbar.Item renderAs='a' href='/account'>
+                                <NavbarItem to='/account/personal-info'>
                                     Account
-                                </Navbar.Item>
+                                </NavbarItem>
                             }
                             <Navbar.Item renderAs='span'>
                                 <Form.Field className='has-addons'>

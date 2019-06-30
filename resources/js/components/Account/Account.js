@@ -6,12 +6,13 @@ import history from '../../history';
 import { withRouter } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 
-import { changeTab } from '../../actions/account';
+import { changeTab, clearResults } from '../../actions/account';
 
 class Account extends React.Component{
 
     changeTab = (newTab) => {
         history.push(`/account/${newTab}`);
+        this.props.clearResults();
     }
 
     render(){
@@ -21,16 +22,16 @@ class Account extends React.Component{
         return <Container>
             <Tabs>
                 <Tabs.Tab
+                    active={location.pathname === '/account/personal-info'}
+                    onClick={() => this.changeTab('personal-info')}
+                >
+                    Personal Info
+                </Tabs.Tab>
+                <Tabs.Tab
                     active={location.pathname === '/account/password'}
                     onClick={() => this.changeTab('password')}
                 >
                     Password
-                </Tabs.Tab>
-                <Tabs.Tab
-                    active={location.pathname === '/account/email'}
-                    onClick={() => this.changeTab('email')}
-                >
-                    Email
                 </Tabs.Tab>
             </Tabs>
         </Container>;
@@ -38,7 +39,8 @@ class Account extends React.Component{
 }
 
 const mapDispatchToProps = {
-    changeTab
+    changeTab,
+    clearResults
 };
 
 const mapStateToProps = state => ({
