@@ -9,15 +9,15 @@ use App\Product;
 class ImportProducts extends Command
 {
 
-    protected $exec_id;
     protected $act_id;
+    protected $run_id;
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'products:import {exec_id}';
+    protected $signature = 'products:import {act_id} {run_id}';
 
     /**
      * The console command description.
@@ -43,6 +43,6 @@ class ImportProducts extends Command
      */
     public function handle(Product $product)
     {
-        $product->import($this->argument('exec_id'));
+        $product->import($this->argument('act_id'), $this->argument('run_id'));
     }
 }

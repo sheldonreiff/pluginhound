@@ -22,6 +22,7 @@ import Header from './components/Header/Header';
 import UpdatePassword from './components/Account/UpdatePassword';
 import UpdatePersonal from './components/Account/UpdatePersonal';
 import VerifyEmail from './components/VeifyEmail/VerifyEmail';
+import Product from './components/Product/Product';
 
 export default class App extends Component
 {
@@ -37,8 +38,10 @@ export default class App extends Component
                         <Header />
                         <Switch>
                             <Route path='/' exact component={Home} />
-                            <Route path='/account' component={Account} />
-                            <Route path='/verify' component={VerifyEmail} />
+                            <Route path='/account' exact component={Account} />
+                            <Route path='/verify' exact component={VerifyEmail} />
+                            
+                            <Route path='/product/:sku' exact component={Product} />
                         </Switch> 
                         <Container>
                             <Route path='/account/password' exact component={UpdatePassword} />

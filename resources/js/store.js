@@ -4,11 +4,13 @@ import thunk from 'redux-thunk';
 import notifyReducer from 'react-redux-notify';
 import accountReducer from './reducers/account';
 import userReducer from './reducers/user';
+import productReducer from './reducers/product';
 
 const combinedReducers = combineReducers({
     account: accountReducer,
     user: userReducer,
-    notifications: notifyReducer
+    product: productReducer,
+    notifications: notifyReducer,
 });
 
 const middleware = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(applyMiddleware(thunk)) || compose : applyMiddleware(thunk);

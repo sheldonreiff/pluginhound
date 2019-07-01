@@ -86,7 +86,7 @@ class UpdatePersonal extends React.Component{
                 <Form.Field>
                     <Form.Control>
                         <Button
-                            color='light'
+                            color='primary'
                             disabled={!filledIn || status === 'PROGRESS'}
                         >
                             Update

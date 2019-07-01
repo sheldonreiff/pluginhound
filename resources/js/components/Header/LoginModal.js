@@ -4,8 +4,14 @@ import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { login } from '../../actions/user';
+import styled from 'styled-components';
 
+import { login, toggleLoginModal, toggleRegisterModal } from '../../actions/user';
+
+const ActionPanel = styled(Form.Control)`
+    display: flex;
+    justify-content: space-between;
+`;
 
 class LoginModal extends Component {
     constructor(){
@@ -35,15 +41,21 @@ class LoginModal extends Component {
         this.setState(this.initialState);
     };
 
+    register = () => {
+        this.props.toggleLoginModal(false);
+        this.props.toggleRegisterModal(true);
+    }
+
     render(){
 
         const { email, password } = this.state;
         const { messages, status, show, close } = this.props;
 
-        return <Modal show={show} onClose={close} closeOnBlur={true} >
+        return <Modal show={show} onClose={close} >
                 <Modal.Content>
                     <Section style={{ backgroundColor: 'white' }}>
                         <form onSubmit={(e) => this.handleSubmit(e)}>
+
                             <Form.Field>
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control>
@@ -51,6 +63,7 @@ class LoginModal extends Component {
                                         type="email"
                                         placeholder="Type your email"
                                         value={email}
+                                        disabled={status === 'PROGRESS'} 
                                         onChange={(e) => this.handleChange({ field: 'email', value: e.target.value }) }
                                     />
                                 </Form.Control>
@@ -61,9 +74,11 @@ class LoginModal extends Component {
                                         type="password"
                                         placeholder="Type your password"
                                         value={password}
+                                        disabled={status === 'PROGRESS'} 
                                         onChange={(e) => this.handleChange({ field: 'password', value: e.target.value }) }
                                     />
                             </Form.Field>
+
                             {status === 'ERROR' &&
                                 messages.slice(0, 2).map(message =>
                                     <Notification color='danger'>
@@ -71,14 +86,22 @@ class LoginModal extends Component {
                                     </Notification>
                                 )
                             }
+
                             {status === 'REGISTERED' &&
                                 <Notification color='success'>
                                     Thanks for signing up! Check your email for a confimration link to finish up.
                                 </Notification>
                             }
-                            <Form.Control>
-                                <Button disabled={status === 'PROGRESS'} color='primary' type="submit">Login</Button>
-                            </Form.Control>
+
+                            <ActionPanel>
+
+                                <Button
+                                    disabled={status === 'PROGRESS'}
+                                    color='primary' type="submit"
+                                >Login</Button>
+
+                                <a onClick={this.register}>I don't have an account</a>
+                            </ActionPanel>
                         </form>
                     </Section>
                 </Modal.Content>
@@ -97,7 +120,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    login
+    login,
+    toggleLoginModal,
+    toggleRegisterModal,
 };
 
 export default compose(

@@ -12,16 +12,20 @@ class Product extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $primaryKey = 'sku';
+    public $incrementing = false;
 
     protected $guarded = [];
 
-    public function import(string $exec_id)
+    public function import(string $act_id, string $run_id)
     {
         $apify = new ApifyClient();
 
-        $crawler_results = $apify->get("execs/$exec_id/results", [
-            'format' => 'json',
-            'limit' => 100000
+        $run = $apify->get("acts/$act_id/runs/$run_id", [
+            'format' => 'json'
+        ]);
+
+        $crawler_results = $apify->get("datasets/{$run->data->defaultDatasetId}/items", [
+            'format' => 'json'
         ]);
 
         if($crawler_results){
@@ -29,7 +33,7 @@ class Product extends Model implements Auditable
         }
     }
 
-    public function transformAndSaveResults(object $crawler_data)
+    public function transformAndSaveResults($crawler_data)
     {
         foreach($crawler_data->pageFunctionResult as $product){
             Product::updateOrCreate(['sku' => $product->sku],

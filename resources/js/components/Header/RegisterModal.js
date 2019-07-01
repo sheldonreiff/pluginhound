@@ -49,7 +49,7 @@ class RegisterModal extends Component {
 
         const disabled = status === 'REGISTER_PROGRESS';
 
-        return <Modal show={show} onClose={close} closeOnBlur={true} >
+        return <Modal show={show} onClose={close}>
                 <Modal.Content>
                     <Section style={{ backgroundColor: 'white' }}>
                         <form onSubmit={(e) => this.handleSubmit(e)}>

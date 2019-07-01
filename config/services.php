@@ -45,6 +45,6 @@ return [
     ],
 
     'apify' => [
-        'endpoint' => env('APIFY_ENDPOINT', 'https://api.apify.com/v1'),
+        'endpoint' => env('APIFY_ENDPOINT', 'https://api.apify.com/v2'),
     ]
 ];

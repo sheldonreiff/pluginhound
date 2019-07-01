@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Product;
+
+use App\Http\Resources\Product as ProductResource;
+use App\Http\Resources\ProductHistory as ProductHistoryResoruce;
+
 class ProductController extends Controller
 {
     /**
@@ -33,9 +38,14 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        //
+        return new ProductResource($product);
+    }
+
+    public function history(Product $product)
+    {
+        return new ProductHistoryResoruce($product->audits);
     }
 
     /**

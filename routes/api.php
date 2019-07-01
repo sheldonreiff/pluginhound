@@ -46,6 +46,7 @@ Route::get('email/verify', 'Auth\VerificationController@show')->name('verificati
 Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify')->middleware('signed');
 Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend')->middleware('jwt.auth');
 
-
+Route::get('product/{product}', 'ProductController@show');
+Route::get('product/{product}/history', 'ProductController@history');
 
 Route::post('user/register', 'UserController@store');
