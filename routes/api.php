@@ -48,5 +48,6 @@ Route::get('email/resend', 'Auth\VerificationController@resend')->name('verifica
 
 Route::get('product/{product}', 'ProductController@show');
 Route::get('product/{product}/history', 'ProductController@history');
+Route::get('products', 'ProductController@index');
 
 Route::post('user/register', 'UserController@store');

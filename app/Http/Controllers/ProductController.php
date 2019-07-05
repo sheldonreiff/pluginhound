@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Product;
 
@@ -16,9 +17,16 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $products = new Product();
+
+        if($request->q){
+            $products = $products
+            ->where('name', 'like', "%$request->q%");
+        }
+
+        return ProductResource::collection( $products->get() );
     }
 
     /**
@@ -43,9 +51,29 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
-    public function history(Product $product)
+    public function history(Product $product, Request $request)
     {
-        return new ProductHistoryResoruce($product->audits);
+        $audits = $product->audits();
+
+        if($request->start){
+            $audits = $audits
+            ->whereDate('new_values->scraped_date', '>=', $request->start);
+        }
+        if($request->end){
+            $audits = $audits
+            ->whereDate('new_values->scraped_date', '<=', $request->end);
+        }
+
+        return ProductHistoryResoruce::collection( $audits
+        ->orderBy('new_values->scraped_date', 'asc')
+        ->get()
+        ->map(function($audit, $key){
+            return $audit->getModified();
+        })
+        ->filter(function($item, $key){
+            return !empty($item['sale_price']['new']) 
+            || !empty($item['msrp']['new']);
+        }));
     }
 
     /**

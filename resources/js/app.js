@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import history from './history';
 import { Container } from 'react-bulma-components'; 
+import styled from 'styled-components';
 
 import { getMe } from './actions/user';
 
@@ -23,6 +24,13 @@ import UpdatePassword from './components/Account/UpdatePassword';
 import UpdatePersonal from './components/Account/UpdatePersonal';
 import VerifyEmail from './components/VeifyEmail/VerifyEmail';
 import Product from './components/Product/Product';
+import Products from './components/Products/Products';
+
+const Content = styled.div`
+    padding: 20px;
+    padding-right: 3%;
+    padding-left: 3%;
+`;
 
 export default class App extends Component
 {
@@ -36,17 +44,19 @@ export default class App extends Component
                 <ThemeProvider theme={theme}>
                     <Router history={history}>
                         <Header />
-                        <Switch>
-                            <Route path='/' exact component={Home} />
-                            <Route path='/account' exact component={Account} />
-                            <Route path='/verify' exact component={VerifyEmail} />
-                            
-                            <Route path='/product/:sku' exact component={Product} />
-                        </Switch> 
-                        <Container>
+                        <Content>
+                            <Switch>
+                                <Route path='/' exact component={Home} />
+                                <Route path='/account' exact component={Account} />
+                                <Route path='/verify' exact component={VerifyEmail} />
+                                
+                                <Route path='/all-products' exact component={Products} />
+                                <Route path='/search' exact render={() => <Products key='search'/>}/>
+                                <Route path='/product/:sku' exact component={Product} />
+                            </Switch>
                             <Route path='/account/password' exact component={UpdatePassword} />
                             <Route path='/account/personal-info' exact component={UpdatePersonal} />
-                        </Container>
+                        </Content>
                     </Router>
                 </ThemeProvider>
             </Provider>

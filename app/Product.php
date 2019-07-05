@@ -16,6 +16,20 @@ class Product extends Model implements Auditable
 
     protected $guarded = [];
 
+    protected $dates = [
+        'scraped_at',
+        'scraped_date',
+        'sale_end',
+    ];
+
+    protected $auditExclude = [
+        'scraped_at',
+    ];
+
+    protected $cast = [
+        'scraped_date' => 'datetime:Y-m-d'
+    ];
+
     public function import(string $act_id, string $run_id)
     {
         $apify = new ApifyClient();
@@ -47,6 +61,7 @@ class Product extends Model implements Auditable
                     'sale_end' => date('Y-m-d H:i:s', strtotime($product->saleEnd)),
                     'badge' => $product->badge,
                     'thumbnail_url' => $product->thumbnailUrl,
+                    'scraped_date' => date('Y-m-d', strtotime($crawler_data->pageFunctionFinishedAt)), # for display and aggregation purposes, only care about date
                     'scraped_at' => date('Y-m-d H:i:s', strtotime($crawler_data->pageFunctionFinishedAt)),
                 ]
             );

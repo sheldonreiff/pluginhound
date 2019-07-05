@@ -5,11 +5,13 @@ import notifyReducer from 'react-redux-notify';
 import accountReducer from './reducers/account';
 import userReducer from './reducers/user';
 import productReducer from './reducers/product';
+import productsReducer from './reducers/products';
 
 const combinedReducers = combineReducers({
     account: accountReducer,
     user: userReducer,
     product: productReducer,
+    products: productsReducer,
     notifications: notifyReducer,
 });
 

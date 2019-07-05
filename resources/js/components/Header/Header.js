@@ -9,7 +9,9 @@ import { compose } from 'redux';
 import { toggleLoginModal, toggleRegisterModal } from '../../actions/user';
 import SignInOut from './SignInOut';
 import RegisterModal from './RegisterModal';
+import history from '../../history';
 
+import Search from './Search';
 
 const NavContainer = styled.div`
     display: flex;
@@ -38,26 +40,15 @@ const RegisterButton = styled(Navbar.Item)`
     }
 `;
 
-const ExpandedNavLink = styled(NavLink)`
-    color: white;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    padding: 10px;
-`;
-
-const TightNavbarItem = styled(Navbar.Item)`
-    padding: 0;
-`;
-
-const NavbarItem = props => <TightNavbarItem 
-        onClick={(e) => e.preventDefault()}
+const NavbarItem = props => <Navbar.Item
+        renderAs='a'
+        onClick={(e) => {
+            e.preventDefault();
+            history.push(props.to);
+        }}
     >
-        <ExpandedNavLink to={props.to}>
-            {props.children}
-        </ExpandedNavLink>
-    </TightNavbarItem>;
+        {props.children}
+    </Navbar.Item>;
 
 
 class Header extends Component {
@@ -88,15 +79,16 @@ class Header extends Component {
                     <NavContainer>
                         <WordMark>Save On Waves</WordMark>
                         <Navbar.Burger
-                            active={this.state.open}
+                            active={this.state.open.toString()}
                             onClick={this.toggleMobileNav}
                         />
                     </NavContainer>
-                    <Navbar.Menu active={this.state.open}>
+                    <Navbar.Menu active={this.state.open.toString()}>
                         <Navbar.Container
                             position='end'
                         >
-                            <NavbarItem to='best-deals'>Best Deals</NavbarItem>
+                            <NavbarItem to='/best-deals'>Best Deals</NavbarItem>
+                            <NavbarItem to='/all-products'>All Products</NavbarItem>
                             {user.status === 'LOGGED_IN' && 
                                 <NavbarItem to='/my-alerts'>
                                     My Alerts
@@ -108,16 +100,7 @@ class Header extends Component {
                                 </NavbarItem>
                             }
                             <Navbar.Item renderAs='span'>
-                                <Form.Field className='has-addons'>
-                                    <Form.Control>
-                                        <Form.Input type="text" placeholder="Plugin or bundle" />
-                                    </Form.Control>
-                                    <Form.Control>
-                                        <Button>
-                                            Search
-                                        </Button>
-                                    </Form.Control>
-                                </Form.Field>
+                                <Search />
                             </Navbar.Item>
 
                             {user.status === 'LOGGED_IN' && 

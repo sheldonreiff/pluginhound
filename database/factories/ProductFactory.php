@@ -15,6 +15,7 @@ $factory->define(Product::class, function (Faker $faker) {
         'name' => $faker->text(50),
         'note' => $faker->randomElement(['select_bundles', 'free', null]),
         'sale_end' => $faker->dateTimeThisYear(),
+        'scraped_date' => $faker->dateTimeThisYear()->settime(0,0),
         'scraped_at' => $faker->dateTimeThisYear(),
         'thumbnail_url' => $faker->imageUrl(100, 100, 'cats'),
         'type' => $faker->randomElement(['plugin', 'bundle']),

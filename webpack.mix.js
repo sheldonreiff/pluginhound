@@ -15,3 +15,10 @@ mix.react('resources/js/index.js', 'public/js')
    .sass('resources/sass/overrides.scss', 'public/css')
    .sass('resources/sass/app.scss', 'public/css')
    .version();
+
+
+mix.webpackConfig({
+   watchOptions: {
+      ignored: /node_modules/
+    }
+});
