@@ -93,3 +93,31 @@ export const clearResults = () => {
         });
     }
 }
+
+export const sendEmailVerification = () => {
+    return dispatch => {
+        dispatch({
+            type: AccountActionTypes.SEND_VERIFY_PROGRESS
+        });
+
+        Axios({
+            method: 'post',
+            url: '/api/email/resend',
+            headers:{
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+            responseType: 'json',
+        }).then(res => {
+            dispatch({
+                type: AccountActionTypes.SEND_VERIFY_SUCCESS
+            });
+        }).catch(error => {
+            dispatch({
+                type: AccountActionTypes.SEND_VERIFY_ERROR,
+                payload: {
+                    error
+                }
+            });
+        })
+    }
+}

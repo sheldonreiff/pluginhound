@@ -4,6 +4,8 @@ import has from 'lodash/has';
 
 const initial = {
     tab: null,
+    sendEmailVerificationStatus: null,
+    sendEmailVerificationMessage: null,
     userUpdateStatus: null,
     userUpdateMessage: null,
 };
@@ -39,6 +41,26 @@ export default function Account(state=initial, action){
                 userUpdateStatus: initial.userUpdateStatus,
                 userUpdateMessage: initial.userUpdateMessage,
             }
+        case AccountActionTypes.SEND_VERIFY_PROGRESS:
+            return {
+                ...state,
+                sendEmailVerificationStatus: 'PROGRESS',
+                sendEmailVerificationMessage: null,
+            };
+        case AccountActionTypes.SEND_VERIFY_SUCCESS:
+            return {
+                ...state,
+                sendEmailVerificationStatus: 'SUCCESS',
+                sendEmailVerificationMessage: null,
+            };
+        case AccountActionTypes.SEND_VERIFY_ERROR:
+            return {
+                ...state,
+                sendEmailVerificationStatus: 'ERROR',
+                sendEmailVerificationMessage: has(action, 'payload.error.response.data.errors')
+                ? Object.values(action.payload.error.response.data.errors)
+                : ["Couldn't send email verification"],
+            };
         default:
             return state;
     }

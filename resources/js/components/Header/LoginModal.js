@@ -13,6 +13,10 @@ const ActionPanel = styled(Form.Control)`
     justify-content: space-between;
 `;
 
+const StyledModalContent = styled(Modal.Content)`
+    max-width: 400px;
+`;
+
 class LoginModal extends Component {
     constructor(){
         super();
@@ -52,7 +56,7 @@ class LoginModal extends Component {
         const { messages, status, show, close } = this.props;
 
         return <Modal show={show} onClose={close} >
-                <Modal.Content>
+                <StyledModalContent>
                     <Section style={{ backgroundColor: 'white' }}>
                         <form onSubmit={(e) => this.handleSubmit(e)}>
 
@@ -104,7 +108,7 @@ class LoginModal extends Component {
                             </ActionPanel>
                         </form>
                     </Section>
-                </Modal.Content>
+                </StyledModalContent>
         </Modal>;
     }
 };

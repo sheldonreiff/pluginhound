@@ -44,10 +44,14 @@ Route::patch('me', 'UserController@update');
 
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice')->middleware('signed');;
 Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify')->middleware('signed');
-Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend')->middleware('jwt.auth');
+Route::post('email/resend', 'Auth\VerificationController@resend')->name('verification.resend')->middleware('jwt.auth');
 
 Route::get('product/{product}', 'ProductController@show');
 Route::get('product/{product}/history', 'ProductController@history');
 Route::get('products', 'ProductController@index');
+
+
+Route::post('product/{product}/alert', 'AlertContoller@store');
+Route::patch('product/{product}/alert/{alert}', 'AlertContoller@update');
 
 Route::post('user/register', 'UserController@store');

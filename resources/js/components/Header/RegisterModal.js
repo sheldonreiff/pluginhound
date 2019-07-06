@@ -7,6 +7,10 @@ import { compose } from 'redux';
 import { register } from '../../actions/user';
 import styled from 'styled-components';
 
+const StyledModalContent = styled(Modal.Content)`
+    max-width: 400px;
+`;
+
 class RegisterModal extends Component {
     constructor(){
         super();
@@ -50,84 +54,84 @@ class RegisterModal extends Component {
         const disabled = status === 'REGISTER_PROGRESS';
 
         return <Modal show={show} onClose={close}>
-                <Modal.Content>
-                    <Section style={{ backgroundColor: 'white' }}>
-                        <form onSubmit={(e) => this.handleSubmit(e)}>
-                            <Form.Field>
-                                <Form.Label>First Name</Form.Label>
-                                <Form.Control>
-                                    <Form.Input
-                                        type="text"
-                                        placeholder="Type your first name"
-                                        value={firstName}
-                                        onChange={(e) => this.handleChange({ field: 'firstName', value: e.target.value }) }
-                                        disabled={disabled}
-                                    />
-                                </Form.Control>
-                            </Form.Field>
-
-                            <Form.Field>
-                                <Form.Label>Last Name</Form.Label>
-                                <Form.Control>
-                                    <Form.Input
-                                        type="text"
-                                        placeholder="Type your last name"
-                                        value={lastName}
-                                        onChange={(e) => this.handleChange({ field: 'lastName', value: e.target.value }) }
-                                        disabled={disabled}
-                                    />
-                                </Form.Control>
-                            </Form.Field>
-
-                            <Form.Field>
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control>
-                                    <Form.Input
-                                        type="email"
-                                        placeholder="Type your email"
-                                        value={email}
-                                        onChange={(e) => this.handleChange({ field: 'email', value: e.target.value }) }
-                                        disabled={disabled}
-                                    />
-                                </Form.Control>
-                            </Form.Field>
-
-                            <Form.Field>
-                                <Form.Label>Password</Form.Label>
-                                <Form.Input
-                                        type="password"
-                                        placeholder="Type a password"
-                                        value={password}
-                                        onChange={(e) => this.handleChange({ field: 'password', value: e.target.value }) }
-                                        disabled={disabled}
-                                    />
-                            </Form.Field>
-
-                            <Form.Field>
-                                <Form.Label>Confirm password</Form.Label>
-                                <Form.Input
-                                        type="password"
-                                        placeholder="Type your password again"
-                                        value={confirmPassword}
-                                        onChange={(e) => this.handleChange({ field: 'confirmPassword', value: e.target.value }) }
-                                        disabled={disabled}
-                                    />
-                            </Form.Field>
-
-                            {status === 'REGISTER_ERROR' &&
-                                messages.slice(0, 2).map(message =>
-                                    <Notification color='danger'>
-                                        {message}
-                                    </Notification>
-                                )
-                            }
-
+            <StyledModalContent>
+                <Section style={{ backgroundColor: 'white' }}>
+                    <form onSubmit={(e) => this.handleSubmit(e)}>
+                        <Form.Field>
+                            <Form.Label>First Name</Form.Label>
                             <Form.Control>
-                                <Button color='primary' type="submit" disabled={disabled}>Register</Button>
+                                <Form.Input
+                                    type="text"
+                                    placeholder="Type your first name"
+                                    value={firstName}
+                                    onChange={(e) => this.handleChange({ field: 'firstName', value: e.target.value }) }
+                                    disabled={disabled}
+                                />
                             </Form.Control>
-                        </form>
-                    </Section>
-                </Modal.Content>
+                        </Form.Field>
+
+                        <Form.Field>
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control>
+                                <Form.Input
+                                    type="text"
+                                    placeholder="Type your last name"
+                                    value={lastName}
+                                    onChange={(e) => this.handleChange({ field: 'lastName', value: e.target.value }) }
+                                    disabled={disabled}
+                                />
+                            </Form.Control>
+                        </Form.Field>
+
+                        <Form.Field>
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control>
+                                <Form.Input
+                                    type="email"
+                                    placeholder="Type your email"
+                                    value={email}
+                                    onChange={(e) => this.handleChange({ field: 'email', value: e.target.value }) }
+                                    disabled={disabled}
+                                />
+                            </Form.Control>
+                        </Form.Field>
+
+                        <Form.Field>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Input
+                                    type="password"
+                                    placeholder="Type a password"
+                                    value={password}
+                                    onChange={(e) => this.handleChange({ field: 'password', value: e.target.value }) }
+                                    disabled={disabled}
+                                />
+                        </Form.Field>
+
+                        <Form.Field>
+                            <Form.Label>Confirm password</Form.Label>
+                            <Form.Input
+                                    type="password"
+                                    placeholder="Type your password again"
+                                    value={confirmPassword}
+                                    onChange={(e) => this.handleChange({ field: 'confirmPassword', value: e.target.value }) }
+                                    disabled={disabled}
+                                />
+                        </Form.Field>
+
+                        {status === 'REGISTER_ERROR' &&
+                            messages.slice(0, 2).map(message =>
+                                <Notification color='danger'>
+                                    {message}
+                                </Notification>
+                            )
+                        }
+
+                        <Form.Control>
+                            <Button color='primary' type="submit" disabled={disabled}>Register</Button>
+                        </Form.Control>
+                    </form>
+                </Section>
+            </StyledModalContent>
         </Modal>;
     }
 };

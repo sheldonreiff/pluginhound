@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Container } from 'react-bulma-components';
+import { Tabs } from 'react-bulma-components';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import history from '../../history';
@@ -7,6 +7,10 @@ import { withRouter } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 
 import { changeTab, clearResults } from '../../actions/account';
+
+const AccountContainer = styled.div`
+    margin-bottom: 20px;
+`;
 
 class Account extends React.Component{
 
@@ -19,7 +23,7 @@ class Account extends React.Component{
 
         const { location } = this.props;
 
-        return <Container>
+        return <AccountContainer>
             <Tabs>
                 <Tabs.Tab
                     active={location.pathname === '/account/personal-info'}
@@ -34,7 +38,7 @@ class Account extends React.Component{
                     Password
                 </Tabs.Tab>
             </Tabs>
-        </Container>;
+        </AccountContainer>;
     }
 }
 

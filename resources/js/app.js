@@ -47,11 +47,12 @@ export default class App extends Component
                         <Content>
                             <Switch>
                                 <Route path='/' exact component={Home} />
-                                <Route path='/account' exact component={Account} />
+                                <Route path='/account' component={Account} />
                                 <Route path='/verify' exact component={VerifyEmail} />
                                 
-                                <Route path='/all-products' exact component={Products} />
-                                <Route path='/search' exact render={() => <Products key='search'/>}/>
+                                <Route path='/best-deals' exact render={() => <Products key='deals' view='bestDeals' />} />
+                                <Route path='/all-products' exact render={() => <Products key='all' view='all' />} />
+                                <Route path='/search' exact render={() => <Products key='search' view='search' />}/>
                                 <Route path='/product/:sku' exact component={Product} />
                             </Switch>
                             <Route path='/account/password' exact component={UpdatePassword} />

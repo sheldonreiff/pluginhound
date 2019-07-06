@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Custom\ApifyClient;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use Illuminate\Support\Facades\DB;
+
 class Product extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
@@ -70,5 +72,32 @@ class Product extends Model implements Auditable
         $all_skus = array_column((array)$crawler_data->pageFunctionResult, 'sku');
 
         Product::whereNotIn('sku', $all_skus);
+    }
+
+    public static function comparisons()
+    {
+        $history = \OwenIt\Auditing\Models\Audit::where('auditable_type', 'App\Product')
+        ->groupBy('auditable_id')
+        ->select(DB::raw("
+            auditable_id as sku,
+            avg(JSON_EXTRACT(new_values, '$.sale_price')) as average_sale_price
+        "));
+
+        return DB::table('products')
+        ->joinSub($history, 'history', function($join){
+            $join->on('products.sku', '=', 'history.sku');
+        })
+        ->select(DB::raw('products.*, history.average_sale_price, (history.average_sale_price - products.sale_price) / history.average_sale_price as discount'));
+    }
+
+    public static function bestDeals()
+    {
+        return self::comparisons()
+        ->whereRaw('(history.average_sale_price - products.sale_price) / history.average_sale_price > .2');
+    }
+
+    public function averageSalePrice()
+    {
+        return $this->audits->avg('new_values->sale_price');
     }
 }

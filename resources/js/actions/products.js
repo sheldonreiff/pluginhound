@@ -1,61 +1,63 @@
 import * as ProductsActionTypes from '../actionTypes/products';
 import axios from 'axios';
 
-export const search = (query) => {
+export const updateQuery = (query) => {
     return dispatch => {
         dispatch({
             type: ProductsActionTypes.SET_QUERY,
             payload: {
-                query
+                view: 'search',
+                query,
             }
         });
-
-        dispatch(loadProducts());
     }
 }
 
-export const loadAllProducts = () => {
-    return dispatch => {
-        dispatch({
-            type: ProductsActionTypes.SET_QUERY,
-            payload: {}
-        });
-    
-        dispatch(loadProducts());
-    }
-}
-
-export const loadProducts = () => {
+export const loadProducts = (view, reload=false) => {
     return (dispatch, getState) => {
-        dispatch({
-            type: ProductsActionTypes.LOAD_PRODUCTS_PROGRESS
-        });
 
-        const q = getState().products.query;
+        const viewData = getState().products.views[view];
 
-        axios({
-            method: 'get',
-            url: `/api/products`,
-            params: {
-                q
-            },
-            header: {
-                accept: 'application/json'
-            }
-        }).then(results => {
+        const q = viewData.query;
+        const bestDeals = view === 'bestDeals';
+
+        if(viewData.loadStatus !== 'DONE' || reload){
+            
             dispatch({
-                type: ProductsActionTypes.LOAD_PRODUCTS_SUCCESS,
+                type: ProductsActionTypes.LOAD_PRODUCTS_PROGRESS,
                 payload: {
-                    products: results.data.data
+                    view,
                 }
             });
-        }).catch(error => {
-            dispatch({
-                type: ProductsActionTypes.LOAD_PRODUCTS_ERROR,
-                payload: {
-                    error
+
+            axios({
+                method: 'get',
+                url: `/api/products`,
+                params: {
+                    q,
+                    bestDeals,
+                },
+                header: {
+                    accept: 'application/json'
                 }
+            }).then(results => {
+                dispatch({
+                    type: ProductsActionTypes.LOAD_PRODUCTS_SUCCESS,
+                    payload: {
+                        products: results.data.data,
+                        view,
+                    }
+                });
+            }).catch(error => {
+                console.log(error);
+                dispatch({
+                    type: ProductsActionTypes.LOAD_PRODUCTS_ERROR,
+                    payload: {
+                        error,
+                        view,
+                    }
+                });
             });
-        })
+        }
     }
 }

@@ -2,53 +2,35 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, Button } from 'react-bulma-components';
 import history from '../../history';
+import styled from 'styled-components';
 
-import { search } from '../../actions/products';
+import { updateQuery, loadProducts } from '../../actions/products';
+
+const StyledForm = styled.form`
+    margin: 0;
+`;
 
 class Search extends React.Component{
-    constructor(){
-        super();
-
-        this.initialState = {
-            query: ''
-        }
-
-        this.state = this.initialState;
-    }
-
-    componentDidUpdate = prevProps => {
-        if(this.props.query != prevProps.query){
-            this.setState({ query: this.props.query });
-        }
-    }
-
-    handleChange = ({ field, value }) => {
-        this.setState({
-            [field]: value
-        });
-    }
 
     handleSubmit = (e) => {
         e.preventDefault();
-
-        const { query } = this.state;
         
-        this.props.search(query);
+        this.props.loadProducts('search');
 
         history.push('/search');
     }
 
     render(){
-        const { query } = this.state;
+        const { query, updateQuery } = this.props;
 
-        return <form onSubmit={(e) => this.handleSubmit(e)}>
+        return <StyledForm onSubmit={(e) => this.handleSubmit(e)}>
             <Form.Field className='has-addons'>
                 <Form.Control>
                     <Form.Input
                         type="text"
                         placeholder="Plugin or bundle"
                         value={query}
-                        onChange={(e) => this.handleChange({ field: 'query', value: e.target.value })}
+                        onChange={(e) => updateQuery(e.target.value)}
                     />
                 </Form.Control>
                 <Form.Control>
@@ -57,16 +39,17 @@ class Search extends React.Component{
                     </Button>
                 </Form.Control>
             </Form.Field>
-        </form>;
+        </StyledForm>;
     }
 }
 
 const mapDispatchToProps = {
-    search
+    updateQuery,
+    loadProducts
 };
 
 const mapStateToProps = state => ({
-    query: state.products.query
+    query: state.products.views.search.query
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

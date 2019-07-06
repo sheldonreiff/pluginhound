@@ -1,0 +1,59 @@
+@charset "UTF-8";
+
+/***************************************************************
+
+Body
+
+****************************************************************/
+
+/***************************************************************
+
+Typography 
+
+****************************************************************/
+
+/***************************************************************
+
+Colors 
+
+****************************************************************/
+
+/***************************************************************
+
+Icomoon 
+
+****************************************************************/
+
+/***************************************************************
+
+paste portion of contents of variables.scss file here
+
+****************************************************************/
+
+@font-face {
+  font-family: "icomoon";
+  src: url(/fonts/icomoon.eot?e10bcadaeff5e30265916530b40a30e8);
+  src: url(/fonts/icomoon.eot?e10bcadaeff5e30265916530b40a30e8) format("embedded-opentype"), url(/fonts/icomoon.ttf?a32765eae39894829173ae2b79a148b1) format("truetype"), url(/fonts/icomoon.woff?6ac973c23964088276b17b9bec534d05) format("woff"), url(/fonts/icomoon.svg?9157c30c4ef81f811dd312d0781174a0) format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^=icon-],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-arrow-left2:before {
+  content: "\EA40";
+}
+

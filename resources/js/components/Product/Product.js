@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect }  from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Notification, Tag } from 'react-bulma-components';
+import { Notification, Tag, Heading, Button } from 'react-bulma-components';
 import { SizeMe } from 'react-sizeme';
 import { ScaleLoader, ClipLoader } from 'react-spinners';
 import styled from 'styled-components';
-
-// import moment from 'moment';
 import { LineChart , CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line } from 'recharts';
 import 'react-dates/initialize';
-import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
+import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
+
+import Alert from './Alert';
 
 import { getProduct, getProductHistory, setProduct } from '../../actions/product';
 
@@ -54,6 +54,13 @@ const HistoryControlsContainer = styled.div`
     margin-top: 20px;
 `;
 
+const BackIcon = styled.span`
+    display: block;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 1.5rem;
+`;
+
 class Product extends React.Component{
     constructor(){
         super();
@@ -77,11 +84,12 @@ class Product extends React.Component{
     }
 
     render(){
-        const { product, history, status, historyStatus, message, start, end } = this.props;
+        const { product, productHistory, status, historyStatus, message, start, end, history } = this.props;
 
         return <SizeMe>
             {({ size }) =>
                 <React.Fragment>
+                    <BackIcon className='icon-arrow-left2' onClick={history.goBack} />
                     {status === 'DONE' &&
                         <React.Fragment>
                             <h2 className='title is-3'>{product.name}</h2>
@@ -106,7 +114,7 @@ class Product extends React.Component{
                                 {historyStatus === 'DONE' &&
                                     <LineChart
                                         width={size.width}
-                                        height={300} data={history}
+                                        height={300} data={productHistory}
                                         margin={{top: 5, right: 30, left: 20, bottom: 5}}
                                     >
                                         <CartesianGrid strokeDasharray="3 3"/>
@@ -144,6 +152,13 @@ class Product extends React.Component{
                                     />
                                 </HistoryControlsContainer>
                             </ProductHistoryContainer>
+
+                            <Heading size={4}>Alerts</Heading>
+
+                            <Alert />
+
+                            <Button color='dark'>+</Button>
+
                         </React.Fragment>
                     }
 
@@ -171,7 +186,7 @@ class Product extends React.Component{
 
 const mapStateToProps = state => ({
     product: state.product.product,
-    history: state.product.productHistory,
+    productHistory: state.product.productHistory,
     status: state.product.productLoadStatus,
     historyStatus: state.product.productHistoryLoadStatus,
     message: state.product.productMessage,

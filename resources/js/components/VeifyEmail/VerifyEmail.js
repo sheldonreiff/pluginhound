@@ -1,9 +1,8 @@
 import React from 'react';
-import Axios from 'axios';
 import { connect } from 'react-redux';
 import { Notification } from 'react-bulma-components';
 import LoggedInOnly from '../LoggedInOnly';
-import Spinner from '../common/Loader';
+import { ClipLoader } from 'react-spinners';
 
 import { verifyEmail } from '../../actions/user'; 
 
@@ -25,17 +24,28 @@ class VerifyEmail extends React.Component {
         }
 
         if(status === 'PROGRESS'){
-            return <Spinner />;
+            return <ClipLoader
+                sizeUnit={'px'}
+                size={40}
+                color='lightgray'
+                loading={true}
+            />;
         }
 
-        return status === 'SUCCESS' ? 
-        <Notification color='success'>
-            Email verified!
-        </Notification>
-        :
-        <Notification color='danger'>
-            {message}
-        </Notification>;
+        if(status === 'ERROR'){
+            return <Notification color='danger'>
+                {message}
+            </Notification>;
+        }
+
+
+        if(status === 'SUCCESS'){
+            return <Notification color='success'>
+                Email verified!
+            </Notification>;
+        }
+
+        return null;
     }
 }
 

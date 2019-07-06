@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Alert;
+
 class AlertController extends Controller
 {
     /**
@@ -24,7 +26,9 @@ class AlertController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        \Auth::user()
+        ->alerts()
+        ->create($request->only(['alert_when', 'alert_method', 'product_sku']));
     }
 
     /**
@@ -47,7 +51,7 @@ class AlertController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**

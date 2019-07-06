@@ -21,6 +21,8 @@ class CreateAlertsTable extends Migration
             $table->string('product_sku', 50);
             $table->timestamps();
 
+            $table->unique(['user_id', 'alert_when', 'alert_method', 'product_sku']);
+
             $table->foreign('user_id')
             ->references('id')->on('users')
             ->onDelete('cascade');

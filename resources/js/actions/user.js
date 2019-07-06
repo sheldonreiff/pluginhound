@@ -172,7 +172,7 @@ export const verifyEmail = () => {
 
             const urlParams = new URLSearchParams(window.location.search);
 
-            const signedUrl = urlParams.get('signedUrl');
+            const signedUrl = urlParams.get('signedRoute');
 
             axios({
                 method: 'get',

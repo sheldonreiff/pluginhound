@@ -26,6 +26,11 @@ class ProductController extends Controller
             ->where('name', 'like', "%$request->q%");
         }
 
+        if($request->bestDeals === 'true'){
+            $products = Product::bestDeals();
+            return ProductResource::collection( Product::hydrate($products->get()->toArray()) );
+        }
+
         return ProductResource::collection( $products->get() );
     }
 

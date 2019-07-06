@@ -69,4 +69,9 @@ class User extends Authenticatable implements JWTSubject
     {
         $this->notify(new VerifyEmail);
     }
+
+    public function alerts()
+    {
+        return $this->hasMany('App\Alert');
+    }
 }

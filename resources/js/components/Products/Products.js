@@ -2,17 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { ClipLoader } from 'react-spinners';
-import { Tile } from 'react-bulma-components';
+import { Tile, Heading } from 'react-bulma-components';
+import PropTypes from 'prop-types';
 
 import ProductTile from './ProductTile';
 
-import { loadAllProducts } from '../../actions/products';
+import { loadProducts } from '../../actions/products';
 
-// const ProductGrid = styled.div`
-//     display: grid;
-//     grid-gap: 1rem;
-//     grid-template-columns: repeat(auto-fit, minmax(200px, 500px));
-// `;
 
 const LoaderContainer = styled.div`
     height: 300px;
@@ -21,31 +17,39 @@ const LoaderContainer = styled.div`
     align-items: center;
 `;
 
+const Message = styled.span`
+    color: gray;
+`;
+
 class Product extends React.Component{
 
-    componentWillMount(){
-        console.log('will mount')
+    static propTypes = {
+        view: PropTypes.string.isRequired
     }
 
     componentDidMount(){
-        console.log('did mount')
-        this.props.loadAllProducts();
+        this.props.loadProducts(this.props.view);
     }
 
     render(){
 
-        const { products, status } = this.props;
+        const { products, title, status } = this.props;
 
         return <React.Fragment>
-            {status === 'SUCCESS' &&
+
+            <Heading size={2}>{title}</Heading>
+
+            {status === 'DONE' && products.length === 0 &&
+                <LoaderContainer>
+                    <Message>No products found</Message>
+                </LoaderContainer>
+            }
+            {status === 'DONE' &&
                 <Tile kind="ancestor">
                     {products.map(product => {
                         return <ProductTile
                             key={product.sku}
-                            sku={product.sku}
-                            name={product.name}
-                            sale_price={product.sale_price}
-                            thumbnail={product.thumbnail_url}
+                            product={product}
                         />;
                     })}
                     
@@ -66,13 +70,14 @@ class Product extends React.Component{
     }
 }
 
-const mapStateToProps = state => ({
-    products: state.products.products,
-    status: state.products.loadStatus,
+const mapStateToProps = (state, ownProps) => ({
+    products: state.products.views[ownProps.view].products,
+    title: state.products.views[ownProps.view].title,
+    status: state.products.views[ownProps.view].loadStatus,
 });
 
 const mapDispatchToProps = {
-    loadAllProducts,
+    loadProducts,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Product);

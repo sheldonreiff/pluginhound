@@ -85,3 +85,66 @@ export const getProductHistory = ({ start=null, end=null} = {startDate: null, en
         })
     }
 }
+
+export const loadAlerts = () => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ProductActionTypes.LOAD_ALERTS_PROGRESS
+        });
+
+        axios({
+            method: 'get',
+            url: `/api/product/${getState().product.sku}/alerts`,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+            responseType: 'json',
+        }).then(result => {
+            dispatch({
+                type: ProductActionTypes.LOAD_ALERTS_SUCCESS,
+                payload: {
+                    alerts: result.data.data
+                }
+            });
+        }).catch(error => {
+            console.log(error);
+            dispatch({
+                type: ProductActionTypes.LOAD_ALERTS_ERROR,
+                payload: {
+                    error
+                }
+            });
+        })
+    }
+}
+
+export const upsertAlert = (alertKey) => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ProductActionTypes.UPSERT_ALERT_PROGRESS,
+        });
+
+        const sku = getState().product.sku;
+        const alert = getState().product.alerts[alertKey];
+
+        const request = alert.id 
+        ? { method: 'patch', url: `/api/product/${sku}/alert/${alert.id}` }
+        : { method: 'post', url: `/api/product/${sku}/alert` };
+
+        axios({
+            ...request,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+            responseType: 'json',
+        }).then(results => {
+            dispatch({
+                type: ProductActionTypes.UPSERT_ALERT_SUCCESS,
+            });
+        }).catch(error => {
+            dispatch({
+                type: ProductActionTypes.UPSERT_ALERT_ERROR,
+            });
+        })
+    }
+}
