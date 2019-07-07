@@ -5,17 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Alert;
+use App\Http\Resources\Alert as AlertResource;
+use App\Http\Requests\AlertStoreRequest;
 
 class AlertController extends Controller
 {
+    private function getAcceptedFields(AlertStoreRequest $request)
+    {
+        return $request->get('event') === 'any_change'
+        ? $request->only(['alert_method', 'event', 'product_sku'])
+        : $request->only(['alert_method', 'event', 'threshold_unit', 'threshold_value', 'product_sku']);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($product)
     {
-        //
+        return new AlertResource(\Auth::user()
+        ->alerts
+        ->where('product_sku', $product));
     }
 
     /**
@@ -24,11 +34,17 @@ class AlertController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AlertStoreRequest $request)
     {
-        \Auth::user()
+        $validated = collect($request->validated());
+
+        $new_alert = \Auth::user()
         ->alerts()
-        ->create($request->only(['alert_when', 'alert_method', 'product_sku']));
+        ->create(
+            $this->getAcceptedFields($request)
+        );
+
+        return new AlertResource($new_alert);
     }
 
     /**
@@ -49,9 +65,15 @@ class AlertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AlertStoreRequest $request, Alert $alert)
     {
-        
+        $validated = collect($request->validated());
+
+        $alert->update(
+            $this->getAcceptedFields($request)
+        );
+
+        return new AlertResource($alert->fresh());
     }
 
     /**
@@ -60,8 +82,8 @@ class AlertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Alert $alert)
     {
-        //
+        $alert->delete();
     }
 }

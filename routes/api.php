@@ -51,7 +51,9 @@ Route::get('product/{product}/history', 'ProductController@history');
 Route::get('products', 'ProductController@index');
 
 
-Route::post('product/{product}/alert', 'AlertContoller@store');
-Route::patch('product/{product}/alert/{alert}', 'AlertContoller@update');
+Route::get('product/{product}/alerts', 'AlertController@index');
+Route::post('product/{product}/alert', 'AlertController@store');
+Route::patch('alert/{alert}', 'AlertController@update');
+Route::delete('alert/{alert}', 'AlertController@destroy');
 
 Route::post('user/register', 'UserController@store');

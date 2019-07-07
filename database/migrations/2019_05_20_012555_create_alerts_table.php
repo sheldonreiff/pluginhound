@@ -16,12 +16,14 @@ class CreateAlertsTable extends Migration
         Schema::create('alerts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->enum('alert_when', ['less_than_by_unit', 'less_than_by_percent', 'any_change']);
+            $table->enum('event', ['less_than', 'any_change']);
+            $table->enum('threshold_unit', ['percent', 'currency'])->nullable();
+            $table->float('threshold_value')->nullable();
             $table->enum('alert_method', ['email']);
             $table->string('product_sku', 50);
             $table->timestamps();
 
-            $table->unique(['user_id', 'alert_when', 'alert_method', 'product_sku']);
+            $table->unique(['user_id', 'event', 'threshold_unit', 'threshold_value', 'alert_method', 'product_sku'], 'uk_alerts');
 
             $table->foreign('user_id')
             ->references('id')->on('users')

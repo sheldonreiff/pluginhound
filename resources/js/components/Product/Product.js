@@ -12,7 +12,7 @@ import 'react-dates/lib/css/_datepicker.css';
 
 import Alert from './Alert';
 
-import { getProduct, getProductHistory, setProduct } from '../../actions/product';
+import { getProduct, getProductHistory, setProduct, loadAlerts, newAlert, deleteAlert, upsertAlert } from '../../actions/product';
 
 const LoaderContainer = styled.div`
     height: 300px;
@@ -61,6 +61,16 @@ const BackIcon = styled.span`
     font-size: 1.5rem;
 `;
 
+const AlertsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: -10px;
+    & > * {
+        margin: 10px;
+    }
+`;
+
 class Product extends React.Component{
     constructor(){
         super();
@@ -77,6 +87,7 @@ class Product extends React.Component{
     componentDidMount(){
         this.props.getProduct();
         this.props.getProductHistory();
+        this.props.loadAlerts();
     }
 
     handleDateChange = ({ start, end }) => {
@@ -84,7 +95,7 @@ class Product extends React.Component{
     }
 
     render(){
-        const { product, productHistory, status, historyStatus, message, start, end, history } = this.props;
+        const { product, productHistory, status, historyStatus, message, start, end, history, alerts, loadAlerts, newAlert, deleteAlert, upsertAlert, alertsLoadStatus } = this.props;
 
         return <SizeMe>
             {({ size }) =>
@@ -155,9 +166,36 @@ class Product extends React.Component{
 
                             <Heading size={4}>Alerts</Heading>
 
-                            <Alert />
+                            <AlertsContainer>
+                        
+                                <React.Fragment>
+                                    {alerts.map((alert, index) => {
+                                        return <Alert
+                                            key={`alert-${index}`}
+                                            alertKey={index}
+                                        />;
+                                    })}
+                                </React.Fragment>
 
-                            <Button color='dark'>+</Button>
+                                {alertsLoadStatus === 'ERROR' &&
+                                    <div>
+                                        <Notification color='danger' style={{display: 'inline-block'}}>
+                                            Error loading alerts
+                                        </Notification>
+                                    </div>
+                                }
+
+                                {alertsLoadStatus === 'PROGRESS' &&
+                                    <ClipLoader
+                                        sizeUnit={"px"}
+                                        size={40}
+                                        color='lightgray'
+                                        loading={true}
+                                    />
+                                }
+                                
+                                <Button color='dark' onClick={newAlert}>+</Button>
+                            </AlertsContainer>
 
                         </React.Fragment>
                     }
@@ -192,12 +230,18 @@ const mapStateToProps = state => ({
     message: state.product.productMessage,
     start: state.product.historyParams.start,
     end: state.product.historyParams.end,
+    alerts: state.product.alerts,
+    alertsLoadStatus: state.product.alertsLoadStatus,
 });
 
 const mapDispatchToProps = {
     getProduct,
     getProductHistory,
     setProduct,
+    loadAlerts,
+    newAlert,
+    deleteAlert,
+    upsertAlert,
 };
 
 export default withRouter(
