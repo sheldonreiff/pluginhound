@@ -22,7 +22,7 @@ const AlertsForm = styled.form`
 
 const SiblingContainer = styled.div`
     display: flex;
-    margin: 0 -10px;
+    margin: 0;
     & > * {
         margin: 10px;
     }
@@ -142,7 +142,7 @@ class Alert extends React.Component{
                     <Notification
                         color='success'
                     >
-                        Successfully updated alert!
+                        Successfully saved alert!
                     </Notification>
                 </Form.Field>
             }

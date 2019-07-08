@@ -2,7 +2,7 @@ import * as UserActionTypes from '../actionTypes/user';
 
 import React from 'react';
 
-import { createNotification, NOTIFICATION_TYPE_SUCCESS, NOTIFICATION_TYPE_ERROR } from 'react-redux-notify';
+import { createNotification } from '../actions/notifications';
 
 import axios from 'axios';
 import { NOTIFICATION_TYPE_INFO } from 'react-redux-notify/lib/modules/Notifications';
@@ -86,9 +86,8 @@ export const login = ({ email, password }) => {
 
             dispatch(createNotification({
                 message: "You're logged in!",
-                type: NOTIFICATION_TYPE_SUCCESS,
+                type: 'SUCCESS',
                 duration: 7500,
-                canDismiss: true
             }));
 
         }).catch(error => {
@@ -108,6 +107,7 @@ export const logout = () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('accessTokenType');
         localStorage.removeItem('accessExpiresIn');
+        localStorage.removeItem('user');
         
         dispatch({
             type: UserActionTypes.LOGOUT
@@ -115,15 +115,25 @@ export const logout = () => {
 
         dispatch(createNotification({
             message: 'Logged out!',
-            type: NOTIFICATION_TYPE_INFO,
+            type: 'INFO',
             duration: 7500,
-            canDismiss: true
         }));
     }
 }
 
 export const getMe = () => {
     return dispatch => {
+
+        const storedUser = localStorage.getItem('user');
+        if(storedUser){
+            dispatch({
+                type: UserActionTypes.UPDATE_SUCCESS,
+                payload: {
+                    data: JSON.parse(storedUser)
+                }
+            });
+        }
+
         if(localStorage.getItem('accessToken')){
             axios({
                 method: 'get',
@@ -132,10 +142,15 @@ export const getMe = () => {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 }
             }).then(response => {
+
+                const user = response.data;
+
+                localStorage.setItem('user', JSON.stringify(user));
+
                 dispatch({
                     type: UserActionTypes.UPDATE_SUCCESS,
                     payload: {
-                        data: response.data
+                        data: user
                     }
                 });
             }).catch(error => {

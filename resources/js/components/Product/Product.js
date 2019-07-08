@@ -95,7 +95,7 @@ class Product extends React.Component{
     }
 
     render(){
-        const { product, productHistory, status, historyStatus, message, start, end, history, alerts, loadAlerts, newAlert, deleteAlert, upsertAlert, alertsLoadStatus } = this.props;
+        const { product, productHistory, status, historyStatus, message, start, end, history, alerts, loadAlerts, newAlert, deleteAlert, upsertAlert, alertsLoadStatus, userStatus } = this.props;
 
         return <SizeMe>
             {({ size }) =>
@@ -164,38 +164,44 @@ class Product extends React.Component{
                                 </HistoryControlsContainer>
                             </ProductHistoryContainer>
 
-                            <Heading size={4}>Alerts</Heading>
+                            
 
-                            <AlertsContainer>
-                        
+
+                            {userStatus === 'LOGGED_IN' &&
                                 <React.Fragment>
-                                    {alerts.map((alert, index) => {
-                                        return <Alert
-                                            key={`alert-${index}`}
-                                            alertKey={index}
-                                        />;
-                                    })}
-                                </React.Fragment>
-
-                                {alertsLoadStatus === 'ERROR' &&
-                                    <div>
-                                        <Notification color='danger' style={{display: 'inline-block'}}>
-                                            Error loading alerts
-                                        </Notification>
-                                    </div>
-                                }
-
-                                {alertsLoadStatus === 'PROGRESS' &&
-                                    <ClipLoader
-                                        sizeUnit={"px"}
-                                        size={40}
-                                        color='lightgray'
-                                        loading={true}
-                                    />
-                                }
+                                    <Heading size={4}>Alerts</Heading>
+                                    <AlertsContainer>
                                 
-                                <Button color='dark' onClick={newAlert}>+</Button>
-                            </AlertsContainer>
+                                        <React.Fragment>
+                                            {alerts.map((alert, index) => {
+                                                return <Alert
+                                                    key={`alert-${index}`}
+                                                    alertKey={index}
+                                                />;
+                                            })}
+                                        </React.Fragment>
+
+                                        {alertsLoadStatus === 'ERROR' &&
+                                            <div>
+                                                <Notification color='danger' style={{display: 'inline-block'}}>
+                                                    Error loading alerts
+                                                </Notification>
+                                            </div>
+                                        }
+
+                                        {alertsLoadStatus === 'PROGRESS' &&
+                                            <ClipLoader
+                                                sizeUnit={"px"}
+                                                size={40}
+                                                color='lightgray'
+                                                loading={true}
+                                            />
+                                        }
+                                        
+                                        <Button color='dark' onClick={newAlert}>+</Button>
+                                    </AlertsContainer>
+                                </React.Fragment>
+                            }
 
                         </React.Fragment>
                     }
@@ -232,6 +238,7 @@ const mapStateToProps = state => ({
     end: state.product.historyParams.end,
     alerts: state.product.alerts,
     alertsLoadStatus: state.product.alertsLoadStatus,
+    userStatus: state.user.status,
 });
 
 const mapDispatchToProps = {

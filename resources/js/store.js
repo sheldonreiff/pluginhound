@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 
-import notifyReducer from 'react-redux-notify';
+import notificationReducer from './reducers/notifications';
 import accountReducer from './reducers/account';
 import userReducer from './reducers/user';
 import productReducer from './reducers/product';
@@ -12,7 +12,7 @@ const combinedReducers = combineReducers({
     user: userReducer,
     product: productReducer,
     products: productsReducer,
-    notifications: notifyReducer,
+    notifications: notificationReducer,
 });
 
 const middleware = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(applyMiddleware(thunk)) || compose : applyMiddleware(thunk);

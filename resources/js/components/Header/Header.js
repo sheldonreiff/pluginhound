@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Heading, Hero, Button, Modal, Navbar, Form } from 'react-bulma-components';
+import { Heading, Navbar } from 'react-bulma-components';
 import styled, { withTheme } from 'styled-components';
 import LoginModal from './LoginModal';
 import { darken } from 'polished';
@@ -12,6 +11,7 @@ import RegisterModal from './RegisterModal';
 import history from '../../history';
 
 import Search from './Search';
+import NotificationBar from './NotificationBar';
 
 const NavContainer = styled.div`
     display: flex;
@@ -138,6 +138,8 @@ class Header extends Component {
                     show={this.props.user.registerOpen}
                     close={() => this.props.toggleRegisterModal(false)}
                 />
+
+                <NotificationBar />
             </Fragment>
         );
     }

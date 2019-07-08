@@ -172,7 +172,7 @@ export default function Product(state=initial, action){
                         status: { $set: 'UPDATE_ERROR' },
                         message: { $set: has(action, 'payload.error.response.data.errors')
                         ? Object.values(action.payload.error.response.data.errors)[0]
-                        : "Couldn't update alert" }
+                        : "Couldn't save alert" }
                     }
                 }
             }); 
