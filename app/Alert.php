@@ -13,4 +13,9 @@ class Alert extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function product()
+    {
+        return $this->belongsTo('App\Product');
+    }
 }

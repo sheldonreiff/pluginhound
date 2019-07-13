@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Alert;
+use App\User;
 use App\Http\Resources\Alert as AlertResource;
 use App\Http\Requests\AlertStoreRequest;
 
@@ -21,11 +22,11 @@ class AlertController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($product)
+    public function index($product=null)
     {
-        return new AlertResource(\Auth::user()
-        ->alerts
-        ->where('product_sku', $product));
+        return $product
+        ? AlertResource::collection(\Auth::user()->alerts->where('product_sku', $product))
+        : AlertResource::collection(User::with('alerts.product')->find(\Auth::id())->alerts);
     }
 
     /**
@@ -73,7 +74,11 @@ class AlertController extends Controller
             $this->getAcceptedFields($request)
         );
 
-        return new AlertResource($alert->fresh());
+        $alert->refresh();
+
+        $alert->load('product');
+
+        return new AlertResource($alert);
     }
 
     /**

@@ -20,6 +20,7 @@ import UpdatePersonal from './components/Account/UpdatePersonal';
 import VerifyEmail from './components/VeifyEmail/VerifyEmail';
 import Product from './components/Product/Product';
 import Products from './components/Products/Products';
+import MyAlerts from './components/MyAlerts/MyAlerts';
 
 const Content = styled.div`
     padding: 20px;
@@ -52,7 +53,9 @@ class App extends Component
 
                         <Route path='/account' component={this.protected(Account)} />
                         <Route path='/verify' exact component={VerifyEmail} />
-                        
+
+                        <Route path='/my-alerts' exact component={MyAlerts} />
+
                         <Route path='/all-products' exact render={() => <Products key='all' view='all' />} />
                         <Route path='/search' exact render={() => <Products key='search' view='search' />}/>
                         <Route path='/product/:sku' exact component={Product} />

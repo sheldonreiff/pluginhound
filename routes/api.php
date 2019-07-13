@@ -19,41 +19,66 @@ Route::middleware('jwt.auth:api')->get('/user', function (Request $request) {
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'auth'
 ], function ($router) {
 
-    Route::post('login', 'Auth\AuthController@login');
-    Route::post('logout', 'Auth\AuthController@logout');
-    Route::post('refresh', 'Auth\AuthController@refresh');
-    Route::get('me', 'Auth\AuthController@me');
-    Route::post('register', 'UserController@store');
+    /**
+     * Auth
+     */
+    Route::post('auth/login', 'Auth\AuthController@login');
+    Route::post('auth/logout', 'Auth\AuthController@logout');
+    Route::post('auth/refresh', 'Auth\AuthController@refresh');
+    Route::get('auth/me', 'Auth\AuthController@me');
+    Route::post('auth/register', 'UserController@store');
 
+    Route::group([
+        'middleware' => 'jwt.auth'
+    ], function ($router) {
+    
+        /**
+         * Password
+         */
+        Route::post('password/update', 'UserController@updatePassword');
+        Route::post('password/reset', 'ResetPasswordController@resetPassword');
+
+        /**
+         * Alerts
+         */
+        Route::get('product/{product}/alerts', 'AlertController@index');
+        Route::post('product/{product}/alert', 'AlertController@store');
+        Route::patch('alert/{alert}', 'AlertController@update');
+        Route::delete('alert/{alert}', 'AlertController@destroy');
+        Route::get('alerts', 'AlertController@index');
+
+        /**
+         * Email verify
+         */
+        Route::post('email/resend', 'Auth\VerificationController@resend')->name('verification.resend')->middleware('jwt.auth');
+
+        /**
+         * Me
+         */
+        Route::patch('me', 'UserController@update');
+    });
+
+    Route::group([
+        'middleware' => 'signed'
+    ], function ($router) {
+        /**
+         * Email verify
+         */
+        Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice')->middleware('signed');;
+        Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify')->middleware('signed');
+    });
+
+    /**
+     * Register
+     */
+    Route::post('user/register', 'UserController@store');
+
+    /**
+     * Products
+     */
+    Route::get('product/{product}', 'ProductController@show');
+    Route::get('product/{product}/history', 'ProductController@history');
+    Route::get('products', 'ProductController@index');
 });
-
-Route::group([
-    'middleware' => 'jwt.auth',
-    'prefix' => 'password'
-], function ($router) {
-
-    Route::post('update', 'UserController@updatePassword');
-    Route::post('reset', 'ResetPasswordController@resetPassword');
-
-});
-
-Route::patch('me', 'UserController@update');
-
-Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice')->middleware('signed');;
-Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify')->middleware('signed');
-Route::post('email/resend', 'Auth\VerificationController@resend')->name('verification.resend')->middleware('jwt.auth');
-
-Route::get('product/{product}', 'ProductController@show');
-Route::get('product/{product}/history', 'ProductController@history');
-Route::get('products', 'ProductController@index');
-
-
-Route::get('product/{product}/alerts', 'AlertController@index');
-Route::post('product/{product}/alert', 'AlertController@store');
-Route::patch('alert/{alert}', 'AlertController@update');
-Route::delete('alert/{alert}', 'AlertController@destroy');
-
-Route::post('user/register', 'UserController@store');

@@ -1,166 +1,183 @@
-import React from 'react';
-import { Form } from 'react-bulma-components';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Button, Notification } from 'react-bulma-components';
+// import React from 'react';
+// import { Form } from 'react-bulma-components';
+// import styled from 'styled-components';
+// import PropTypes from 'prop-types';
+// import { connect } from 'react-redux';
+// import { Button, Notification, Box, Image } from 'react-bulma-components';
 
-import { updateAlert, deleteAlert, upsertAlert } from '../../actions/product';
+// import { updateAlert, deleteAlert, upsertAlert } from '../../actions/product';
 
-const AlertsForm = styled.form`
-    display: flex;
-    flex-wrap: wrap;
-    margin: 20px -10px;
-    & > * {
-        margin: 10px;
-    }
-    @media (max-width: 850px) {
-        flex-direction: column;
-        flex-wrap: nowrap;
-    }
-`;
+// const AlertsForm = styled.form`
+//     display: flex;
+//     flex-wrap: wrap;
+//     margin: 20px -10px;
+//     align-items: center;
+//     & > * {
+//         margin: 10px;
+//     }
+//     @media (max-width: 850px) {
+//         flex-direction: column;
+//         flex-wrap: nowrap;
+//         align-items: unset;
+//     }
+// `;
 
-const SiblingContainer = styled.div`
-    display: flex;
-    margin: 0;
-    & > * {
-        margin: 10px;
-    }
-`;
+// const SiblingContainer = styled.div`
+//     display: flex;
+//     margin: 0;
+//     & > * {
+//         margin: 10px;
+//     }
+// `;
 
-class Alert extends React.Component{
+// const StyledBox = styled(Box)`
+//     margin: 10px!important;
+// `;
 
-    static propTypes = {
-        alertKey: PropTypes.number.isRequired,
-    }
+// class Alert extends React.Component{
 
-    saveAlert = (e) => {
-        e.preventDefault();
-        this.props.upsertAlert(this.props.alertKey);
-    }
+//     static defaultProps = {
+//         isExtended: false
+//     }
 
-    getFillable = (alert) => {
-        return {
-            alert_method: alert.alert_method,
-            event: alert.event,
-            threshold_unit: alert.threshold_unit,
-            threshold_value: alert.threshold_value,
-        };
-    }
+//     static propTypes = {
+//         alertKey: PropTypes.number.isRequired,
+//     }
 
-    render(){
+//     saveAlert = (e) => {
+//         e.preventDefault();
+//         this.props.upsertAlert(this.props.alertKey);
+//     }
 
-        const { updateAlert, alertKey, alert, originalAlert, deleteAlert } = this.props;
+//     getFillable = (alert) => {
+//         return {
+//             alert_method: alert.alert_method,
+//             event: alert.event,
+//             threshold_unit: alert.threshold_unit,
+//             threshold_value: alert.threshold_value,
+//         };
+//     }
 
-        const changed = originalAlert && JSON.stringify(this.getFillable(originalAlert)) === JSON.stringify(this.getFillable(alert));
+//     render(){
 
-        const disabled = alert.status === 'DELETING';
+//         const { updateAlert, alertKey, alert, originalAlert, deleteAlert } = this.props;
 
-        return <AlertsForm onSubmit={(e) => this.saveAlert(e)}>
+//         const changed = originalAlert && JSON.stringify(this.getFillable(originalAlert)) === JSON.stringify(this.getFillable(alert));
 
-            Alert me by email when
+//         const disabled = alert.status === 'DELETING';
 
-            <Form.Select
-                value={alert.event}
-                onChange={(e) => updateAlert({ alertKey, key: 'event', value: e.target.value })}
-                disabled={disabled}
-            >
-                <option />
-                <option value='less_than'>the price decreases by</option>
-                <option value='any_change'>the price changes at all</option>
-            </Form.Select>
+//         return <AlertsForm onSubmit={(e) => this.saveAlert(e)}>
 
-            {alert.event !== 'any_change' && 
-                <SiblingContainer>
-                    <Form.Field>
-                        <Form.Input
-                            type='number'
-                            style={{ maxWidth: '100px' }} 
-                            value={alert.threshold_value}
-                            onChange={(e) => updateAlert({ alertKey, key: 'threshold_value', value: e.target.value })}
-                            disabled={disabled}
-                        />
-                    </Form.Field>
+//             {alert.product &&
+//                 <StyledBox>
+//                     <Image size={48} style={{gridArea: 'thumbnail'}} src={alert.product.thumbnail_url} />
+//                     {alert.product.name}
+//                 </StyledBox>
+//             }
 
-                    <Form.Select
-                        value={alert.threshold_unit}
-                        onChange={(e) => updateAlert({ alertKey, key: 'threshold_unit', value: e.target.value })}
-                        disabled={disabled}
-                    >
-                        <option />
-                        <option value='currency'>dollars</option>
-                        <option value='percent'>percent</option>
-                    </Form.Select>
-                </SiblingContainer>
-            }
+//             <span>Alert me by email when</span>
 
-            <SiblingContainer>
-                <Form.Field>
-                    <Form.Control>
-                        <Button
-                            color='primary'
-                            loading={alert.status === 'UPDATING'}
-                            disabled={changed}
-                        >
-                            Save
-                        </Button>
-                    </Form.Control>
-                </Form.Field>
+//             <Form.Select
+//                 value={alert.event}
+//                 onChange={(e) => updateAlert({ alertKey, key: 'event', value: e.target.value })}
+//                 disabled={disabled}
+//             >
+//                 <option />
+//                 <option value='less_than'>the price decreases by</option>
+//                 <option value='any_change'>the price changes at all</option>
+//             </Form.Select>
 
-                <Form.Field>
-                    <button
-                        type='button'
-                        className='delete'
-                        onClick={() => deleteAlert(alertKey)} 
-                        disabled={disabled}
-                    />
-                </Form.Field>
-            </SiblingContainer>
+//             {alert.event !== 'any_change' && 
+//                 <SiblingContainer>
+//                     <Form.Field>
+//                         <Form.Input
+//                             type='number'
+//                             style={{ maxWidth: '100px' }} 
+//                             value={alert.threshold_value}
+//                             onChange={(e) => updateAlert({ alertKey, key: 'threshold_value', value: e.target.value })}
+//                             disabled={disabled}
+//                         />
+//                     </Form.Field>
 
-            {alert.status === 'DELETE_ERROR' &&
-                <Form.Field>
-                    <Notification
-                        color='danger'
-                    >
-                        Couldn't delete alert
-                    </Notification>
-                </Form.Field>
-            }
+//                     <Form.Select
+//                         value={alert.threshold_unit}
+//                         onChange={(e) => updateAlert({ alertKey, key: 'threshold_unit', value: e.target.value })}
+//                         disabled={disabled}
+//                     >
+//                         <option />
+//                         <option value='currency'>dollars</option>
+//                         <option value='percent'>percent</option>
+//                     </Form.Select>
+//                 </SiblingContainer>
+//             }
 
-            {alert.status === 'UPDATE_ERROR' &&
-                <Form.Field>
-                    <Notification
-                        color='danger'
-                    >
-                        {alert.message}
-                    </Notification>
-                </Form.Field>
-            }
+//             <SiblingContainer>
+//                 <Form.Field>
+//                     <Form.Control>
+//                         <Button
+//                             color='primary'
+//                             loading={alert.status === 'UPDATING'}
+//                             disabled={changed}
+//                         >
+//                             Save
+//                         </Button>
+//                     </Form.Control>
+//                 </Form.Field>
 
-            {alert.status === 'UPDATED' &&
-                <Form.Field>
-                    <Notification
-                        color='success'
-                    >
-                        Successfully saved alert!
-                    </Notification>
-                </Form.Field>
-            }
+//                 <Form.Field>
+//                     <button
+//                         type='button'
+//                         className='delete'
+//                         onClick={() => deleteAlert(alertKey)} 
+//                         disabled={disabled}
+//                     />
+//                 </Form.Field>
+//             </SiblingContainer>
+
+//             {alert.status === 'DELETE_ERROR' &&
+//                 <Form.Field>
+//                     <Notification
+//                         color='danger'
+//                     >
+//                         Couldn't delete alert
+//                     </Notification>
+//                 </Form.Field>
+//             }
+
+//             {alert.status === 'UPDATE_ERROR' &&
+//                 <Form.Field>
+//                     <Notification
+//                         color='danger'
+//                     >
+//                         {alert.message}
+//                     </Notification>
+//                 </Form.Field>
+//             }
+
+//             {alert.status === 'UPDATED' &&
+//                 <Form.Field>
+//                     <Notification
+//                         color='success'
+//                     >
+//                         Successfully saved alert!
+//                     </Notification>
+//                 </Form.Field>
+//             }
             
             
-        </AlertsForm>;
-    }
-}
+//         </AlertsForm>;
+//     }
+// }
 
-const mapDispatchToProps = {
-    updateAlert,
-    deleteAlert,
-    upsertAlert,
-}
+// const mapDispatchToProps = {
+//     updateAlert,
+//     deleteAlert,
+//     upsertAlert,
+// }
 
-const mapStateToProps = (state, ownProps) => ({
-    originalAlert: state.product.originalAlerts.find(orgAlert => orgAlert.id === state.product.alerts[ownProps.alertKey].id),
-    alert: state.product.alerts[ownProps.alertKey]
-});
+// const mapStateToProps = (state, ownProps) => ({
+//     originalAlert: state.product.originalAlerts.find(orgAlert => orgAlert.id === state.product.alerts[ownProps.alertKey].id),
+//     alert: state.product.alerts[ownProps.alertKey]
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Alert);
+// export default connect(mapStateToProps, mapDispatchToProps)(Alert);

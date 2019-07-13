@@ -25,7 +25,7 @@ export const updatePassword = ({ currentPassword, newPassword, confirmNewPasswor
             method: 'post',
             url: '/api/password/update',
             headers:{
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             },
             responseType: 'json',
             data: {

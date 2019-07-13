@@ -9,10 +9,12 @@ import { LineChart , CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line } from '
 import 'react-dates/initialize';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
+import WhenAuthenticated from '../helpers/WhenAuthenticated';
 
-import Alert from './Alert';
+import Alerts from '../Alerts/Alerts';
 
-import { getProduct, getProductHistory, setProduct, loadAlerts, newAlert, deleteAlert, upsertAlert } from '../../actions/product';
+import { getProduct, getProductHistory, setProduct } from '../../actions/product';
+import { loadAlerts, newAlert, deleteAlert, upsertAlert } from '../../actions/alerts';
 
 const LoaderContainer = styled.div`
     height: 300px;
@@ -87,15 +89,20 @@ class Product extends React.Component{
     componentDidMount(){
         this.props.getProduct();
         this.props.getProductHistory();
-        this.props.loadAlerts();
+        this.props.loadAlerts({ view: 'product', sku: this.props.match.params.sku });
     }
 
     handleDateChange = ({ start, end }) => {
         this.props.getProductHistory({ start, end });
     }
 
+    handleNewAlert = () => {
+        const { product, newAlert } = this.props;
+        newAlert({ view: 'product', sku: product.sku });
+    }
+
     render(){
-        const { product, productHistory, status, historyStatus, message, start, end, history, alerts, loadAlerts, newAlert, deleteAlert, upsertAlert, alertsLoadStatus, userStatus } = this.props;
+        const { product, productHistory, status, historyStatus, message, start, end, history, alerts, alertsLoadStatus, userStatus } = this.props;
 
         return <SizeMe>
             {({ size }) =>
@@ -167,41 +174,17 @@ class Product extends React.Component{
                             
 
 
-                            {userStatus === 'LOGGED_IN' &&
-                                <React.Fragment>
-                                    <Heading size={4}>Alerts</Heading>
-                                    <AlertsContainer>
-                                
-                                        <React.Fragment>
-                                            {alerts.map((alert, index) => {
-                                                return <Alert
-                                                    key={`alert-${index}`}
-                                                    alertKey={index}
-                                                />;
-                                            })}
-                                        </React.Fragment>
+                            <WhenAuthenticated>
+                                <Heading size={4}>Alerts</Heading>
+                                <AlertsContainer>
 
-                                        {alertsLoadStatus === 'ERROR' &&
-                                            <div>
-                                                <Notification color='danger' style={{display: 'inline-block'}}>
-                                                    Error loading alerts
-                                                </Notification>
-                                            </div>
-                                        }
-
-                                        {alertsLoadStatus === 'PROGRESS' &&
-                                            <ClipLoader
-                                                sizeUnit={"px"}
-                                                size={40}
-                                                color='lightgray'
-                                                loading={true}
-                                            />
-                                        }
-                                        
-                                        <Button color='dark' onClick={newAlert}>+</Button>
-                                    </AlertsContainer>
-                                </React.Fragment>
-                            }
+                                    <Alerts
+                                        view='product'
+                                    />
+                            
+                                    <Button color='dark' onClick={this.handleNewAlert}>+</Button>
+                                </AlertsContainer>
+                            </WhenAuthenticated>
 
                         </React.Fragment>
                     }
