@@ -18,6 +18,10 @@ class Product extends Model implements Auditable
 
     protected $guarded = [];
 
+    protected $dispatchesEvents = [
+        'saving' => \App\Events\ProductSaving::class,
+    ];
+
     protected $dates = [
         'scraped_at',
         'scraped_date',
@@ -49,7 +53,7 @@ class Product extends Model implements Auditable
         }
     }
 
-    public function transformAndSaveResults($crawler_data)
+    public static function transformAndSaveResults($crawler_data)
     {
         foreach($crawler_data->pageFunctionResult as $product){
             Product::updateOrCreate(['sku' => $product->sku],
@@ -87,13 +91,21 @@ class Product extends Model implements Auditable
         ->joinSub($history, 'history', function($join){
             $join->on('products.sku', '=', 'history.sku');
         })
-        ->select(DB::raw('products.*, history.average_sale_price, (history.average_sale_price - products.sale_price) / history.average_sale_price as discount'));
+        ->select(DB::raw("products.*, history.average_sale_price, (history.average_sale_price - products.sale_price) / history.average_sale_price as discount"));
     }
 
     public static function bestDeals()
     {
-        return self::comparisons()
-        ->whereRaw('(history.average_sale_price - products.sale_price) / history.average_sale_price > .2');
+        $comparisons = self::comparisons();
+        
+        $withRank = DB::table( DB::raw("({$comparisons->toSql()}) as sub") )
+        ->mergeBindings($comparisons)
+        ->select(DB::raw('sub.*, percent_rank() OVER (ORDER BY discount) as discount_rank'));
+
+        return DB::table(DB::raw("({$withRank->toSql()}) as sub"))
+        ->mergeBindings($withRank)
+        ->where('discount_rank', '>=', .5)
+        ->orderBy('discount_rank', 'desc');
     }
 
     public function averageSalePrice()

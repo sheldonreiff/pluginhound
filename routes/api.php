@@ -19,6 +19,7 @@ Route::middleware('jwt.auth:api')->get('/user', function (Request $request) {
 
 Route::group([
     'middleware' => 'api',
+    'throttle:60,1',
 ], function ($router) {
 
     /**
@@ -29,6 +30,7 @@ Route::group([
     Route::post('auth/refresh', 'Auth\AuthController@refresh');
     Route::get('auth/me', 'Auth\AuthController@me');
     Route::post('auth/register', 'UserController@store');
+    Route::get('auth/validate', 'Auth\AuthController@validate');
 
     Route::group([
         'middleware' => 'jwt.auth'

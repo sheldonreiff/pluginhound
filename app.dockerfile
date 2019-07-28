@@ -1,5 +1,7 @@
 FROM php:7.3.5-fpm-stretch
 
-RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install pdo pdo_mysql bcmath
 
 RUN chown www-data /var/www
+
+RUN echo "cd /usr/local/apache2/htdocs" >> ~/.bashrc

@@ -11,7 +11,7 @@ import RegisterModal from './RegisterModal';
 import history from '../../history';
 
 import Search from './Search';
-import NotificationBar from './NotificationBar';
+
 
 const NavContainer = styled.div`
     display: flex;
@@ -22,6 +22,7 @@ const WordMark = styled(Heading)`
     padding: 1rem;
     color: white;
     display: inline-block;
+    cursor: pointer;
 `;
 
 const LoginButton = styled(Navbar.Item)`
@@ -67,6 +68,10 @@ class Header extends Component {
         });
     }
 
+    goHome = () => {
+        history.push('/');
+    }
+
     render() {
         const { user } = this.props;
 
@@ -77,7 +82,7 @@ class Header extends Component {
                     color='primary'
                 >
                     <NavContainer>
-                        <WordMark>Save On Waves</WordMark>
+                        <WordMark onClick={this.goHome}>Waves Saver</WordMark>
                         <Navbar.Burger
                             active={this.state.open.toString()}
                             onClick={this.toggleMobileNav}
@@ -87,7 +92,7 @@ class Header extends Component {
                         <Navbar.Container
                             position='end'
                         >
-                            <NavbarItem to='/best-deals'>Best Deals</NavbarItem>
+                            <NavbarItem to='/'>Top Deals</NavbarItem>
                             <NavbarItem to='/all-products'>All Products</NavbarItem>
                             {user.status === 'LOGGED_IN' && 
                                 <NavbarItem to='/my-alerts'>
@@ -138,8 +143,6 @@ class Header extends Component {
                     show={this.props.user.registerOpen}
                     close={() => this.props.toggleRegisterModal(false)}
                 />
-
-                <NotificationBar />
             </Fragment>
         );
     }

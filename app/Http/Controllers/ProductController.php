@@ -19,19 +19,18 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = new Product();
-
+        if($request->bestDeals === 'true'){
+            $products = Product::bestDeals();
+        }else{
+            $products = Product::comparisons();
+        }
+        
         if($request->q){
             $products = $products
             ->where('name', 'like', "%$request->q%");
         }
 
-        if($request->bestDeals === 'true'){
-            $products = Product::bestDeals();
-            return ProductResource::collection( Product::hydrate($products->get()->toArray()) );
-        }
-
-        return ProductResource::collection( $products->get() );
+        return ProductResource::collection( Product::hydrate($products->get()->toArray()) );
     }
 
     /**

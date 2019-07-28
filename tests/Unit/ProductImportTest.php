@@ -12,82 +12,51 @@ class ProductImportTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $testProducts;
-
-    public function setUp() : void
+    /** @test */
+    public function products_can_be_imported()
     {
-        parent::setUp();
-
-        $this->testProducts = [
-            (object) [
-                'sku' => 'TESTSKU1',
-                'name' => 'My great product',
-                'type' => 'plugin',
-                'msrp' => '79.000000000',
-                'salePrice' => '29.000000000',
-                'category' => 'Post Production',
-                'note' => 'nonsense',
-                'saleEnd' => '12/3/2019 5:00:00 AM',
-                'badge' => 'New',
-                'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png'
-            ],
-            (object) [
-                'sku' => 'TESTSKU2',
-                'name' => 'My better great product',
-                'type' => 'plugin',
-                'msrp' => '79.000000000',
-                'salePrice' => '29.000000000',
-                'category' => 'Post Production',
-                'note' => null,
-                'saleEnd' => null,
-                'badge' => 'New',
-                'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png'
-            ]
-        ];
-    }
-
-    private function importProducts(iterable $testProductKeys)
-    {
-        $products = array_intersect_key($this->testProducts, array_flip($testProductKeys));
-
-        $product = new Product();
-        $product->transformAndSaveResults((object)[
-            'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
-            'pageFunctionResult' => $products
-        ]);
-    }
-
-    public function test_products_can_be_imported()
-    {
-        $this->importProducts([0, 1]);
+        $this->importProducts(['a', 'b']);
 
         $this->assertDatabaseHas('products', [
-            'sku' => $this->testProducts[0]->sku,
-            'sale_price' => $this->testProducts[0]->salePrice,
-            'thumbnail_url' => $this->testProducts[0]->thumbnailUrl
+            'sku' => $this->testProducts['a']->sku,
+            'sale_price' => $this->testProducts['a']->salePrice,
+            'thumbnail_url' => $this->testProducts['a']->thumbnailUrl
         ]);
 
         $this->assertDatabaseHas('products', [
-            'sku' => $this->testProducts[1]->sku,
-            'sale_price' => $this->testProducts[1]->salePrice,
-            'thumbnail_url' => $this->testProducts[1]->thumbnailUrl
+            'sku' => $this->testProducts['b']->sku,
+            'sale_price' => $this->testProducts['b']->salePrice,
+            'thumbnail_url' => $this->testProducts['b']->thumbnailUrl
         ]);
     }
 
-    public function test_missing_products_are_deleted()
+    /** @test */
+    public function missing_products_are_deleted()
     {
-        $this->importProducts([0]);
+        $this->importProducts(['a']);
 
         $this->assertDatabaseHas('products', [
-            'sku' => $this->testProducts[0]->sku,
-            'sale_price' => $this->testProducts[0]->salePrice,
-            'thumbnail_url' => $this->testProducts[0]->thumbnailUrl
+            'sku' => $this->testProducts['a']->sku,
+            'sale_price' => $this->testProducts['a']->salePrice,
+            'thumbnail_url' => $this->testProducts['a']->thumbnailUrl
         ]);
 
         $this->assertDatabaseMissing('products', [
-            'sku' => $this->testProducts[1]->sku,
-            'sale_price' => $this->testProducts[1]->salePrice,
-            'thumbnail_url' => $this->testProducts[1]->thumbnailUrl
+            'sku' => $this->testProducts['b']->sku,
+            'sale_price' => $this->testProducts['b']->salePrice,
+            'thumbnail_url' => $this->testProducts['b']->thumbnailUrl
+        ]);
+    }
+
+    /** @test */
+    public function product_history_is_recorded()
+    {
+        $this->importProducts(['a', 'a_decreased']);
+
+        $this->assertDatabaseHas('audits', [
+            'auditable_type' => 'App\Product',
+            'auditable_id' => $this->testProducts['a']->sku,
+            'event' => 'updated',
         ]);
     }
 }

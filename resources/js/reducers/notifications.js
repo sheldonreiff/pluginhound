@@ -6,7 +6,14 @@ const initial = [];
 export default function Notifications(state=initial, action){
     switch(action.type){
         case NotificationActionTypes.ADD_NOTIFICATION:
-            return update(state, {
+            let newNotifications = state;
+
+            // allow only one notification at a time for topBar notifications
+            if(action.payload.displayType === 'topBar'){
+                newNotifications = state.filter(notification => notification.displayType !== 'topBar');
+            }
+
+            return update(newNotifications, {
                 $push: [{
                     ...action.payload,
                     show: true,

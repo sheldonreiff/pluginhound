@@ -1,11 +1,10 @@
 import * as UserActionTypes from '../actionTypes/user';
-
-import React from 'react';
-
+import has from 'lodash/has';
 import { createNotification } from '../actions/notifications';
-
 import axios from 'axios';
-import { NOTIFICATION_TYPE_INFO } from 'react-redux-notify/lib/modules/Notifications';
+import history from '../history';
+import React from 'react';
+import { ClipLoader } from 'react-spinners';
 
 export const register = ({ firstName, lastName, email, password, confirmPassword }) => {
     return dispatch => {
@@ -87,7 +86,7 @@ export const login = ({ email, password }) => {
             dispatch(createNotification({
                 message: "You're logged in!",
                 type: 'SUCCESS',
-                duration: 7500,
+                duration: 3000,
             }));
 
         }).catch(error => {
@@ -116,20 +115,40 @@ export const logout = () => {
         dispatch(createNotification({
             message: 'Logged out!',
             type: 'INFO',
-            duration: 7500,
+            duration: 3000,
         }));
+    }
+}
+
+const validUser = (dispatch) => {
+    const storedUser = localStorage.getItem('user');
+
+    if(storedUser){
+        dispatch({
+            type: UserActionTypes.UPDATE_VERIFYING,
+        });
+        axios({
+            method: 'get',
+            url: '/api/auth/validate',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        }).then(res => {
+            return storedUser;
+        });
     }
 }
 
 export const getMe = () => {
     return dispatch => {
 
-        const storedUser = localStorage.getItem('user');
-        if(storedUser){
+        const user = validUser(dispatch);
+
+        if(user){
             dispatch({
                 type: UserActionTypes.UPDATE_SUCCESS,
                 payload: {
-                    data: JSON.parse(storedUser)
+                    data: JSON.parse(user)
                 }
             });
         }
@@ -179,35 +198,59 @@ export const toggleLoginModal = (open) => {
 
 export const verifyEmail = () => {
     return (dispatch, getState) => {
-        if(!getState().user.verifyEmailStatus){
-            
-            dispatch({
-                type: UserActionTypes.VERIFY_EMAIL_PROGRESS
-            });
+        dispatch(createNotification({
+            type: 'INFO', 
+            message: <span>
+                Verifying email...  
+                <ClipLoader
+                    sizeUnit={'px'}
+                    size={15}
+                    color='white'
+                    loading={true}
+                />
+            </span>,
+        }));
 
-            const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(window.location.search);
 
-            const signedUrl = urlParams.get('signedRoute');
+        const signedUrl = urlParams.get('signedRoute');
 
-            axios({
-                method: 'get',
-                url: decodeURI(signedUrl),
-                headers:{
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                },
-                responseType: 'json',
-            }).then(res => {
-                dispatch({
-                    type: UserActionTypes.VERIFY_EMAIL_SUCCESS
-                });
-            }).catch(error => {
-                dispatch({
-                    type: UserActionTypes.VERIFY_EMAIL_ERROR,
-                    payload: {
-                        error
-                    }
-                });
-            });
-        }
+        history.replace('/');
+
+        axios({
+            method: 'get',
+            url: decodeURI(signedUrl),
+            headers:{
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+            responseType: 'json',
+        }).then(res => {
+            dispatch(createNotification({
+                type: 'SUCCESS', 
+                message: 'Email verified!', 
+                duration: 10000, 
+            }));
+            dispatch(getMe());
+        }).catch(error => {
+            dispatch(createNotification({
+                type: 'ERROR', 
+                message: has(error, 'response.data.errors') 
+                ? Object.values(error.response.data.errors).flat(1)[0]
+                : 'There was a problem verifying your email. Please try again.', 
+                duration: 10000, 
+            }));
+        });
+    }
+}
+
+export const updateUser = (field, value) => {
+    return dispatch => {
+        dispatch({
+            type: UserActionTypes.UPDATE_USER,
+            payload: {
+                field,
+                value
+            }
+        });
     }
 }

@@ -67,8 +67,8 @@ export const updateUser = (data = {}) => {
                 new_password: data.newPassword,
                 new_password_confirmation: data.confirmNewPassword,
                 email: data.email,
-                first_name: data.firstName,
-                last_name: data.lastName,
+                first_name: data.first_name,
+                last_name: data.last_name,
             },
         }).then(res => {
             dispatch({
@@ -121,3 +121,4 @@ export const sendEmailVerification = () => {
         })
     }
 }
+

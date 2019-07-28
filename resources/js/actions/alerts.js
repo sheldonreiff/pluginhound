@@ -114,7 +114,7 @@ export const deleteAlert = ({ view, alertKey }) => {
     }
 }
 
-export const upsertAlert = ({ view, alertKey, sku }) => {
+export const upsertAlert = ({ view, alertKey }) => {
     return (dispatch, getState) => {
         dispatch({
             type: AlertActionTypes.UPSERT_ALERT_PROGRESS,
@@ -126,11 +126,11 @@ export const upsertAlert = ({ view, alertKey, sku }) => {
 
         const alert = getState().alerts.views[view].alerts[alertKey];
 
+        const { alert_method, event, threshold_unit, threshold_value, product_sku } = alert;
+
         const request = alert.id 
         ? { method: 'patch', url: `/api/alert/${alert.id}` }
-        : { method: 'post', url: `/api/product/${sku}/alert` };
-
-        const { alert_method, event, threshold_unit, threshold_value, product_sku } = alert;
+        : { method: 'post', url: `/api/product/${product_sku}/alert` };
 
         axios({
             ...request,
@@ -139,7 +139,6 @@ export const upsertAlert = ({ view, alertKey, sku }) => {
                 event,
                 threshold_unit,
                 threshold_value,
-                product_sku,
             },
             headers: {
                 authorization: `Bearer ${localStorage.getItem('accessToken')}`,

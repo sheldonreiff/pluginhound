@@ -89,7 +89,6 @@ class Product extends React.Component{
     componentDidMount(){
         this.props.getProduct();
         this.props.getProductHistory();
-        this.props.loadAlerts({ view: 'product', sku: this.props.match.params.sku });
     }
 
     handleDateChange = ({ start, end }) => {
@@ -171,15 +170,13 @@ class Product extends React.Component{
                                 </HistoryControlsContainer>
                             </ProductHistoryContainer>
 
-                            
-
-
                             <WhenAuthenticated>
                                 <Heading size={4}>Alerts</Heading>
                                 <AlertsContainer>
 
                                     <Alerts
                                         view='product'
+                                        sku={this.props.match.params.sku}
                                     />
                             
                                     <Button color='dark' onClick={this.handleNewAlert}>+</Button>

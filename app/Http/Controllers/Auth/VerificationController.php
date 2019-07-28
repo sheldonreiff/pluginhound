@@ -31,8 +31,8 @@ class VerificationController extends Controller
      */
     public function verify(Request $request)
     {
-        if ($request->route('id') != $request->user()->getKey()) {
-            throw new AuthorizationException;
+        if ($request->route('id') != optional($request->user())->getKey()) {
+            return response()->json(['errors' => ["Please login to the account you're trying to activate before verifying"]], 401);
         }
 
         if ($request->user()->hasVerifiedEmail()) {

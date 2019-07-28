@@ -33,7 +33,6 @@ class AlertStoreRequest extends FormRequest
             'event' => ['required', 'in:less_than,any_change'],
             'threshold_unit' => ['nullable', 'in:percent,currency', 'required_with:threshold_value'],
             'threshold_value' => ['nullable', 'numeric', Rule::requiredIf($this->request->get('event') === 'less_than')],
-            'product_sku' => ['required', 'exists:products,sku']
         ];
     }
 }

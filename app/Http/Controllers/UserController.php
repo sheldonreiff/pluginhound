@@ -53,7 +53,15 @@ class UserController extends Controller
 
     protected function updateEmail($data)
     {
-        Auth::user()->update(['email' => $data['email']]);
+        $user = Auth::user();
+
+        if($data['email'] !== $user->email){
+            $user->email_verified_at = null;
+        }
+
+        $user->email = $data['email'];
+
+        $user->save();
 
         Auth::user()->sendEmailVerificationNotification();
     }

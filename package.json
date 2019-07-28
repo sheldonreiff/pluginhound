@@ -46,6 +46,7 @@
         "recharts": "^1.6.2",
         "redux": "^3.0.0",
         "redux-thunk": "^2.3.0",
+        "reselect": "^4.0.0",
         "styled-components": "^4.2.0",
         "uuid": "^3.3.2",
         "validate": "^4.5.1"

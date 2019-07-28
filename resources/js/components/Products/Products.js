@@ -4,9 +4,11 @@ import styled from 'styled-components';
 import { ClipLoader } from 'react-spinners';
 import { Tile, Heading } from 'react-bulma-components';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import ProductTile from './ProductTile';
 
+import { verifyEmail } from '../../actions/user'; 
 import { loadProducts } from '../../actions/products';
 
 
@@ -28,6 +30,10 @@ class Product extends React.Component{
     }
 
     componentDidMount(){
+        if(this.props.location.pathname === '/verify'){
+            this.props.verifyEmail();
+        }
+
         this.props.loadProducts(this.props.view);
     }
 
@@ -78,6 +84,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = {
     loadProducts,
+    verifyEmail,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Product);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Product));

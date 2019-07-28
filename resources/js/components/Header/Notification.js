@@ -9,11 +9,16 @@ import { removeNotification } from '../../actions/notifications';
 
 const StyledNotification = styled(BulmaNotification)`
     border-radius: 0;
+    height: 50px;
+    padding: 0;
+    display: grid;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Animation = posed.div({
-visible: { opacity: 1 },
-hidden: { opacity: 0 }
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 }
 });
 
 
@@ -32,21 +37,6 @@ class Notification extends React.Component{
         notification: PropTypes.object.isRequired,
     }
 
-    handleDismiss = () => {
-        const { removeNotification, notification } = this.props;
-
-        removeNotification(notification.id);
-    }
-
-    componentDidMount() {
-        const { duration } = this.props.notification;
-        if (duration !== 0) {
-            setTimeout(() => {
-                this.handleDismiss();
-            }, duration);
-        }
-    }
-
     render(){
 
         const { notification } = this.props;
@@ -57,7 +47,7 @@ class Notification extends React.Component{
             <StyledNotification
                 color={this.colorMap[notification.type]}
             >
-                {notification.message}
+                <span>{notification.message}</span>
             </StyledNotification>
         </Animation>;
     }

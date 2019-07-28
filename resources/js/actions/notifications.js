@@ -1,8 +1,11 @@
 import * as NotificationActionTypes from '../actionTypes/notifications';
 const uuidv4 = require('uuid/v4');
 
-export const createNotification = ({ type, message, duration, displayType }) => {
+export const createNotification = ({ type, message, duration=null, displayType='topBar' }) => {
     return dispatch => {
+
+        const id = uuidv4();
+
         dispatch({
             type: NotificationActionTypes.ADD_NOTIFICATION,
             payload: {
@@ -10,9 +13,15 @@ export const createNotification = ({ type, message, duration, displayType }) => 
                 message,
                 duration,
                 displayType,
-                id: uuidv4(),
+                id,
             }
-        })
+        });
+
+        if (duration) {
+            setTimeout(() => {
+                dispatch(removeNotification(id));
+            }, duration);
+        }
     }
 }
 

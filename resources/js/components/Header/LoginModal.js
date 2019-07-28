@@ -69,6 +69,7 @@ class LoginModal extends Component {
                                         value={email}
                                         disabled={status === 'PROGRESS'} 
                                         onChange={(e) => this.handleChange({ field: 'email', value: e.target.value }) }
+                                        autoFocus
                                     />
                                 </Form.Control>
                             </Form.Field>
@@ -93,7 +94,7 @@ class LoginModal extends Component {
 
                             {status === 'REGISTERED' &&
                                 <Notification color='success'>
-                                    Thanks for signing up! Check your email for a confimration link to finish up.
+                                    Thanks for signing up! Log in with your new account, then check your email for a confimration link to finish up.
                                 </Notification>
                             }
 

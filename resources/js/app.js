@@ -12,18 +12,24 @@ import styled from 'styled-components';
 import { getMe } from './actions/user';
 
 // components
-import Main from './components/Main/Main';
 import Account from './components/Account/Account';
 import Header from './components/Header/Header';
 import UpdatePassword from './components/Account/UpdatePassword';
 import UpdatePersonal from './components/Account/UpdatePersonal';
-import VerifyEmail from './components/VeifyEmail/VerifyEmail';
 import Product from './components/Product/Product';
 import Products from './components/Products/Products';
 import MyAlerts from './components/MyAlerts/MyAlerts';
+import NotFound from './components/NotFound';
+import NotificationBar from './components/Header/NotificationBar';
+import WhenAuthenticated from './components/helpers/WhenAuthenticated';
+
+const Main = styled.div`
+    padding-top: 60px;
+    position: relative;
+`;
 
 const Content = styled.div`
-    padding: 20px;
+    padding-bottom: 20px;
     padding-right: 3%;
     padding-left: 3%;
 `;
@@ -33,10 +39,7 @@ const Home = props => <Products key='deals' view='bestDeals' />;
 class App extends Component
 {
     protected = (component, isMainContent=true) => {
-        const { userStatus } = this.props;
-        return userStatus === 'LOGGED_IN'
-        ? component
-        : (isMainContent ? Home : null);
+        return <WhenAuthenticated else={isMainContent ? Home : null} chilren={component} />;
     }
     
     componentWillMount(){
@@ -47,22 +50,27 @@ class App extends Component
         return (
            <React.Fragment>
                 <Header />
-                <Content>
-                    <Switch>
-                        <Route path='/' exact render={Home} />
+                <Main>
+                    <NotificationBar />
+                    <Content>
+                        <Switch>
+                            <Route path='/' exact render={Home} />
 
-                        <Route path='/account' component={this.protected(Account)} />
-                        <Route path='/verify' exact component={VerifyEmail} />
+                            <Route path='/account' component={this.protected(Home)} />
+                            <Route path='/verify' exact component={Home} />
 
-                        <Route path='/my-alerts' exact component={MyAlerts} />
+                            <Route path='/my-alerts' exact component={MyAlerts} />
 
-                        <Route path='/all-products' exact render={() => <Products key='all' view='all' />} />
-                        <Route path='/search' exact render={() => <Products key='search' view='search' />}/>
-                        <Route path='/product/:sku' exact component={Product} />
-                    </Switch>
-                    <Route path='/account/password' exact component={this.protected(UpdatePassword, false)} />
-                    <Route path='/account/personal-info' exact component={this.protected(UpdatePersonal, false)} />
-                </Content>
+                            <Route path='/all-products' exact render={() => <Products key='all' view='all' />} />
+                            <Route path='/search' exact render={() => <Products key='search' view='search' />}/>
+                            <Route path='/product/:sku' exact component={Product} />
+
+                            <Route component={NotFound} />
+                        </Switch>
+                        <Route path='/account/password' exact component={this.protected(UpdatePassword, false)} />
+                        <Route path='/account/personal-info' exact component={this.protected(UpdatePersonal, false)} />
+                    </Content>
+                </Main>
             </React.Fragment>
         );
     }

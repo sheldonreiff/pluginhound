@@ -16,7 +16,7 @@ const customFields = {
         title: 'Search',
     },
     bestDeals: {
-        title: 'Best Deals',
+        title: 'Top Deals',
     }
 };
 

@@ -66,6 +66,7 @@ class RegisterModal extends Component {
                                     value={firstName}
                                     onChange={(e) => this.handleChange({ field: 'firstName', value: e.target.value }) }
                                     disabled={disabled}
+                                    autoFocus
                                 />
                             </Form.Control>
                         </Form.Field>

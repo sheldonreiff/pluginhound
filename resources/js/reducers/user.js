@@ -5,6 +5,7 @@ import has from 'lodash/has';
 
 const initial = {
     me: {},
+    originalMe: {},
     status: 'GUEST',
     messages: [],
     loginOpen: false,
@@ -37,10 +38,15 @@ export default function User(state=initial, action){
         case UserActionTypes.UPDATE_SUCCESS:
             return update(state, {
                 me: { $set: action.payload.data },
+                originalMe: { $set: action.payload.data },
                 status: { $set: 'LOGGED_IN' },
             });
         case UserActionTypes.UPDATE_ERROR:
-        
+            return state;
+        case UserActionTypes.UPDATE_VERIFYING:
+            return update(state, {
+                status: { $set: 'VERIFYING' },
+            }); 
         case UserActionTypes.LOGOUT:
             return initial;
         case UserActionTypes.REGISTER_PROGRESS:
@@ -64,20 +70,11 @@ export default function User(state=initial, action){
             return update(state, {
                 registerOpen: { $set: action.payload.open },
             });
-        case UserActionTypes.VERIFY_EMAIL_SUCCESS:
+        case UserActionTypes.UPDATE_USER:
             return update(state, {
-                verifyEmailStatus: { $set: 'SUCCESS' }
-            });
-        case UserActionTypes.VERIFY_EMAIL_PROGRESS:
-            return update(state, {
-                verifyEmailStatus: { $set: 'PROGRESS' }
-            });
-        case UserActionTypes.VERIFY_EMAIL_ERROR:
-            return update(state, {
-                verifyEmailStatus: { $set: 'ERROR' },
-                verifyEmailMessage: { $set: has(action, 'payload.error.response.data.errors') 
-                ? Object.values(action.payload.error.response.data.errors).flat(1)
-                : ['There was a problem verify your email. Please try again.'] },
+                me: { 
+                    [action.payload.field]: { $set: action.payload.value }
+                }
             });
         default:
             return state;

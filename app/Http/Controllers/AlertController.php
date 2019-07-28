@@ -6,16 +6,25 @@ use Illuminate\Http\Request;
 
 use App\Alert;
 use App\User;
+use App\Product;
 use App\Http\Resources\Alert as AlertResource;
 use App\Http\Requests\AlertStoreRequest;
 
 class AlertController extends Controller
 {
-    private function getAcceptedFields(AlertStoreRequest $request)
+    private function getAcceptedFields(AlertStoreRequest $request, Product $product=null)
     {
-        return $request->get('event') === 'any_change'
-        ? $request->only(['alert_method', 'event', 'product_sku'])
-        : $request->only(['alert_method', 'event', 'threshold_unit', 'threshold_value', 'product_sku']);
+        $fields = collect(
+            $request->get('event') === 'any_change'
+            ? $request->only(['alert_method', 'event', 'product_sku'])
+            : $request->only(['alert_method', 'event', 'threshold_unit', 'threshold_value', 'product_sku'])
+        );
+
+        if($product){
+            $fields->put('product_sku', $product->sku);
+        }
+
+        return $fields->toArray();
     }
     /**
      * Display a listing of the resource.
@@ -35,14 +44,14 @@ class AlertController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AlertStoreRequest $request)
+    public function store(Product $product, AlertStoreRequest $request)
     {
         $validated = collect($request->validated());
 
         $new_alert = \Auth::user()
         ->alerts()
         ->create(
-            $this->getAcceptedFields($request)
+            $this->getAcceptedFields($request, $product)
         );
 
         return new AlertResource($new_alert);

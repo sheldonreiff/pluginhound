@@ -6,15 +6,24 @@ import { Notification } from 'react-bulma-components';
 
 import Alert from './Alert';
 
+import { loadAlerts } from '../../actions/alerts';
+
 class Alerts extends React.Component{
 
     static defaultProps = {
         extendedAlertView: false,
+        sku: null,
     }
 
     static propTypes = {
         view: PropTypes.string.isRequired,
         extendedAlertView: PropTypes.bool,
+        sku: PropTypes.string,
+    }
+
+    componentDidMount(){
+        const { view, sku } = this.props;
+        this.props.loadAlerts({ view, sku });
     }
 
     render(){
@@ -56,4 +65,8 @@ const mapStateToProps = (state, ownProps) => ({
     status: state.alerts.views[ownProps.view].status,
 });
 
-export default connect(mapStateToProps)(Alerts);
+const mapDispatchToProps = {
+    loadAlerts
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Alerts);

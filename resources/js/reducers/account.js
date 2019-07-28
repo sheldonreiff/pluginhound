@@ -40,6 +40,8 @@ export default function Account(state=initial, action){
                 ...state,
                 userUpdateStatus: initial.userUpdateStatus,
                 userUpdateMessage: initial.userUpdateMessage,
+                sendEmailVerificationStatus: initial.sendEmailVerificationStatus,
+                sendEmailVerificationMessage: initial.sendEmailVerificationMessage,
             }
         case AccountActionTypes.SEND_VERIFY_PROGRESS:
             return {

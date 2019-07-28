@@ -11,7 +11,10 @@ export const LOGOUT = 'user/LOGOUT';
 
 export const UPDATE_SUCCESS = 'user/UPDATE_SUCCESS';
 export const UPDATE_ERROR = 'user/UPDATE_ERROR';
+export const UPDATE_VERIFYING = 'user/UPDATE_VERIFYING';
 
 export const VERIFY_EMAIL_SUCCESS = 'user/VERIFY_EMAIL_SUCCESS';
 export const VERIFY_EMAIL_PROGRESS = 'user/VERIFY_EMAIL_PROGRESS';
 export const VERIFY_EMAIL_ERROR = 'user/VERIFY_EMAIL_ERROR';
+
+export const UPDATE_USER = 'user/UPDATE_USER';
