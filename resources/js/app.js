@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
@@ -9,7 +9,7 @@ import 'babel-runtime/core-js/object/assign';
 import store from './store';
 import styled from 'styled-components';
 
-import { getMe } from './actions/user';
+import { getMe, verifyEmail } from './actions/user';
 
 // components
 import Account from './components/Account/Account';
@@ -39,11 +39,17 @@ const Home = props => <Products key='deals' view='bestDeals' />;
 class App extends Component
 {
     protected = (component, isMainContent=true) => {
-        return <WhenAuthenticated else={isMainContent ? Home : null} chilren={component} />;
+        return <WhenAuthenticated else={isMainContent ? Home : null} children={component} />;
     }
     
     componentWillMount(){
-        store.dispatch(getMe());
+        this.props.getMe();
+    }
+
+    componentDidMount(){
+        if(this.props.location.pathname === '/verify'){
+            this.props.verifyEmail();
+        }
     }
 
     render(){
@@ -56,8 +62,9 @@ class App extends Component
                         <Switch>
                             <Route path='/' exact render={Home} />
 
-                            <Route path='/account' component={this.protected(Home)} />
+                            <Route path='/account' render={ () => <WhenAuthenticated else={Home}><Account/></WhenAuthenticated>}/>
                             <Route path='/verify' exact component={Home} />
+                            <Route path='/reset' exact component={Home} />
 
                             <Route path='/my-alerts' exact component={MyAlerts} />
 
@@ -67,8 +74,8 @@ class App extends Component
 
                             <Route component={NotFound} />
                         </Switch>
-                        <Route path='/account/password' exact component={this.protected(UpdatePassword, false)} />
-                        <Route path='/account/personal-info' exact component={this.protected(UpdatePersonal, false)} />
+                        <Route path='/account/password' exact render={ () => <WhenAuthenticated><UpdatePassword/></WhenAuthenticated>} />
+                        <Route path='/account/personal-info' exact render={ () => <WhenAuthenticated><UpdatePersonal/></WhenAuthenticated>} />
                     </Content>
                 </Main>
             </React.Fragment>
@@ -80,4 +87,9 @@ const mapStateToProps = state => ({
     userStatus: state.user.status
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = {
+    verifyEmail,
+    getMe,
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

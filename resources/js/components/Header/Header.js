@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Heading, Navbar } from 'react-bulma-components';
+import { withRouter } from 'react-router-dom';
 import styled, { withTheme } from 'styled-components';
 import LoginModal from './LoginModal';
 import { darken } from 'polished';
@@ -11,6 +12,7 @@ import RegisterModal from './RegisterModal';
 import history from '../../history';
 
 import Search from './Search';
+import ResetPasswordModal from './ResetPasswordModal';
 
 
 const NavContainer = styled.div`
@@ -143,6 +145,11 @@ class Header extends Component {
                     show={this.props.user.registerOpen}
                     close={() => this.props.toggleRegisterModal(false)}
                 />
+
+                <ResetPasswordModal
+                    show={this.props.location.pathname === '/reset'}
+                    close={() => history.push('/')}
+                />
             </Fragment>
         );
     }
@@ -158,6 +165,7 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
+    withRouter,
     connect(mapStateToProps, mapDispatchToProps),
     withTheme
 )(Header);

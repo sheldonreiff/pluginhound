@@ -5,6 +5,7 @@ import axios from 'axios';
 import history from '../history';
 import React from 'react';
 import { ClipLoader } from 'react-spinners';
+const queryString = require('query-string');
 
 export const register = ({ firstName, lastName, email, password, confirmPassword }) => {
     return dispatch => {
@@ -50,6 +51,8 @@ export const toggleRegisterModal = (open) => {
         });
     }
 }
+
+
 
 
 export const login = ({ email, password }) => {
@@ -135,6 +138,10 @@ const validUser = (dispatch) => {
             }
         }).then(res => {
             return storedUser;
+        }).catch(error => {
+            dispatch({
+                type: UserActionTypes.LOGOUT,
+            });
         });
     }
 }
@@ -196,6 +203,18 @@ export const toggleLoginModal = (open) => {
     }
 }
 
+export const toggleResetMode = (open) => {
+    return dispatch => {
+        dispatch({
+            type: UserActionTypes.TOGGLE_RESET_MODE,
+            payload: {
+                open,
+                messages: [],
+            }
+        });
+    }
+}
+
 export const verifyEmail = () => {
     return (dispatch, getState) => {
         dispatch(createNotification({
@@ -251,6 +270,66 @@ export const updateUser = (field, value) => {
                 field,
                 value
             }
+        });
+    }
+}
+
+export const sendPasswordReset = (email) => {
+    return dispatch => {
+        dispatch({
+            type: UserActionTypes.SEND_RESET_PROGRESS,
+        });
+
+        axios({
+            method: 'post',
+            url: '/api/password/send',
+            data: {
+                email,
+            },
+            responseType: 'json'
+        }).then(res => {
+            dispatch({
+                type: UserActionTypes.SEND_RESET_SUCCESS,
+            });
+        }).catch(error => {
+            console.log(error);
+
+            dispatch({
+                type: UserActionTypes.SEND_RESET_ERROR,
+            });
+        })
+    }
+}
+
+export const resetPassword = ({ password, password_confirmation, signature }) => {
+    return dispatch => {
+        dispatch({
+            type: UserActionTypes.RESET_PASSWORD_PROGRESS,
+        });
+
+        const signatureParsed = queryString.parse(signature);
+
+        axios({
+            method: 'post',
+            url: `/api/password/reset`,
+            data: {
+                password,
+                password_confirmation,
+                ...signatureParsed,
+            },
+            responseType: 'json'
+        }).then(res => {
+            history.push('/');
+            dispatch({
+                type: UserActionTypes.RESET_PASSWORD_SUCCESS,
+            });
+        }).catch(error => {
+            dispatch({
+                type: UserActionTypes.RESET_PASSWORD_ERROR,
+                payload: {
+                    error
+                },
+            });
         });
     }
 }

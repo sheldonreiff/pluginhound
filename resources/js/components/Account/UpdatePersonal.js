@@ -160,4 +160,4 @@ const mapDispatchToProps = {
     updateUserInput,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdatePersonal  );
+export default connect(mapStateToProps, mapDispatchToProps)(UpdatePersonal);

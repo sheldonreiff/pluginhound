@@ -9,9 +9,13 @@ const initial = {
     status: 'GUEST',
     messages: [],
     loginOpen: false,
+    resetMode: false,
     registerOpen: false,
     verifyEmailStatus: null,
     verifyEmailMessage: null,
+    sendResetStatus: null,
+    passwordResetStatus: null,
+    passwordResetMessages: null,
 };
 
 export default function User(state=initial, action){
@@ -75,6 +79,40 @@ export default function User(state=initial, action){
                 me: { 
                     [action.payload.field]: { $set: action.payload.value }
                 }
+            });
+        case UserActionTypes.TOGGLE_RESET_MODE:
+            return update(state, {
+                resetMode: { $set: action.payload.open },
+            }); 
+        case UserActionTypes.SEND_RESET_PROGRESS:
+            return update(state, {
+                sendResetStatus: { $set: 'PROGRESS' },
+            });
+        case UserActionTypes.SEND_RESET_SUCCESS:
+            return update(state, {
+                sendResetStatus: { $set: 'SUCCESS' },
+            });
+        case UserActionTypes.SEND_RESET_ERROR:
+            return update(state, {
+                sendResetStatus: { $set: 'ERROR' },
+            });
+        case UserActionTypes.RESET_PASSWORD_PROGRESS:
+            return update(state, {
+                passwordResetStatus: { $set: 'PROGRESS' },
+                passwordResetMessages: { $set: null },
+            });
+        case UserActionTypes.RESET_PASSWORD_SUCCESS:
+            return update(state, {
+                loginOpen: { $set: true },
+                passwordResetStatus: { $set: 'SUCCESS' },
+                passwordResetMessages: { $set: null },
+            });
+        case UserActionTypes.RESET_PASSWORD_ERROR:
+            return update(state, {
+                passwordResetStatus: { $set: 'ERROR' },
+                passwordResetMessages: { $set: has(action, 'payload.error.response.data.errors') 
+                ? Object.values(action.payload.error.response.data.errors).flat(1)
+                : ["Couldn't reset password"] },
             });
         default:
             return state;

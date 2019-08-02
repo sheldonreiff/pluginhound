@@ -21,6 +21,7 @@ export const isAuthenticated = createSelector(
 )
 
 const WhenAuthenticated = props => {
+
     if(props.status === 'LOGGED_IN'){
         return props.children;
     }
@@ -36,8 +37,12 @@ const WhenAuthenticated = props => {
         </LoaderContainer>;
     }
 
-    return props.else ? props.else : null;
+    return props.else;
 }
+
+WhenAuthenticated.defaultProps = {
+    else: null,
+};
 
 const mapStateToProps = state => ({
     status: state.user.status

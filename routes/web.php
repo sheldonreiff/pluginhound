@@ -18,3 +18,7 @@
 Route::get('{path}', function () {
     return view('home');
 })->where('path', '^((?!api)[\s\S])*$');
+
+// only for password reset email, not actual laravel route
+Route::get('/reset', null)
+->name('password.reset');

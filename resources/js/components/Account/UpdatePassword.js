@@ -121,4 +121,8 @@ const mapStateToProps = state => ({
     errors: state.account.userUpdateMessage,
 });
 
-export default connect(mapStateToProps, { updateUser })(UpdatePassword);
+const mapDispatchToProps = {
+    updateUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdatePassword);

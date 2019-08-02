@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\User;
+use Mail;
+use Notification;
 
 class AuthTest extends TestCase
 {
@@ -75,5 +77,42 @@ class AuthTest extends TestCase
 
         $this->json('get', '/api/auth/validate')
         ->assertStatus(401);
+    }
+
+    /** @test */
+    public function can_update_password()
+    {
+        $new_password = $this->faker->password();
+
+        $this->json('post', '/api/password/update', [
+            'current_password' => $this->userData->password_raw,
+            'new_password' => $new_password,
+            'new_password_confirmation' => $new_password,
+        ])
+        ->assertOk();
+
+        $this->json('post', '/api/auth/login', [
+            'email' => $this->userData->email,
+            'password' => $new_password,
+        ])
+        ->assertOk();
+    }
+
+    /** @test */
+    public function can_reset_password_from_emailed_link()
+    {
+        Notification::fake();
+
+        $this->post('/api/auth/logout')
+        ->assertOk();
+
+        Notification::assertNothingSent();
+
+        $this->json('post', '/api/password/send', [
+            'email' => $this->userData->email,
+        ])
+        ->assertOk();
+
+        Notification::assertSentTo($this->user, \Illuminate\Auth\Notifications\ResetPassword::class);
     }
 }

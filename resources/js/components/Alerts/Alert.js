@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Notification, Box, Image } from 'react-bulma-components';
+import { Link } from 'react-router-dom';
 
 import { updateAlert, deleteAlert, upsertAlert } from '../../actions/alerts';
 
@@ -80,10 +81,12 @@ class Alert extends React.Component{
         return <AlertsForm onSubmit={(e) => this.saveAlert(e)}>
 
             {alert.product && isExtended &&
-                <StyledBox>
-                    <Image size={48} style={{gridArea: 'thumbnail'}} src={alert.product.thumbnail_url} />
-                    {alert.product.name}
-                </StyledBox>
+                <Link to={`/product/${alert.product.sku}`}>
+                    <StyledBox>
+                        <Image size={48} style={{gridArea: 'thumbnail'}} src={alert.product.thumbnail_url} />
+                        {alert.product.name}
+                    </StyledBox>
+                </Link>
             }
 
             <span>Alert me by email when</span>

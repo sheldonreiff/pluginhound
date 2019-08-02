@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 use App\Rules\Password;
+use App\User;
+use Mail;
+use Illuminate\Http\Request;
 
 class ResetPasswordController 
 {
@@ -41,13 +44,27 @@ class ResetPasswordController
         ];
     }
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function sendPasswordReset()
     {
-        $this->middleware('guest');
+        $credentials = ['email' => request()->input('email')];
+        $response = \Password::sendResetLink($credentials, function (Message $message) {
+            $message->subject($this->getEmailSubject());
+        });
+
+        switch ($response) {
+            case \Password::RESET_LINK_SENT:
+                return response(null, 200);
+            case \Password::INVALID_USER:
+                return response(null, 404);
+        }
+
+        // $user = User::where('email', request()->input('email'))->firstOrFail();
+        // $token = \Password::getRepository()->create($user);
+
+        // Mail::send(['text' => 'emails.password'], ['token' => $token], function (\Illuminate\Mail\Message $message) use ($user) {
+        //     $message->subject(config('app.name') . ' Password Reset Link');
+        //     $message->to($user->email);
+        // });
     }
+
 }

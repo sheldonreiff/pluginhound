@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import history from '../../history';
 import { withRouter } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
 
 import { changeTab, clearResults } from '../../actions/account';
 
@@ -22,7 +21,7 @@ class Account extends React.Component{
     render(){
 
         const { location } = this.props;
-
+        
         return <AccountContainer>
             <Tabs>
                 <Tabs.Tab

@@ -39,8 +39,7 @@ Route::group([
         /**
          * Password
          */
-        Route::post('password/update', 'UserController@updatePassword');
-        Route::post('password/reset', 'ResetPasswordController@resetPassword');
+        Route::post('password/update', 'UserController@update');
 
         /**
          * Alerts
@@ -68,8 +67,13 @@ Route::group([
         /**
          * Email verify
          */
-        Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice')->middleware('signed');;
-        Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify')->middleware('signed');
+        Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
+        Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
+
+        /**
+         * Me
+         */
+        Route::patch('me', 'UserController@update');
     });
 
     /**
@@ -78,9 +82,16 @@ Route::group([
     Route::post('user/register', 'UserController@store');
 
     /**
+     * Password
+     */
+    Route::post('password/send', 'Auth\ResetPasswordController@sendPasswordReset');
+
+    /**
      * Products
      */
     Route::get('product/{product}', 'ProductController@show');
     Route::get('product/{product}/history', 'ProductController@history');
     Route::get('products', 'ProductController@index');
+
+    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 });

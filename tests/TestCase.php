@@ -15,6 +15,7 @@ abstract class TestCase extends BaseTestCase
     protected $testProducts;
     protected $testAlerts;
     protected $user;
+    protected $faker;
 
     public function be(User $user, $driver = null)
     {
@@ -103,6 +104,8 @@ abstract class TestCase extends BaseTestCase
                 'product_sku' => $this->testProducts['b']->sku,
             ],
         ];
+
+        $this->faker = \Faker\Factory::create();
     }
 
     protected function importProducts(iterable $testProductKeys=[])
