@@ -42,5 +42,7 @@ jobs:
       # prepare the database
       - run: php artisan migrate --env=testing --force
 
+      - run: php artisan jwt:secret
+
       # run tests
       - run: ./vendor/bin/phpunit
