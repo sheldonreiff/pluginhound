@@ -21,19 +21,33 @@ abstract class TestCase extends BaseTestCase
     {
         $token = JWTAuth::fromUser($user);
         $this->withHeader('Authorization', 'Bearer ' . $token);
-
-        return $this;
     }
 
     public function setUp() : void
     {
         parent::setUp();
 
+        User::unguard();
+
         $this->userData = factory(User::class)
         ->make()
         ->makeVisible(['password']);
 
-        $this->user = User::create($this->userData->toArray());
+        $this->user2Data = factory(User::class)
+        ->make()
+        ->makeVisible(['password']);
+
+        $this->user = User::create(
+            collect($this->userData)
+            ->except(['password_raw'])
+            ->toArray()
+        );
+        
+        $this->user2 = User::create(
+            collect($this->user2Data)
+            ->except(['password_raw'])
+            ->toArray()
+        );
 
         $this->be($this->user);
 

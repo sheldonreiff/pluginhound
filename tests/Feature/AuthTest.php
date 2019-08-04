@@ -82,9 +82,9 @@ class AuthTest extends TestCase
     /** @test */
     public function can_update_password()
     {
-        $new_password = $this->faker->password();
+        $new_password = $this->faker->password().'sdlfj2389';
 
-        $this->json('post', '/api/password/update', [
+        $this->json('patch', '/api/me', [
             'current_password' => $this->userData->password_raw,
             'new_password' => $new_password,
             'new_password_confirmation' => $new_password,

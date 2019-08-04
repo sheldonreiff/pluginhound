@@ -38,7 +38,7 @@ class Product extends React.Component{
 
         return <React.Fragment>
 
-            <Heading size={2}>{title}</Heading>
+            <Heading size={2} className='products-heading'>{title}</Heading>
 
             {status === 'DONE' && products.length === 0 &&
                 <LoaderContainer>

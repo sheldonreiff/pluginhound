@@ -63,9 +63,13 @@ class AlertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, Alert $alert)
     {
-        //
+        if(\Auth::user()->cant('show', $alert)){
+            abort(403);
+        }
+
+        return new AlertResource($alert);
     }
 
     /**
@@ -77,6 +81,10 @@ class AlertController extends Controller
      */
     public function update(AlertStoreRequest $request, Alert $alert)
     {
+        // if(\Auth::user()->cant('update', $alert)){
+        //     abort(403);
+        // }
+
         $validated = collect($request->validated());
 
         $alert->update(
@@ -98,6 +106,10 @@ class AlertController extends Controller
      */
     public function destroy(Alert $alert)
     {
+        if(\Auth::user()->cant('destroy', $alert)){
+            abort(403);
+        }
+
         $alert->delete();
     }
 }

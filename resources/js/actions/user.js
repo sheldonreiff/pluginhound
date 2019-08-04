@@ -120,10 +120,12 @@ export const logout = () => {
             type: 'INFO',
             duration: 3000,
         }));
+
+        history.push('/');
     }
 }
 
-const validUser = (dispatch) => {
+const validUser = (dispatch, callback) => {
     const storedUser = localStorage.getItem('user');
 
     if(storedUser){
@@ -137,7 +139,7 @@ const validUser = (dispatch) => {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         }).then(res => {
-            return storedUser;
+            callback(storedUser);
         }).catch(error => {
             dispatch({
                 type: UserActionTypes.LOGOUT,
@@ -149,16 +151,14 @@ const validUser = (dispatch) => {
 export const getMe = () => {
     return dispatch => {
 
-        const user = validUser(dispatch);
-
-        if(user){
+        const userInfo = validUser(dispatch, user => {
             dispatch({
                 type: UserActionTypes.UPDATE_SUCCESS,
                 payload: {
                     data: JSON.parse(user)
                 }
             });
-        }
+        });
 
         if(localStorage.getItem('accessToken')){
             axios({

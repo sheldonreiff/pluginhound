@@ -92,27 +92,4 @@ class ProductTest extends TestCase
             ]
         ]);
     }
-
-    /** @test */
-    public function can_create_alerts()
-    {
-        $this->importProducts(['a']);
-
-        $alert = [
-            'alert_method' => 'email',
-            'event' => 'less_than',
-            'threshold_unit' => 'percent',
-            'threshold_value' => .2,
-        ];
-
-        $this->json('post', "api/product/{$this->testProducts['a']->sku}/alert", $alert)
-        ->assertStatus(201);
-
-        $this->get("api/product/{$this->testProducts['a']->sku}/alerts")
-        ->assertJson([
-            'data' => [
-                $alert
-            ]
-        ]);
-    }
 }

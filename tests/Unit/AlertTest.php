@@ -96,4 +96,28 @@ class AlertTest extends TestCase
             return true;
         });
     }
+
+    /** @test */
+    public function alert_email_is_not_sent_when_email_is_not_verified()
+    {
+        Notification::fake();
+
+        $this->importProducts(['a']);
+
+        $this->user->email_verified_at = null;
+        $this->user->save();
+
+        $this->user
+        ->alerts()
+        ->create($this->testAlerts['a']);
+
+        $this->importProducts(['a_decreased']);
+
+        $user = $this->user;
+        $testProduct = $this->testProducts['a'];
+
+        Notification::assertNothingSent();
+    }
+
+    
 }

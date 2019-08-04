@@ -10,6 +10,7 @@ use App\Notifications\Alert as AlertNotification;
 
 use App\Product;
 use App\User;
+use Illuminate\Support\Facades\Gate;
 
 class GenerateAlerts
 {
@@ -65,7 +66,9 @@ class GenerateAlerts
             });
             
             $usersToAlert->each(function ($user, $key) use($event, $changes) {
-                $user->notify(new AlertNotification($event->product, $changes, $user->alerts));
+                if(Gate::forUser($user)->allows('send-alert')){
+                    $user->notify(new AlertNotification($event->product, $changes, $user->alerts));
+                }
             });
         }
     }

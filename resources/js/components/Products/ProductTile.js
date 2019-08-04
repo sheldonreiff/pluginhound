@@ -30,10 +30,10 @@ const ProductTile = props => {
 
     const { product } = props;
 
-    return <Link to={`/product/${product.sku}`}>
+    return <Link to={`/product/${product.sku}`} data-sku={product.sku}>
         <ParentTile kind='parent'>
             <ChildTile renderAs="article" kind="child" className='box'>
-                <Heading style={{gridArea: 'title'}} size={5}>{product.name}</Heading>
+                <Heading style={{gridArea: 'title'}} size={5} className='product-title'>{product.name}</Heading>
                 <PriceContainer>
                     <Heading subtitle>${product.sale_price}</Heading>
                     <Tag color='danger' style={{gridArea: 'badge'}} >{Math.round(product.discount * 100)}% off</Tag>

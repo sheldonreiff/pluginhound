@@ -46,6 +46,7 @@ Route::group([
          */
         Route::get('product/{product}/alerts', 'AlertController@index');
         Route::post('product/{product}/alert', 'AlertController@store');
+        Route::get('alert/{alert}', 'AlertController@show');
         Route::patch('alert/{alert}', 'AlertController@update');
         Route::delete('alert/{alert}', 'AlertController@destroy');
         Route::get('alerts', 'AlertController@index');
@@ -69,11 +70,6 @@ Route::group([
          */
         Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
         Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
-
-        /**
-         * Me
-         */
-        Route::patch('me', 'UserController@update');
     });
 
     /**
