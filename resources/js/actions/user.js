@@ -84,6 +84,8 @@ export const login = ({ email, password }) => {
                 }
             });
 
+            dispatch(toggleLoginModal(false));
+
             dispatch(getMe());
 
             dispatch(createNotification({

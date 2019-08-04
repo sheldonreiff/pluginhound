@@ -136,7 +136,7 @@ class Header extends Component {
                     </Navbar.Menu>
                 </Navbar>
 
-                <LoginModal 
+                <LoginModal
                     show={this.props.user.loginOpen}
                     close={() => this.props.toggleLoginModal(false)}
                 />

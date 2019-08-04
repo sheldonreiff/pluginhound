@@ -64,7 +64,8 @@ class RegisterModal extends Component {
                                     type="text"
                                     placeholder="Type your first name"
                                     value={firstName}
-                                    onChange={(e) => this.handleChange({ field: 'firstName', value: e.target.value }) }
+                                    name='firstName'
+                                    onChange={(e) => this.handleChange({ field: e.target.name, value: e.target.value }) }
                                     disabled={disabled}
                                     autoFocus
                                 />
@@ -78,7 +79,8 @@ class RegisterModal extends Component {
                                     type="text"
                                     placeholder="Type your last name"
                                     value={lastName}
-                                    onChange={(e) => this.handleChange({ field: 'lastName', value: e.target.value }) }
+                                    name='lastName'
+                                    onChange={(e) => this.handleChange({ field: e.target.name, value: e.target.value }) }
                                     disabled={disabled}
                                 />
                             </Form.Control>
@@ -91,7 +93,8 @@ class RegisterModal extends Component {
                                     type="email"
                                     placeholder="Type your email"
                                     value={email}
-                                    onChange={(e) => this.handleChange({ field: 'email', value: e.target.value }) }
+                                    name='email'
+                                    onChange={(e) => this.handleChange({ field: e.target.name, value: e.target.value }) }
                                     disabled={disabled}
                                 />
                             </Form.Control>
@@ -103,7 +106,8 @@ class RegisterModal extends Component {
                                     type="password"
                                     placeholder="Type a password"
                                     value={password}
-                                    onChange={(e) => this.handleChange({ field: 'password', value: e.target.value }) }
+                                    name='password'
+                                    onChange={(e) => this.handleChange({ field: e.target.name, value: e.target.value }) }
                                     disabled={disabled}
                                 />
                         </Form.Field>
@@ -114,7 +118,8 @@ class RegisterModal extends Component {
                                     type="password"
                                     placeholder="Type your password again"
                                     value={confirmPassword}
-                                    onChange={(e) => this.handleChange({ field: 'confirmPassword', value: e.target.value }) }
+                                    name='confirmPassword'
+                                    onChange={(e) => this.handleChange({ field: e.target.name, value: e.target.value }) }
                                     disabled={disabled}
                                 />
                         </Form.Field>

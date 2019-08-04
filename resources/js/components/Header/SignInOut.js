@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+const isTouchDevice = require('is-touch-device');
 
 import { logout } from '../../actions/user';
 
@@ -25,6 +26,8 @@ class SignInOut extends React.Component {
 
     render(){
 
+        const isTouch = isTouchDevice();
+
         const { hover } = this.state;
         const { name, logout } = this.props;
 
@@ -33,9 +36,12 @@ class SignInOut extends React.Component {
             onMouseLeave={() => this.toggleHover(false)}
         >
             {!hover && name &&
-                <div>
+                <div id='name-badge' onClick={logout}>
                     <Greeting>Hi</Greeting>
                     <span>{name}</span>
+                    {isTouch &&
+                        <span>(logout)</span>
+                    }
                 </div>
             }
             {hover &&

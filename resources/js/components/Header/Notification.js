@@ -47,7 +47,7 @@ class Notification extends React.Component{
             <StyledNotification
                 color={this.colorMap[notification.type]}
             >
-                <span>{notification.message}</span>
+                <span className='app-notification'>{notification.message}</span>
             </StyledNotification>
         </Animation>;
     }

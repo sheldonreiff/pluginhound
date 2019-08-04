@@ -76,7 +76,7 @@ class LoginModal extends Component {
         const { email, password } = this.state;
         const { messages, status, show, close, resetMode, sendResetStatus, passwordResetStatus } = this.props;
 
-        return <Modal show={show} onClose={close} >
+        return <Modal show={show} onClose={close}>
                 <StyledModalContent>
                     <Section style={{ backgroundColor: 'white' }}>
                         <form onSubmit={(e) => this.handleSubmit(e)}>
@@ -89,7 +89,8 @@ class LoginModal extends Component {
                                         placeholder="Type your email"
                                         value={email}
                                         disabled={status === 'PROGRESS'} 
-                                        onChange={(e) => this.handleChange({ field: 'email', value: e.target.value }) }
+                                        name='email'
+                                        onChange={(e) => this.handleChange({ field: e.target.name, value: e.target.value }) }
                                         autoFocus
                                     />
                                 </Form.Control>
@@ -99,12 +100,12 @@ class LoginModal extends Component {
                                 <Form.Field>
                                     <Form.Label>Password</Form.Label>
                                     <Form.Input
-                                        autoFocus
                                         type="password"
                                         placeholder="Type your password"
                                         value={password}
-                                        disabled={status === 'PROGRESS'} 
-                                        onChange={(e) => this.handleChange({ field: 'password', value: e.target.value }) }
+                                        disabled={status === 'PROGRESS'}
+                                        name='password' 
+                                        onChange={(e) => this.handleChange({ field: e.target.name, value: e.target.value }) }
                                     />
                                 </Form.Field>
                             }
