@@ -54,6 +54,7 @@
         "reselect": "^4.0.0",
         "styled-components": "^4.2.0",
         "uuid": "^3.3.2",
-        "validate": "^4.5.1"
+        "validate": "^4.5.1",
+        "wait-on": "^3.3.0"
     }
 }

@@ -1,4 +1,4 @@
-version: 2
+version: 2.0
 jobs:
   build:
     docker:
@@ -10,6 +10,10 @@ jobs:
           MYSQL_PASSWORD: app
           MYSQL_DATABASE: waves-saver
         command: [--default-authentication-plugin=mysql_native_password]
+      - image: cypress/base:8
+        environment:
+          ## this enables colors in the output
+          TERM: xterm
 
     steps:
       - checkout
@@ -23,12 +27,27 @@ jobs:
             - v1-dependencies-{{ checksum "composer.lock" }}
             - v1-dependencies-
 
+            - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - v1-deps-{{ .Branch }}
+            - v1-deps
+      - run:
+            name: Install Dependencies
+            command: yarn install --frozen-lockfile
+
       - run: composer install -n --prefer-dist
 
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
+
+      - save_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ~/.cache
+      - run: npm start & wait-on http://localhost:3002
+      - run: $(yarn bin)/cypress run --record
+
       - restore_cache:
           keys:
             - node-v1-{{ checksum "package.json" }}
