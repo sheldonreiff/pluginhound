@@ -52,7 +52,6 @@ jobs:
           command: |
             set -x
             docker-compose up -d
-      - run: npm run wait-on http://localhost:3002
 
       - run: $(yarn bin)/cypress run --record
 
