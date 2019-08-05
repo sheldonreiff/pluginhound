@@ -45,7 +45,7 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ~/.cache
-      - run: npm start & wait-on http://localhost:3002
+      - run: npm start & npm wait-on http://localhost:3002
       - run: $(yarn bin)/cypress run --record
 
       - restore_cache:
