@@ -55,10 +55,6 @@ jobs:
 
       - run: |
           ssh remote-docker \
-            yarn run wait-on http://localhost:3002
-
-      - run: |
-          ssh remote-docker \
             $(yarn bin)/cypress run --record 
 
       - restore_cache:
