@@ -55,7 +55,7 @@ jobs:
 
       - run: |
           ssh remote-docker \
-            $(yarn bin)/cypress run --record 
+            cypress run
 
       - restore_cache:
           keys:
