@@ -45,8 +45,6 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ~/.cache
-
-      - run: node -p & "console.log(require('ip').address())"
       
       - setup_remote_docker
       - run:
