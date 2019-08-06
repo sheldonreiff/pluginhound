@@ -45,6 +45,8 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ~/.cache
+
+      - run: node -p & "console.log(require('ip').address())"
       
       - setup_remote_docker
       - run:
@@ -53,7 +55,7 @@ jobs:
             set -x
             docker-compose up -d
 
-      - run: yarn run wait-on http://localhost:3002
+      - run: yarn run wait-on http://127.0.0.1:3002
 
       - run: $(yarn bin)/cypress run --record
 
