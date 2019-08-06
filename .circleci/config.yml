@@ -53,9 +53,13 @@ jobs:
             set -x
             docker-compose up -d
 
-      - run: yarn run wait-on http://127.0.0.1:3002
+      - run: |
+          ssh remote-docker \
+            yarn run wait-on http://localhost:3002
 
-      - run: $(yarn bin)/cypress run --record
+      - run: |
+          ssh remote-docker \
+            $(yarn bin)/cypress run --record 
 
       - restore_cache:
           keys:
