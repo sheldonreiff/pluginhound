@@ -53,7 +53,7 @@ jobs:
             set -x
             docker-compose up -d
 
-      - run: docker exec waves-saver-app yarn run test
+      - run: docker exec -i waves-saver-app bash -c "cd /usr/local/apache2/htdocs && yarn run test"
 
       - restore_cache:
           keys:
