@@ -8,8 +8,8 @@
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "test": "jest",
-        "cypress": "cypress open"
+        "test": "cypress run",
+        "test:i": "cypress open"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.4.4",
