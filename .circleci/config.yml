@@ -52,7 +52,7 @@ jobs:
           command: |
             set -x
             docker-compose up -d
-            docker cp ./ app:/usr/local/apache2/htdocs/
+            docker cp ./ waves-saver-app:/usr/local/apache2/htdocs/
 
       - run: docker exec -i waves-saver-app bash -c "cd /usr/local/apache2/htdocs && yarn run test"
 
