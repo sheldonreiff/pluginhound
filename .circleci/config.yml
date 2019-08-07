@@ -53,9 +53,7 @@ jobs:
             set -x
             docker-compose up -d
 
-      - run: |
-          ssh remote-docker \
-            yarn run test
+      - run: docker exec waves-saver-app yarn run test
 
       - restore_cache:
           keys:
