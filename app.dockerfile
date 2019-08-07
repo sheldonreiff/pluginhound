@@ -17,3 +17,4 @@ RUN apt-get update \
     && apt-get install -y yarn
 
 RUN echo "cd /usr/local/apache2/htdocs" >> ~/.bashrc
+RUN echo "cd /usr/local/apache2/htdocs" >> ~/.bash_profile
