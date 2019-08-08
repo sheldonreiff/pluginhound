@@ -69,6 +69,16 @@ services:
       - 3004:6379
     networks:
       - app-network
+  cypress:
+    container_name: waves-saver-cypress
+    build:
+      context: ./
+      dockerfile: cypress.dockerfile
+    tty: true
+    networks:
+      - app-network
+    volumes:
+      - ./:/home/app
 networks:
   app-network:
     driver: bridge
