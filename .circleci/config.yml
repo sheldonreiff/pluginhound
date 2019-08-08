@@ -45,7 +45,17 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ~/.cache
-      
+
+      - run:
+          name: set environmental vars
+          command: |
+            touch .env && echo "APP_KEY=" >> .env
+            php artisan key:generate
+            php artisan jwt:secret
+            echo -e "\DB_CONNECTION=${DB_CONNECTION}" >> .env
+            echo -e "\DB_HOST_TEST=${DB_HOST_TEST}" >> .env
+            cat .env
+        
       - setup_remote_docker
       - run:
           name: boot full app for cypress tests
@@ -54,7 +64,6 @@ jobs:
             docker-compose up -d
             docker cp ./ waves-saver-app:/usr/local/apache2/htdocs/
 
-      - run: docker exec -i waves-saver-app bash -c "cd /usr/local/apache2/htdocs && touch .env && echo "APP_KEY=" >> .env && php artisan key:generate && php artisan jwt:secret"
       - run: docker exec -i waves-saver-cypress bash -c "cd /home/app && yarn run cypress run"
 
       - restore_cache:
