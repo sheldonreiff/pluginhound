@@ -14,3 +14,4 @@ yarn-error.log
 dev_notes
 cypress.env.json
 cypress/videos/
+cypress/screenshots/
