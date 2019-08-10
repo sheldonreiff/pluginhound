@@ -7,7 +7,7 @@ import history from './history';
 import theme from './theme';
 import store from './store';
 
-import App from './App.js';
+import App from './app.js';
 
 const AppContainer = props => <Provider store={store}>
     <ThemeProvider theme={theme} >

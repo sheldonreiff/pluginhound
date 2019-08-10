@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'test'),
 
     /*
     |--------------------------------------------------------------------------
@@ -66,7 +66,7 @@ return [
         'test' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL_TEST'),
-            'host' => env('DB_HOST_TEST', 'waves-saver-test-db'),
+            'host' => env('DB_HOST_TEST', '127.0.0.1'),
             'port' => env('DB_PORT_TEST', '3306'),
             'database' => env('DB_DATABASE_TEST', 'waves-saver'),
             'username' => env('DB_USERNAME_TEST', 'app'),

@@ -34,6 +34,8 @@ jobs:
             name: Install Dependencies
             command: yarn install --frozen-lockfile
 
+      - run: npm run prod
+
       - run: composer install -n --prefer-dist
 
       - save_cache:
@@ -52,19 +54,6 @@ jobs:
             touch .env && echo "APP_KEY=" >> .env
             php artisan key:generate
             php artisan jwt:secret
-            echo -e "\DB_CONNECTION=${DB_CONNECTION}" >> .env
-            echo -e "\DB_HOST_TEST=${DB_HOST_TEST}" >> .env
-            cat .env
-        
-      - setup_remote_docker
-      - run:
-          name: boot full app for cypress tests
-          command: |
-            set -x
-            docker-compose up -d
-            docker cp ./ waves-saver-app:/usr/local/apache2/htdocs/
-
-      - run: docker exec -i waves-saver-cypress bash -c "cd /home/app && yarn run cypress run"
 
       - restore_cache:
           keys:
@@ -76,8 +65,25 @@ jobs:
           paths:
             - node_modules
 
+      - run:
+          name: Start php
+          background: true
+          command: php artisan serve --port=3002
+
+      - run: yarn run wait-on http://localhost:3002
+
+      - run:
+          name: Run Cypress tests
+          command: yarn run cypress run
+          environment:
+            APP_URL: http://localhost:3002
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
+
       # prepare the database
-      - run: php artisan migrate --env=testing --force
+      - run: php artisan migrate --database=test --env= --force
 
       # run tests
       - run: ./vendor/bin/phpunit
