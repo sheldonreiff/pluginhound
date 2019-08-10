@@ -3,7 +3,7 @@ describe('Products grid', () => {
         {
             title: 'All Products',
             url: 'all-products',
-            apiQueryString: '',
+            apiQueryString: '?bestDeals=false',
         },
         {
             title: 'Top Deals',
