@@ -1,0 +1,5 @@
+*
+
+!Dockerrun.aws.json
+!/.ebextensions/*
+!/.elasticbeanstalk/*

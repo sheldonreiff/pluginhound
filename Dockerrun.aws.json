@@ -1,0 +1,29 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "app",
+      "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/waves-saver/app",
+      "essential": true,
+      "memory": 200,
+      "cpu": 1
+    },
+    {
+      "name": "web",
+      "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/waves-saver/web",
+      "essential": true,
+      "memory": 200,
+      "cpu": 1,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "links": [
+        "app"
+      ]
+    }
+  ]
+}

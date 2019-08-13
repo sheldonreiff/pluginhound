@@ -1,0 +1,15 @@
+/resources/assets
+/resources/js
+/resources/sass
+.env
+/storage/logs
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+dev_notes
+cypress.env.json
+cypress/videos/
+cypress/screenshots/
+.DS_store

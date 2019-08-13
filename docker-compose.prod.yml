@@ -1,0 +1,27 @@
+version: '3.2'
+services:
+  app:
+    container_name: waves-saver-app
+    image: ${DOCKER_REGISTRY}/waves-saver/app
+    build:
+      context: ./
+      dockerfile: app-prod.dockerfile
+    environment:
+      - TZ=America/New_York
+    networks:
+      - app-network
+  web:
+    container_name: waves-saver-web
+    image: ${DOCKER_REGISTRY}/waves-saver/web
+    build:
+      context: ./
+      dockerfile: web-prod.dockerfile
+    environment:
+      - TZ=America/New_York
+    ports:
+      - 80:80
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge

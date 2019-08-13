@@ -1,6 +1,8 @@
-version: 2.0
+version: 2.1
+orbs:
+  aws-ecr: circleci/aws-ecr@0.0.2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/php:7.3.5-fpm-stretch-node-browsers
       - image: circleci/mysql:8.0.16-ram
@@ -31,10 +33,10 @@ jobs:
             - v1-deps-{{ .Branch }}
             - v1-deps
       - run:
-            name: Install Dependencies
-            command: yarn install --frozen-lockfile
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
 
-      - run: npm run prod
+      - run: yarn run prod
 
       - run: composer install -n --prefer-dist
 
@@ -54,16 +56,6 @@ jobs:
             touch .env && echo "APP_KEY=" >> .env
             php artisan key:generate
             php artisan jwt:secret
-
-      - restore_cache:
-          keys:
-            - node-v1-{{ checksum "package.json" }}
-            - node-v1-
-      - run: yarn install
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
-          paths:
-            - node_modules
 
       - run:
           name: Start php
@@ -87,3 +79,50 @@ jobs:
 
       # run tests
       - run: ./vendor/bin/phpunit
+  deploy:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+
+    steps:
+      - checkout
+
+      - setup_remote_docker
+      - run:
+          name: Build and push Docker image
+          command: |
+            npm install -g yarn
+            yarn install --frozen-lockfile
+            yarn run prod
+            composer install -n --prefer-dist
+            docker-compose -f dockerfile.prod.yml build
+
+      - run:
+          name: Push to ECR
+          command: |
+            $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+            docker-compose build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com:$CIRCLE_SHA1
+
+      - run:
+          name: Installing deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python-pip python-dev build-essential
+            sudo pip install --upgrade setuptools
+            sudo pip install awsebcli --upgrade
+
+      - run:
+          name: Deploying
+          command: eb deploy waves-saver-$CIRCLE_BRANCH
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - test
+      - deploy:
+          filters:
+            branches:
+              only:
+                - test
+                - master
