@@ -94,7 +94,7 @@ jobs:
             sudo apt update
             sudo docker-php-ext-install zip pdo pdo_mysql bcmath
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-            python get-pip.py
+            sudo python get-pip.py
             sudo pip install awscli --upgrade --user
             sudo pip install awsebcli --upgrade --user
 
