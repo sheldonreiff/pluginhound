@@ -89,10 +89,16 @@ jobs:
       - setup_remote_docker
 
       - run:
-          name: Build
+          name: Install build dependencies
           command: |
             sudo apt update
             sudo docker-php-ext-install zip pdo pdo_mysql bcmath
+            pip install awscli --upgrade --user
+            pip install awsebcli --upgrade --user
+
+      - run:
+          name: Build
+          command: |
             yarn install --frozen-lockfile
             yarn run prod
             composer install -n --prefer-dist 
