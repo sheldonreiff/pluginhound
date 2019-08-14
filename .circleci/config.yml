@@ -87,9 +87,12 @@ jobs:
       - checkout
 
       - setup_remote_docker
+      
       - run:
           name: Build and push Docker image
           command: |
+            sudo apt update
+            sudo docker-php-ext-install zip pdo pdo_mysql bcmath
             yarn install --frozen-lockfile
             yarn run prod
             composer install -n --prefer-dist
