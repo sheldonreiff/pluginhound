@@ -87,7 +87,7 @@ jobs:
       - checkout
 
       - setup_remote_docker
-      
+
       - run:
           name: Build and push Docker image
           command: |
@@ -96,7 +96,7 @@ jobs:
             yarn install --frozen-lockfile
             yarn run prod
             composer install -n --prefer-dist
-            docker-compose -f dockerfile.prod.yml build
+            docker-compose -f docker-compose.prod.yml build
 
       - run:
           name: Push to ECR
