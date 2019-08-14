@@ -124,8 +124,7 @@ jobs:
       - run:
           name: Deploying
           command: |
-            eb init --platform "arn:aws:elasticbeanstalk:us-east-2::platform/Multi-container Docker running on 64bit Amazon Linux/2.15.0" --region us-east-2 waves-saver
-            eb use waves-saver-$CIRCLE_BRANCH
+            eb init --platform "arn:aws:elasticbeanstalk:us-east-2::platform/Multi-container Docker running on 64bit Amazon Linux/2.15.0" --region us-east-2 "Waves Saver"
             eb deploy waves-saver-$CIRCLE_BRANCH
 
 workflows:
