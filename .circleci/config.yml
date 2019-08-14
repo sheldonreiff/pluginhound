@@ -89,20 +89,19 @@ jobs:
       - setup_remote_docker
 
       - run:
-          name: Build and push Docker image
+          name: Build
           command: |
             sudo apt update
             sudo docker-php-ext-install zip pdo pdo_mysql bcmath
             yarn install --frozen-lockfile
             yarn run prod
-            composer install -n --prefer-dist
-            docker-compose -f docker-compose.prod.yml build
+            composer install -n --prefer-dist 
 
       - run:
-          name: Push to ECR
+          name: Build and push Docker image to ECR
           command: |
             $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-            docker-compose build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com:$CIRCLE_SHA1
+            docker-compose build -f docker-compose.prod.yml build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com:$CIRCLE_SHA1
 
       - run:
           name: Installing deployment dependencies
