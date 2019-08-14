@@ -109,8 +109,7 @@ jobs:
           name: Build and push Docker image to ECR
           command: |
             $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-            DOCKER_TAG=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com:$CIRCLE_SHA1
-            docker-compose -f docker-compose.prod.yml build
+            DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com DOCKER_TAG=$CIRCLE_SHA1 docker-compose -f docker-compose.prod.yml build
 
       - run:
           name: Installing deployment dependencies
