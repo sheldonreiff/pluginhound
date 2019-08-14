@@ -110,7 +110,7 @@ jobs:
           command: |
             $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
             DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com DOCKER_TAG=$CIRCLE_SHA1 docker-compose -f docker-compose.prod.yml build
-            docker-compose push
+            DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com DOCKER_TAG=$CIRCLE_SHA1 docker-compose push
 
       - run:
           name: Installing deployment dependencies
@@ -123,7 +123,10 @@ jobs:
 
       - run:
           name: Deploying
-          command: eb deploy waves-saver-$CIRCLE_BRANCH
+          command: |
+            eb init --platform "arn:aws:elasticbeanstalk:us-east-2::platform/Multi-container Docker running on 64bit Amazon Linux/2.15.0" --region us-east-2 waves-saver
+            eb use waves-saver-$CIRCLE_BRANCH
+            eb deploy waves-saver-$CIRCLE_BRANCH
 
 workflows:
   version: 2
