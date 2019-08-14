@@ -110,7 +110,7 @@ jobs:
           command: |
             $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
             DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com DOCKER_TAG=$CIRCLE_SHA1 docker-compose -f docker-compose.prod.yml build
-            DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com DOCKER_TAG=$CIRCLE_SHA1 docker-compose push
+            DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com DOCKER_TAG=$CIRCLE_SHA1 docker-compose -f docker-compose.prod.yml push
 
       - run:
           name: Installing deployment dependencies
