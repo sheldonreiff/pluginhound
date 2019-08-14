@@ -2,7 +2,7 @@ version: '3.2'
 services:
   app:
     container_name: waves-saver-app
-    image: ${DOCKER_REGISTRY}/waves-saver/app
+    image: ${DOCKER_REGISTRY}/waves-saver/app:${DOCKER_TAG}
     build:
       context: ./
       dockerfile: app-prod.dockerfile
@@ -12,7 +12,7 @@ services:
       - app-network
   web:
     container_name: waves-saver-web
-    image: ${DOCKER_REGISTRY}/waves-saver/web
+    image: ${DOCKER_REGISTRY}/waves-saver/web:${DOCKER_TAG}
     build:
       context: ./
       dockerfile: web-prod.dockerfile
