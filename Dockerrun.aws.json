@@ -2,14 +2,14 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "app",
+      "name": "waves-saver-app",
       "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/waves-saver/app",
       "essential": true,
       "memory": 200,
       "cpu": 1
     },
     {
-      "name": "web",
+      "name": "waves-saver-web",
       "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/waves-saver/web",
       "essential": true,
       "memory": 200,
@@ -22,7 +22,7 @@
         }
       ],
       "links": [
-        "app"
+        "waves-saver-app"
       ]
     }
   ]
