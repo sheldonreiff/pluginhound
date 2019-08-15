@@ -26,15 +26,19 @@ Route::group([
      * Auth
      */
     Route::post('auth/login', 'Auth\AuthController@login');
-    Route::post('auth/logout', 'Auth\AuthController@logout');
-    Route::post('auth/refresh', 'Auth\AuthController@refresh');
-    Route::get('auth/me', 'Auth\AuthController@me');
-    Route::post('auth/register', 'UserController@store');
-    Route::get('auth/validate', 'Auth\AuthController@validate');
 
     Route::group([
         'middleware' => 'jwt.auth'
     ], function ($router) {
+
+        /**
+         * Auth
+         */
+        Route::post('auth/logout', 'Auth\AuthController@logout');
+        Route::post('auth/refresh', 'Auth\AuthController@refresh');
+        Route::get('auth/me', 'Auth\AuthController@me');
+        Route::post('auth/register', 'UserController@store');
+        Route::get('auth/validate', 'Auth\AuthController@validate');
     
         /**
          * Password

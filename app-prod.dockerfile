@@ -4,6 +4,6 @@ RUN docker-php-ext-install pdo pdo_mysql bcmath
 
 RUN chown www-data /var/www
 
-COPY ./ /usr/local/apache2/htdocs/
+COPY ./ /var/www/html
 
-RUN chmod -fR 777 /usr/local/apache2/htdocs/storage
+RUN chmod -fR 777 /var/www/html/storage

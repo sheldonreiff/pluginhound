@@ -41,7 +41,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Product::import($request->eventData->actorId, $request->eventData->actorRunId);
     }
 
     /**

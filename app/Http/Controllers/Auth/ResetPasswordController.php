@@ -57,14 +57,6 @@ class ResetPasswordController
             case \Password::INVALID_USER:
                 return response(null, 404);
         }
-
-        // $user = User::where('email', request()->input('email'))->firstOrFail();
-        // $token = \Password::getRepository()->create($user);
-
-        // Mail::send(['text' => 'emails.password'], ['token' => $token], function (\Illuminate\Mail\Message $message) use ($user) {
-        //     $message->subject(config('app.name') . ' Password Reset Link');
-        //     $message->to($user->email);
-        // });
     }
 
 }
