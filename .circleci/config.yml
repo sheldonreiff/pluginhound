@@ -104,6 +104,7 @@ jobs:
             yarn install --frozen-lockfile
             yarn run prod
             composer install -n --prefer-dist 
+            php artisan build:dockerrun $CIRCLE_SHA1
 
       - run:
           name: Build and push Docker image to ECR
