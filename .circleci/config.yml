@@ -127,6 +127,8 @@ jobs:
           command: |
             eb init --platform "arn:aws:elasticbeanstalk:${AWS_DEFAULT_REGION}::platform/Multi-container Docker running on 64bit Amazon Linux/2.15.2" --region ${AWS_DEFAULT_REGION} "Waves Saver"
             eb deploy --label $CIRCLE_SHA1 waves-saver-$CIRCLE_BRANCH
+      - store_artifacts:
+          path: Dockerrun.aws.json
 
 workflows:
   version: 2
