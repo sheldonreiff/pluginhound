@@ -51,8 +51,8 @@ class ProductController extends Controller
         }
 
         $request->validate([
-            'eventData.actorId' => ['required', 'integer'],
-            'eventData.actorRunId' => ['required', 'integer'],
+            'eventData.actorId' => ['required', 'string'],
+            'eventData.actorRunId' => ['required', 'string'],
         ]);
 
         $product->import($request->eventData['actorId'], $request->eventData['actorRunId']);
