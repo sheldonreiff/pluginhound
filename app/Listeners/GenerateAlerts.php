@@ -51,7 +51,7 @@ class GenerateAlerts
      */
     public function handle($event)
     {
-        if($event->product->exists() && $event->product->isDirty('sale_price')){
+        if($event->product->exists() && $event->product->isDirty('sale_price') && $event->product->sendAlerts){
             $changes = collect([
                 'percent_change' => (($event->product->sale_price - $event->product->getOriginal('sale_price') ) / $event->product->sale_price) * 100,
                 'currency_change' => $event->product->sale_price - $event->product->getOriginal('sale_price'),

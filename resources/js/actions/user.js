@@ -143,9 +143,7 @@ const validUser = (dispatch, callback) => {
         }).then(res => {
             callback(storedUser);
         }).catch(error => {
-            dispatch({
-                type: UserActionTypes.LOGOUT,
-            });
+            dispatch(logout());
         });
     }
 }

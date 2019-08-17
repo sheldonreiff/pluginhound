@@ -6,7 +6,8 @@ import { darken } from 'polished';
 import { Link } from 'react-router-dom';
 
 const ParentTile = styled(Tile)`
-    max-width: 350px;
+    width: 350px;
+    height: 250px;
 `;
 
 const ChildTile = styled(Tile)`

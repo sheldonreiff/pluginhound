@@ -22,6 +22,11 @@ const Message = styled.span`
     color: gray;
 `;
 
+const MainGrid = styled(Tile)`
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+`;
+
 class Product extends React.Component{
 
     static propTypes = {
@@ -46,7 +51,7 @@ class Product extends React.Component{
                 </LoaderContainer>
             }
             {status === 'DONE' &&
-                <Tile kind="ancestor">
+                <MainGrid kind="ancestor">
                     {products.map(product => {
                         return <ProductTile
                             key={product.sku}
@@ -54,7 +59,7 @@ class Product extends React.Component{
                         />;
                     })}
                     
-                </Tile>
+                </MainGrid>
             }
 
             {status === 'PROGRESS' &&

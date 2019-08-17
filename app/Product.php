@@ -18,6 +18,8 @@ class Product extends Model implements Auditable
 
     protected $guarded = [];
 
+    public $sendAlerts = true;
+
     protected $dispatchesEvents = [
         'saving' => \App\Events\ProductSaving::class,
     ];
@@ -35,6 +37,16 @@ class Product extends Model implements Auditable
     protected $cast = [
         'scraped_date' => 'datetime:Y-m-d'
     ];
+
+    public function sendAlerts()
+    {
+        $this->sendAlerts = true;
+    }
+
+    public function dontSendAlerts()
+    {
+        $this->sendAlerts = false;
+    }
 
     public function import(string $act_id, string $run_id)
     {
