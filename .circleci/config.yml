@@ -134,7 +134,7 @@ workflows:
   version: 2
   build:
     jobs:
-      # - test
+      - test
       - deploy:
           filters:
             branches:

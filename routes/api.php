@@ -26,6 +26,7 @@ Route::group([
      * Auth
      */
     Route::post('auth/login', 'Auth\AuthController@login');
+    Route::post('auth/register', 'UserController@store');
 
     Route::group([
         'middleware' => 'jwt.auth'
@@ -37,7 +38,6 @@ Route::group([
         Route::post('auth/logout', 'Auth\AuthController@logout');
         Route::post('auth/refresh', 'Auth\AuthController@refresh');
         Route::get('auth/me', 'Auth\AuthController@me');
-        Route::post('auth/register', 'UserController@store');
         Route::get('auth/validate', 'Auth\AuthController@validate');
     
         /**
@@ -94,4 +94,10 @@ Route::group([
     Route::get('products', 'ProductController@index');
 
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+});
+
+Route::group([
+    'middleware' => 'webhook'
+], function ($router) {
+    Route::post('products', 'ProductController@store');
 });

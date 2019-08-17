@@ -29,5 +29,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('send-alert', function ($user) {
             return !is_null($user->email_verified_at);
         });
+
+        Gate::define('import-products', function ($user) {
+            return $user->type === 'service';
+        });
     }
 }

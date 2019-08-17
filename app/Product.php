@@ -44,9 +44,17 @@ class Product extends Model implements Auditable
             'format' => 'json'
         ]);
 
+        if(!$run){
+            abort(404, 'Apify run not found');
+        }
+
         $crawler_results = $apify->get("datasets/{$run->data->defaultDatasetId}/items", [
             'format' => 'json'
         ]);
+
+        if(!$crawler_results){
+            abort(404, 'Apify dataset not found');
+        }
 
         if($crawler_results){
             $this->transformAndSaveResults($crawler_results[0]);

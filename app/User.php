@@ -18,7 +18,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'password', 'type',
     ];
 
     /**
@@ -63,6 +63,35 @@ class User extends Authenticatable implements JWTSubject
             'last_name' => $newUser['last_name'],
             'password' => Hash::make($newUser['password'])
         ]);
+    }
+
+    private static function makeServiceAccountPassword()
+    {
+        return bin2hex(openssl_random_pseudo_bytes(32));
+    }
+
+    public static function registerServiceAccount($username)
+    {
+        $password = self::makeServiceAccountPassword();
+
+        static::create([
+            'email' => $username,
+            'password' => Hash::make($password),
+            'type' => 'service',
+        ]);
+
+        return $password;
+    }
+
+    public function rotateServiceAccountPassword()
+    {
+        $password = self::makeServiceAccountPassword();
+
+        $this->password = Hash::make($password);
+
+        $this->save();
+
+        return $password;
     }
 
     public function sendEmailVerificationNotification()

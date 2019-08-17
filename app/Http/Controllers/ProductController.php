@@ -6,12 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Product;
+use Gate;
 
 use App\Http\Resources\Product as ProductResource;
 use App\Http\Resources\ProductHistory as ProductHistoryResoruce;
 
 class ProductController extends Controller
 {
+    function __construct()
+    {
+        \Auth::shouldUse('web');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -39,9 +44,18 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Product $product)
     {
-        Product::import($request->eventData->actorId, $request->eventData->actorRunId);
+        if(Gate::denies('import-products')){
+            abort(403, 'User not allowed to import products');
+        }
+
+        $request->validate([
+            'eventData.actorId' => ['required', 'integer'],
+            'eventData.actorRunId' => ['required', 'integer'],
+        ]);
+
+        $product->import($request->eventData['actorId'], $request->eventData['actorRunId']);
     }
 
     /**
