@@ -16,7 +16,9 @@ class AuthenticateWebhook
      * @return mixed
      */
     public function handle($request, $next)
-    {           
+    {    
+        $request->headers->set('Accept', 'application/json');
+        
         return Auth::onceBasic() ?: $next($request);
     }
 }
