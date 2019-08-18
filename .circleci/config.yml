@@ -117,8 +117,8 @@ jobs:
           command: |
             $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
 
-            DOCKER_REGISTRY DOCKER_TAG docker-compose -f docker-compose.prod.yml build
-            DOCKER_REGISTRY DOCKER_TAG docker-compose -f docker-compose.prod.yml push
+            DOCKER_REGISTRY=${DOCKER_REGISTRY} DOCKER_TAG=${DOCKER_TAG} docker-compose -f docker-compose.prod.yml build
+            DOCKER_REGISTRY=${DOCKER_REGISTRY} DOCKER_TAG=${DOCKER_TAG} docker-compose -f docker-compose.prod.yml push
 
       - run:
           name: Installing deployment dependencies
@@ -144,10 +144,10 @@ workflows:
   version: 2
   build:
     jobs:
-      - test
+      # - test
       - deploy:
-          requires:
-            - test
+          # requires:
+          #   - test
           filters:
             branches:
               only:
