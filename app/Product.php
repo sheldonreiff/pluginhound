@@ -89,6 +89,7 @@ class Product extends Model implements Auditable
                     'thumbnail_url' => $product->thumbnailUrl,
                     'scraped_date' => date('Y-m-d', strtotime($crawler_data->pageFunctionFinishedAt)), # for display and aggregation purposes, only care about date
                     'scraped_at' => date('Y-m-d H:i:s', strtotime($crawler_data->pageFunctionFinishedAt)),
+                    'url' => $product->url,
                 ]
             );
         }
@@ -126,6 +127,13 @@ class Product extends Model implements Auditable
         ->mergeBindings($withRank)
         ->where('discount_rank', '>=', .5)
         ->orderBy('discount_rank', 'desc');
+    }
+
+    public function discount(){
+        return self::comparisons()
+        ->where('products.sku', $this->sku)
+        ->pluck('discount')
+        ->first();
     }
 
     public function averageSalePrice()

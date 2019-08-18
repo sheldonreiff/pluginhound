@@ -22,6 +22,7 @@ class ProductTest extends TestCase
                 'name' => $this->testProducts['a']->name,
                 'sale_price' => $this->testProducts['a']->salePrice,
                 'thumbnail_url' => $this->testProducts['a']->thumbnailUrl,
+                'url' => $this->testProducts['a']->url,
             ],
         ]);
     }

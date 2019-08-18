@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Button } from 'react-bulma-components';
 import history from '../../history';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { updateQuery, loadProducts } from '../../actions/products';
 
@@ -12,12 +13,18 @@ const StyledForm = styled.form`
 
 class Search extends React.Component{
 
+    static propTypes = {
+        onSearch: PropTypes.func.isRequired,
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         
-        this.props.loadProducts('search');
+        this.props.loadProducts('search', true);
 
         history.push('/search');
+
+        this.props.onSearch();
     }
 
     render(){

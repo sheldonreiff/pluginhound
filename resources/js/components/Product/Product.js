@@ -12,9 +12,14 @@ import 'react-dates/lib/css/_datepicker.css';
 import WhenAuthenticated from '../helpers/WhenAuthenticated';
 
 import Alerts from '../Alerts/Alerts';
+import DiscountBadge from './DiscountBadge';
 
 import { getProduct, getProductHistory, setProduct } from '../../actions/product';
 import { loadAlerts, newAlert, deleteAlert, upsertAlert } from '../../actions/alerts';
+
+const ProductContainer = styled.div`
+    display: block;
+`;
 
 const LoaderContainer = styled.div`
     height: 300px;
@@ -38,6 +43,11 @@ const ProductType = props => {
 }
 
 const ProductMetaContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const ProductMetaContainerLeft = styled.div`
     margin: -10px;
     display: flex;
     & > * {
@@ -57,7 +67,7 @@ const HistoryControlsContainer = styled.div`
 `;
 
 const BackIcon = styled.span`
-    display: block;
+    display: inline-block;
     margin-bottom: 15px;
     cursor: pointer;
     font-size: 1.5rem;
@@ -105,15 +115,20 @@ class Product extends React.Component{
 
         return <SizeMe>
             {({ size }) =>
-                <React.Fragment>
+                <ProductContainer>
                     <BackIcon className='icon-arrow-left2' onClick={history.goBack} />
                     {status === 'DONE' &&
                         <React.Fragment>
                             <h2 className='title is-3'>{product.name}</h2>
 
                             <ProductMetaContainer>
-                                <ProductType type={product.type} />
-                                <h6 className='subtitle is-6'>{product.category}</h6>
+                                <ProductMetaContainerLeft>
+                                    <Heading subtitle>${product.sale_price}</Heading>
+                                    <DiscountBadge product={product} />
+                                    <ProductType type={product.type} />
+                                    <h6 className='subtitle is-6'>{product.category}</h6>
+                                </ProductMetaContainerLeft>
+                                <a href={product.url} target='_blank'>View on Waves</a>
                             </ProductMetaContainer>
 
                             <ProductHistoryContainer>
@@ -165,7 +180,8 @@ class Product extends React.Component{
                                         isOutsideRange={(date) => false}
                                         withPortal={size.width <= 600 ? true : false}
                                         numberOfMonths={size.width <= 600 ? 1 : 2}
-                                        showClearDates={true}
+                                        showClearDates
+                                        readOnly
                                     />
                                 </HistoryControlsContainer>
                             </ProductHistoryContainer>
@@ -202,7 +218,7 @@ class Product extends React.Component{
                             color='danger'
                         >{message}</Notification>
                     }
-                </React.Fragment>
+                </ProductContainer>
             }   
         </SizeMe>;
     }

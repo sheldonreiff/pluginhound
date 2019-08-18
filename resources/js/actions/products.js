@@ -21,7 +21,9 @@ export const loadProducts = (view, reload=false) => {
         const q = viewData.query;
         const bestDeals = view === 'bestDeals';
 
-        if(viewData.loadStatus !== 'DONE' || reload){
+        const emptySearchQuery = view === 'search' && q.length === 0;
+
+        if((viewData.loadStatus !== 'DONE' || reload) && !emptySearchQuery){
             
             dispatch({
                 type: ProductsActionTypes.LOAD_PRODUCTS_PROGRESS,

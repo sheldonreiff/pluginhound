@@ -7,6 +7,8 @@ import React from 'react';
 import { ClipLoader } from 'react-spinners';
 const queryString = require('query-string');
 
+import { loadProducts } from './products';
+
 export const register = ({ firstName, lastName, email, password, confirmPassword }) => {
     return dispatch => {
 
@@ -108,11 +110,11 @@ export const login = ({ email, password }) => {
 
 export const logout = () => {
     return dispatch => {
+        localStorage.removeItem('user');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('accessTokenType');
         localStorage.removeItem('accessExpiresIn');
-        localStorage.removeItem('user');
-        
+
         dispatch({
             type: UserActionTypes.LOGOUT
         });
@@ -124,6 +126,8 @@ export const logout = () => {
         }));
 
         history.push('/');
+
+        dispatch(loadProducts('bestDeals'));
     }
 }
 

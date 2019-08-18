@@ -48,6 +48,7 @@ const NavbarItem = props => <Navbar.Item
         onClick={(e) => {
             e.preventDefault();
             history.push(props.to);
+            props.additionalAction();
         }}
     >
         {props.children}
@@ -74,6 +75,16 @@ class Header extends Component {
         history.push('/');
     }
 
+    showLoginModal = () => {
+        this.toggleMobileNav();
+        this.props.toggleLoginModal(true);
+    }
+
+    showRegisterModal = () => {
+        this.props.toggleRegisterModal(true)
+        this.toggleMobileNav();
+    }
+
     render() {
         const { user } = this.props;
 
@@ -94,20 +105,20 @@ class Header extends Component {
                         <Navbar.Container
                             position='end'
                         >
-                            <NavbarItem to='/'>Top Deals</NavbarItem>
-                            <NavbarItem to='/all-products'>All Products</NavbarItem>
+                            <NavbarItem to='/' additionalAction={this.toggleMobileNav}>Top Deals</NavbarItem>
+                            <NavbarItem to='/all-products' additionalAction={this.toggleMobileNav}>All Products</NavbarItem>
                             {user.status === 'LOGGED_IN' && 
-                                <NavbarItem to='/my-alerts'>
+                                <NavbarItem to='/my-alerts' additionalAction={this.toggleMobileNav}>
                                     My Alerts
                                 </NavbarItem>
                             }
                             {user.status === 'LOGGED_IN' && 
-                                <NavbarItem to='/account/personal-info'>
+                                <NavbarItem to='/account/personal-info' additionalAction={this.toggleMobileNav}>
                                     Account
                                 </NavbarItem>
                             }
                             <Navbar.Item renderAs='span'>
-                                <Search />
+                                <Search onSearch={this.toggleMobileNav} />
                             </Navbar.Item>
 
                             {user.status === 'LOGGED_IN' && 
@@ -119,13 +130,13 @@ class Header extends Component {
                             {user.status !== 'LOGGED_IN' &&
                                 <Fragment>
                                     <LoginButton
-                                        onClick={() => this.props.toggleLoginModal(true)}
+                                        onClick={this.showLoginModal}
                                     >
                                         Login
                                     </LoginButton>
                                     {user.status !== 'REGISTERED' &&
                                         <RegisterButton
-                                            onClick={() => this.props.toggleRegisterModal(true)}
+                                            onClick={this.showRegisterModal}
                                         >
                                             Register
                                         </RegisterButton>

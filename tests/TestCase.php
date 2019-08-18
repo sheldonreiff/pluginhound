@@ -63,6 +63,7 @@ abstract class TestCase extends BaseTestCase
                 'saleEnd' => '12/3/2019 5:00:00 AM',
                 'badge' => 'New',
                 'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png',
+                'url' => 'https://www.waves.com/plugins/abbey-road-studio-3',
             ],
             'b' => (object) [
                 'sku' => 'TESTSKU2',
@@ -74,7 +75,8 @@ abstract class TestCase extends BaseTestCase
                 'note' => null,
                 'saleEnd' => null,
                 'badge' => 'New',
-                'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png'
+                'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png',
+                'url' => 'https://www.waves.com/plugins/abbey-road-studio-3',
             ],
             'a_decreased' => (object) [
                 'sku' => 'TESTSKU1',
@@ -86,7 +88,8 @@ abstract class TestCase extends BaseTestCase
                 'note' => 'nonsense',
                 'saleEnd' => '12/3/2019 5:00:00 AM',
                 'badge' => 'New',
-                'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png'
+                'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png',
+                'url' => 'https://www.waves.com/plugins/abbey-road-studio-3',
             ],
             'b_decreased' => (object) [
                 'sku' => 'TESTSKU2',
@@ -98,7 +101,8 @@ abstract class TestCase extends BaseTestCase
                 'note' => null,
                 'saleEnd' => null,
                 'badge' => 'New',
-                'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png'
+                'thumbnailUrl' => 'https://img.wavescdn.com/1lib/images/products/plugins/icons/submarine.png',
+                'url' => 'https://www.waves.com/plugins/abbey-road-studio-3',
             ],
         ];
 

@@ -16,10 +16,13 @@ const AlertsForm = styled.form`
     & > * {
         margin: 10px;
     }
-    @media (max-width: 850px) {
+    @media (max-width: 850x px) {
         flex-direction: column;
         flex-wrap: nowrap;
         align-items: unset;
+        background: #eee;
+        padding: 20px;
+        border-radius: 5px;
     }
 `;
 

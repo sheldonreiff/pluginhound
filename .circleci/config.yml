@@ -103,15 +103,22 @@ jobs:
           command: |
             yarn install --frozen-lockfile
             yarn run prod
-            composer install -n --prefer-dist 
-            php artisan build:dockerrun $CIRCLE_SHA1
+            composer install -n --prefer-dist
+
+            DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+            DOCKER_TAG=$CIRCLE_SHA1
+            APP_IMAGE=${DOCKER_REGISTRY}/waves-saver/app:${DOCKER_TAG}
+
+            php artisan build:dockerrun $DOCKER_TAG
+            php artisan build:container_commands $APP_IMAGE
 
       - run:
           name: Build and push Docker image to ECR
           command: |
             $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-            DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com DOCKER_TAG=$CIRCLE_SHA1 docker-compose -f docker-compose.prod.yml build
-            DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com DOCKER_TAG=$CIRCLE_SHA1 docker-compose -f docker-compose.prod.yml push
+
+            DOCKER_REGISTRY DOCKER_TAG docker-compose -f docker-compose.prod.yml build
+            DOCKER_REGISTRY DOCKER_TAG docker-compose -f docker-compose.prod.yml push
 
       - run:
           name: Installing deployment dependencies
@@ -127,17 +134,20 @@ jobs:
           command: |
             eb init --platform "arn:aws:elasticbeanstalk:${AWS_DEFAULT_REGION}::platform/Multi-container Docker running on 64bit Amazon Linux/2.15.2" --region ${AWS_DEFAULT_REGION} "Waves Saver"
             eb deploy --label $CIRCLE_SHA1 waves-saver-$CIRCLE_BRANCH
+
       - store_artifacts:
           path: Dockerrun.aws.json
+      - store_artifacts:
+          path: .ebextensions/deploy.config
 
 workflows:
   version: 2
   build:
     jobs:
-      # - test
+      - test
       - deploy:
-          # requires:
-          #   - test
+          requires:
+            - test
           filters:
             branches:
               only:

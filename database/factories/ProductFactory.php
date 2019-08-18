@@ -19,5 +19,6 @@ $factory->define(Product::class, function (Faker $faker) {
         'scraped_at' => $faker->dateTimeThisYear(),
         'thumbnail_url' => $faker->imageUrl(100, 100, 'cats'),
         'type' => $faker->randomElement(['plugin', 'bundle']),
+        'url' => $faker->url(),
     ];
 });

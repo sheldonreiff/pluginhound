@@ -133,7 +133,7 @@ class RegisterModal extends Component {
                         }
 
                         <Form.Control>
-                            <Button color='primary' type="submit" disabled={disabled}>Register</Button>
+                            <Button color='primary' type="submit" loading={disabled}>Register</Button>
                         </Form.Control>
                     </form>
                 </Section>

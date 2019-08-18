@@ -14,6 +14,7 @@ import { getMe, verifyEmail } from './actions/user';
 // components
 import Account from './components/Account/Account';
 import Header from './components/Header/Header';
+import Footer from './components/Footer';
 import UpdatePassword from './components/Account/UpdatePassword';
 import UpdatePersonal from './components/Account/UpdatePersonal';
 import Product from './components/Product/Product';
@@ -22,6 +23,11 @@ import MyAlerts from './components/MyAlerts/MyAlerts';
 import NotFound from './components/NotFound';
 import NotificationBar from './components/Header/NotificationBar';
 import WhenAuthenticated from './components/helpers/WhenAuthenticated';
+import About from './components/About/About';
+
+const Body = styled.div`
+    flex: 1 0 auto;
+`;
 
 const Main = styled.div`
     padding-top: 60px;
@@ -55,29 +61,34 @@ class App extends Component
     render(){
         return (
            <React.Fragment>
-                <Header />
-                <Main>
-                    <NotificationBar />
-                    <Content>
-                        <Switch>
-                            <Route path='/' exact render={Home} />
+                <Body>
+                    <Header />
+                    <Main>
+                        <NotificationBar />
+                        <Content>
+                            <Switch>
+                                <Route path='/' exact render={Home} />
 
-                            <Route path='/account' render={ () => <WhenAuthenticated else={Home}><Account/></WhenAuthenticated>}/>
-                            <Route path='/verify' exact component={Home} />
-                            <Route path='/reset' exact component={Home} />
+                                <Route path='/account' render={ () => <WhenAuthenticated else={Home}><Account/></WhenAuthenticated>}/>
+                                <Route path='/verify' exact component={Home} />
+                                <Route path='/reset' exact component={Home} />
 
-                            <Route path='/my-alerts' exact component={MyAlerts} />
+                                <Route path='/my-alerts' exact component={MyAlerts} />
 
-                            <Route path='/all-products' exact render={() => <Products key='all' view='all' />} />
-                            <Route path='/search' exact render={() => <Products key='search' view='search' />}/>
-                            <Route path='/product/:sku' exact component={Product} />
+                                <Route path='/all-products' exact render={() => <Products key='all' view='all' />} />
+                                <Route path='/search' exact render={() => <Products key='search' view='search' />}/>
+                                <Route path='/product/:sku' exact component={Product} />
 
-                            <Route component={NotFound} />
-                        </Switch>
-                        <Route path='/account/password' exact render={ () => <WhenAuthenticated><UpdatePassword/></WhenAuthenticated>} />
-                        <Route path='/account/personal-info' exact render={ () => <WhenAuthenticated><UpdatePersonal/></WhenAuthenticated>} />
-                    </Content>
-                </Main>
+                                <Route path='/about' exact component={About} />
+
+                                <Route component={NotFound} />
+                            </Switch>
+                            <Route path='/account/password' exact render={ () => <WhenAuthenticated><UpdatePassword/></WhenAuthenticated>} />
+                            <Route path='/account/personal-info' exact render={ () => <WhenAuthenticated><UpdatePersonal/></WhenAuthenticated>} />
+                        </Content>
+                    </Main>
+                </Body>
+                <Footer />
             </React.Fragment>
         );
     }
