@@ -105,12 +105,8 @@ jobs:
             yarn run prod
             composer install -n --prefer-dist
 
-            DOCKER_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
             DOCKER_TAG=$CIRCLE_SHA1
-            APP_IMAGE=${DOCKER_REGISTRY}/waves-saver/app:${DOCKER_TAG}
-
             php artisan build:dockerrun $DOCKER_TAG
-            php artisan build:container_commands $APP_IMAGE
 
       - run:
           name: Build and push Docker image to ECR
