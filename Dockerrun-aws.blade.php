@@ -6,7 +6,8 @@
       "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/waves-saver/app:{{ $tag }}",
       "essential": true,
       "memory": 200,
-      "cpu": 1
+      "cpu": 1,
+      "command": [ "php", "/var/www/html/artisan", "migrate" ]
     },
     {
       "name": "waves-saver-web",
