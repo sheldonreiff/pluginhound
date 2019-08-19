@@ -7,7 +7,6 @@
       "essential": true,
       "memory": 200,
       "cpu": 1,
-      "command": [ "php", "/var/www/html/artisan", "migrate" ]
     },
     {
       "name": "waves-saver-web",
