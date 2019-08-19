@@ -7,3 +7,5 @@ RUN chown www-data /var/www
 COPY ./ /var/www/html
 
 RUN chmod -fR 777 /var/www/html/storage
+
+CMD ["sh", "-c", "php /var/www/html/artisan migrate && php-fpm" ]
