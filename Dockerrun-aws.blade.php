@@ -6,7 +6,7 @@
       "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/waves-saver/app:{{ $tag }}",
       "essential": true,
       "memory": 200,
-      "cpu": 1,
+      "cpu": 1
     },
     {
       "name": "waves-saver-web",
