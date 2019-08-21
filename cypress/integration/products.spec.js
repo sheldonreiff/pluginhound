@@ -3,17 +3,15 @@ describe('Products grid', () => {
         {
             title: 'All Products',
             url: 'all-products',
-            apiQueryString: '?bestDeals=false',
         },
         {
             title: 'Top Deals',
             url: '/',
-            apiQueryString: '?bestDeals=true',
         },
     ].forEach(view => {
         it('displays products', () => {
             cy.server()
-            cy.route('GET', `api/products${view.apiQueryString}`, 'fixture:products')
+            cy.route('GET', `api/products*`, 'fixture:products')
             cy.visit(view.url)
     
             cy.get('.products-heading')
