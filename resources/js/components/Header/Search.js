@@ -20,7 +20,7 @@ class Search extends React.Component{
     handleSubmit = (e) => {
         e.preventDefault();
         
-        this.props.loadProducts('search', true);
+        this.props.loadProducts({ view: 'search', reload: true });
 
         history.push('/search');
 

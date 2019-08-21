@@ -13,7 +13,7 @@ export const updateQuery = (query) => {
     }
 }
 
-export const loadProducts = (view, reload=false) => {
+export const loadProducts = ({ view, page=1, perPage=12, reload=false }) => {
     return (dispatch, getState) => {
 
         const viewData = getState().products.views[view];
@@ -38,6 +38,8 @@ export const loadProducts = (view, reload=false) => {
                 params: {
                     q,
                     bestDeals,
+                    page,
+                    perPage,
                 },
                 header: {
                     accept: 'application/json'
@@ -47,6 +49,8 @@ export const loadProducts = (view, reload=false) => {
                     type: ProductsActionTypes.LOAD_PRODUCTS_SUCCESS,
                     payload: {
                         products: results.data.data,
+                        page: results.data.current_page,
+                        pages: results.data.last_page,
                         view,
                     }
                 });

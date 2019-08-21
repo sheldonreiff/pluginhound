@@ -3,6 +3,7 @@ import { Tag } from 'react-bulma-components';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import styled from 'styled-components';
+const isTouchDevice = require('is-touch-device');
 
 const Badge = styled(Tag)`
     grid-area: badge;
@@ -20,6 +21,7 @@ const DiscountBadge = props => {
         <OverlayTrigger
             id={`discountTrigger${props.product.sku}`}
             placement='top'
+            trigger={isTouchDevice() ? 'click' : 'hover'}
             overlay={
                 <Popover>
                     <Popover.Title>Real Discount</Popover.Title>

@@ -5,6 +5,7 @@ import { ClipLoader } from 'react-spinners';
 import { Heading } from 'react-bulma-components';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import Pagination from 'bulma-pagination-react';
 
 import ProductTile from './ProductTile';
 import IntroHero from './IntroHero';
@@ -27,6 +28,7 @@ const MainGrid = styled.div`
     display: grid!important;
     grid-gap: 15px;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    max-width: 1800px;
 `;
 
 const SearchQuery = styled.span`
@@ -35,6 +37,9 @@ const SearchQuery = styled.span`
     display: block;
 `;
 
+const StyledPagination = styled(Pagination)`
+    margin-top: 20px;
+`;
 
 
 class Product extends React.Component{
@@ -44,12 +49,24 @@ class Product extends React.Component{
     }
 
     componentDidMount(){
-        this.props.loadProducts(this.props.view);
+        const { view } = this.props;
+
+        const perPage = view === 'bestDeals'
+        ? 24
+        : 12;
+
+        this.props.loadProducts({ view, perPage });
+    }
+
+    goToPage = page => {
+        const { view, loadProducts } = this.props;
+
+        loadProducts({ view, page, reload: true });
     }
 
     render(){
 
-        const { products, title, query, status, view } = this.props;
+        const { products, title, query, status, view, page, pages } = this.props;
 
         const emptySearchQuery = view === 'search' && query.length === 0;
 
@@ -71,15 +88,21 @@ class Product extends React.Component{
                 </LoaderContainer>
             }
             {status === 'DONE' && !emptySearchQuery &&
-                <MainGrid kind="ancestor">
-                    {products.map(product => {
-                        return <ProductTile
-                            key={product.sku}
-                            product={product}
-                        />;
-                    })}
-                    
-                </MainGrid>
+                <React.Fragment>
+                    <MainGrid>
+                        {products.map(product => {
+                            return <ProductTile
+                                key={product.sku}
+                                product={product}
+                            />;
+                        })}
+                    </MainGrid>
+                    <StyledPagination
+                        pages={pages}
+                        currentPage={page}
+                        onChange={page => this.goToPage(page)}
+                    />
+                </React.Fragment>
             }
 
             {emptySearchQuery &&
@@ -107,6 +130,8 @@ const mapStateToProps = (state, ownProps) => ({
     title: state.products.views[ownProps.view].title,
     query: state.products.views[ownProps.view].query,
     status: state.products.views[ownProps.view].loadStatus,
+    page: state.products.views[ownProps.view].page,
+    pages: state.products.views[ownProps.view].pages,
 });
 
 const mapDispatchToProps = {

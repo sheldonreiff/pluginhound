@@ -53,6 +53,7 @@ const ProductMetaContainerLeft = styled.div`
     & > * {
         margin: 10px;
     }
+    flex-wrap: wrap;
 `;
 
 const ProductHistoryContainer = styled.div`

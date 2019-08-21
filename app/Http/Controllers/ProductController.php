@@ -24,6 +24,13 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        $request->validate([
+            'bestDeals' => ['in:true,false', 'nullable'],
+            'q' => ['string', 'nullable'],
+            'page' => ['integer', 'required'],
+            'perPage' => ['integer', 'required'],
+        ]);
+
         if($request->bestDeals === 'true'){
             $products = Product::bestDeals();
         }else{
@@ -35,7 +42,7 @@ class ProductController extends Controller
             ->where('name', 'like', "%$request->q%");
         }
 
-        return ProductResource::collection( Product::hydrate($products->get()->toArray()) );
+        return $products->paginate($request->perPage);
     }
 
     /**

@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Product::class, function (Faker $faker) {
     return [
-        'sku' => $faker->randomElement(['abc', 'abcd', 'abcde', 'abcdef', 'abcz', 'abcdz', 'abcdez', 'abcdefz', 'abc5', 'abcd5', 'abcde5', 'abcdef5']),
+        'sku' => $faker->randomElement(['abc', 'abcd', 'abcde', 'abcdef', 'abcz', 'abcdz', 'abcdez', 'abcdefz', 'abc5', 'abcd5', 'abcde5', 'abcdef5', 'abc6', 'abc7', 'abc8', 'abc9']),
         'badge' => $faker->randomElement(['New', 'Super Deal', 'Top Seller', null]),
         'category' => $faker->randomElement(['Reverb', 'Vocals', 'Modeling', 'Effects', null]),
         'msrp' => $faker->randomFloat(2, 20, 10000),

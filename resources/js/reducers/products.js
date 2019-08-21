@@ -5,6 +5,8 @@ const defaultFields = {
     products: [],
     loadStatus: null,
     message: null,
+    page: 1,
+    pages: 1,
 };
 
 const customFields = {
@@ -68,6 +70,8 @@ export default function Products(state=initial, action){
                 views: {
                     [action.payload.view]: {
                         products: { $set: action.payload.products },
+                        page: { $set: action.payload.page },
+                        pages: { $set: action.payload.pages },
                         loadStatus: { $set: 'DONE' },
                         message: { $set: 'Error loading products' },
                     }

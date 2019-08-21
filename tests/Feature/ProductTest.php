@@ -51,7 +51,11 @@ class ProductTest extends TestCase
     {
         $import = $this->importProducts();
 
-        $this->get("api/products?bestDeals=true")
+        $this->json('GET', 'api/products', [
+            'bestDeals' => 'true',
+            'page' => 1,
+            'perPage' => 12,
+        ])
         ->assertJson([
             'data' => [
                 [
@@ -75,7 +79,11 @@ class ProductTest extends TestCase
     {
         $import = $this->importProducts();
 
-        $this->get("api/products?bestDeals=false")
+        $this->json('GET', 'api/products', [
+            'bestDeals' => 'false',
+            'page' => 1,
+            'perPage' => 12,
+        ])
         ->assertJson([
             'data' => [
                 [

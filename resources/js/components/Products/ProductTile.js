@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { darken } from 'polished';
 import { Link } from 'react-router-dom';
 import DiscountBadge from '../Product/DiscountBadge';
+const isTouchDevice = require('is-touch-device');
 
 const ProductLink = styled(Link)`
     display: flex;
@@ -19,7 +20,7 @@ const ProductTileContainer = styled(Box)`
     grid-gap: .5rem;
 
     &:hover {
-        background: ${darken(.1, 'white')};
+        background: ${props => props.isTouchDevice ? '' : darken(.1, 'white')};
         cursor: pointer;
     }
     width: 100%;
@@ -38,7 +39,7 @@ const ProductTile = props => {
     const { product } = props;
 
     return <ProductLink to={`/product/${product.sku}`} data-sku={product.sku}>
-        <ProductTileContainer>
+        <ProductTileContainer isTouchDevice={isTouchDevice()}>
             <Heading style={{gridArea: 'title'}} size={5} className='product-title'>{product.name}</Heading>
             <PriceContainer>
                 <Price subtitle>${product.sale_price}</Price>
