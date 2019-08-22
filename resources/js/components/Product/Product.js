@@ -120,11 +120,11 @@ class Product extends React.Component{
 
         return <SizeMe>
             {({ size }) =>
-                <ProductContainer>
+                <ProductContainer className='product'>
                     <BackIcon className='icon-arrow-left2' onClick={history.goBack} />
                     {status === 'DONE' &&
                         <React.Fragment>
-                            <Heading size={3}>{product.name}</Heading>
+                            <Heading size={3} className='title'>{product.name}</Heading>
 
                             <ProductMetaContainer>
                                 <ProductMetaContainerLeft>
@@ -132,7 +132,7 @@ class Product extends React.Component{
                                     <DiscountBadge product={product} />
                                     <ProductType type={product.type} />
                                     {product.category &&
-                                        <Heading subtitl size={6}>{product.category}</Heading>
+                                        <Heading subtitle size={6} className='category'>{product.category}</Heading>
                                     }
                                 </ProductMetaContainerLeft>
                                 <a href={product.url} target='_blank'>View on Waves</a>

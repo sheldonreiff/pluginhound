@@ -12,9 +12,9 @@ describe('Product page', () => {
         visitProduct()
 
         cy.fixture('product').then(product => {
-            cy.get('h2.title')
-            .should(($h2) => {
-                expect($h2.text()).to.equal(product.data.name);
+            cy.get('.product .title')
+            .should(($title) => {
+                expect($title.text()).to.equal(product.data.name);
             })
         })
     })
@@ -28,7 +28,7 @@ describe('Product page', () => {
                 expect($span.text()).to.be.equal(product.data.type);
             })
 
-            cy.get('h6.subtitle')
+            cy.get('.product .category')
             .should(($h6) => {
                 expect($h6.text()).to.equal(product.data.category);
             })
