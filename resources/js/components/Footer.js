@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Content = styled(Hero.Footer)`
-    padding: 10px;
+    padding: 40px 20px 10px;
     display: flex;
     justify-content: center;
     flex-shrink: 0;

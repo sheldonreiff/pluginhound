@@ -1,6 +1,5 @@
 import * as ProductActionTypes from '../actionTypes/product';
 import has from 'lodash/has';
-import update from 'immutability-helper';
 
 const initial = {
     product: {},

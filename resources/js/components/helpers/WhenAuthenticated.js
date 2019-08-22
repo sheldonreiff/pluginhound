@@ -27,14 +27,16 @@ const WhenAuthenticated = props => {
     }
 
     if(props.status === 'VERIFYING'){
-        return <LoaderContainer>
+        return props.showLoader
+        ? <LoaderContainer>
             <ClipLoader
                 sizeUnit={"px"}
                 size={40}
                 color='lightgray'
                 loading={true}
             />
-        </LoaderContainer>;
+        </LoaderContainer>
+        : null;
     }
 
     return props.else;
@@ -42,6 +44,7 @@ const WhenAuthenticated = props => {
 
 WhenAuthenticated.defaultProps = {
     else: null,
+    showLoader: true,
 };
 
 const mapStateToProps = state => ({

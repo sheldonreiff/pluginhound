@@ -5,11 +5,12 @@ import { Notification, Tag, Heading, Button } from 'react-bulma-components';
 import { SizeMe } from 'react-sizeme';
 import { ScaleLoader, ClipLoader } from 'react-spinners';
 import styled from 'styled-components';
-import { LineChart , CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line } from 'recharts';
+import { LineChart , BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line } from 'recharts';
 import 'react-dates/initialize';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import WhenAuthenticated from '../helpers/WhenAuthenticated';
+import moment from 'moment';
 
 import Alerts from '../Alerts/Alerts';
 import DiscountBadge from './DiscountBadge';
@@ -48,10 +49,10 @@ const ProductMetaContainer = styled.div`
 `;
 
 const ProductMetaContainerLeft = styled.div`
-    margin: -10px;
+    margin: -5px;
     display: flex;
     & > * {
-        margin: 10px;
+        margin: 5px;
     }
     flex-wrap: wrap;
 `;
@@ -99,7 +100,10 @@ class Product extends React.Component{
 
     componentDidMount(){
         this.props.getProduct();
-        this.props.getProductHistory();
+        this.props.getProductHistory({
+            start: moment().subtract(60, 'days'),
+            end: moment(),
+        });
     }
 
     handleDateChange = ({ start, end }) => {
@@ -120,14 +124,16 @@ class Product extends React.Component{
                     <BackIcon className='icon-arrow-left2' onClick={history.goBack} />
                     {status === 'DONE' &&
                         <React.Fragment>
-                            <h2 className='title is-3'>{product.name}</h2>
+                            <Heading size={3}>{product.name}</Heading>
 
                             <ProductMetaContainer>
                                 <ProductMetaContainerLeft>
                                     <Heading subtitle>${product.sale_price}</Heading>
                                     <DiscountBadge product={product} />
                                     <ProductType type={product.type} />
-                                    <h6 className='subtitle is-6'>{product.category}</h6>
+                                    {product.category &&
+                                        <Heading subtitl size={6}>{product.category}</Heading>
+                                    }
                                 </ProductMetaContainerLeft>
                                 <a href={product.url} target='_blank'>View on Waves</a>
                             </ProductMetaContainer>
@@ -148,7 +154,7 @@ class Product extends React.Component{
                                     <LineChart
                                         width={size.width}
                                         height={300} data={productHistory}
-                                        margin={{top: 5, right: 30, left: 20, bottom: 5}}
+                                        margin={{top: 5, right: 0, left: 0, bottom: 5}}
                                     >
                                         <CartesianGrid strokeDasharray="3 3"/>
                                         <XAxis dataKey="date"/>

@@ -20,11 +20,24 @@ const NavContainer = styled.div`
     justify-content: space-between;
 `;
 
+
+const Logo = styled.div`
+    height: 60px;
+    margin: 10px 20px 0;
+    cursor: pointer;
+`;
+
 const WordMark = styled(Heading)`
-    padding: 1rem;
     color: white;
     display: inline-block;
-    cursor: pointer;
+    font-family: Allerta Stencil;
+    margin: 0!important;
+    vertical-align: bottom;
+`;
+
+const LogoImage = styled.img`
+    width: 40px;
+    margin-left: 10px;
 `;
 
 const LoginButton = styled(Navbar.Item)`
@@ -95,7 +108,10 @@ class Header extends Component {
                     color='primary'
                 >
                     <NavContainer>
-                        <WordMark onClick={this.goHome}>Waves Saver</WordMark>
+                        <Logo onClick={this.goHome}>
+                            <WordMark>Plugin Hound</WordMark>
+                            <LogoImage src='./images/logo.png' alt='logo' />
+                         </Logo>
                         <Navbar.Burger
                             active={this.state.open.toString()}
                             onClick={this.toggleMobileNav}

@@ -1,8 +1,6 @@
 import * as ProductActionTypes from '../actionTypes/product';
 import axios from 'axios';
 
-import { getMe } from './user';
-
 export const setProduct = (sku) => {
     return dispatch => {
         dispatch({
@@ -45,7 +43,7 @@ export const getProduct = () => {
     }
 }
 
-export const getProductHistory = ({ start=null, end=null} = {startDate: null, endDate: null}) => {
+export const getProductHistory = ({ start, end } = {startDate: null, endDate: null}) => {
     return (dispatch, getState) => {
         dispatch({
             type: ProductActionTypes.LOAD_PRODUCT_HISTORY_PROGRESS

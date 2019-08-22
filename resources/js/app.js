@@ -83,8 +83,8 @@ class App extends Component
 
                                 <Route component={NotFound} />
                             </Switch>
-                            <Route path='/account/password' exact render={ () => <WhenAuthenticated><UpdatePassword/></WhenAuthenticated>} />
-                            <Route path='/account/personal-info' exact render={ () => <WhenAuthenticated><UpdatePersonal/></WhenAuthenticated>} />
+                            <Route path='/account/password' exact render={ () => <WhenAuthenticated showLoader={false}><UpdatePassword/></WhenAuthenticated>} />
+                            <Route path='/account/personal-info' exact render={ () => <WhenAuthenticated showLoader={false}><UpdatePersonal/></WhenAuthenticated>} />
                         </Content>
                     </Main>
                 </Body>

@@ -145,54 +145,57 @@ const validUser = (dispatch, callback) => {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         }).then(res => {
-            callback(storedUser);
+            callback(true, storedUser);
         }).catch(error => {
             dispatch(logout());
         });
+    }else{
+        callback(false);
     }
 }
 
 export const getMe = () => {
     return dispatch => {
-
-        const userInfo = validUser(dispatch, user => {
-            dispatch({
-                type: UserActionTypes.UPDATE_SUCCESS,
-                payload: {
-                    data: JSON.parse(user)
-                }
-            });
-        });
-
-        if(localStorage.getItem('accessToken')){
-            axios({
-                method: 'get',
-                url: '/api/auth/me',
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-                }
-            }).then(response => {
-
-                const user = response.data;
-
-                localStorage.setItem('user', JSON.stringify(user));
-
+        validUser(dispatch, (retreivedFromStorage, user) => {
+            if(retreivedFromStorage){
                 dispatch({
                     type: UserActionTypes.UPDATE_SUCCESS,
                     payload: {
-                        data: user
+                        data: JSON.parse(user)
                     }
                 });
-            }).catch(error => {
-                console.log(error);
-                dispatch({
-                    type: UserActionTypes.UPDATE_ERROR,
-                    payload: {
-                        error
-                    }
-                });
-            });
-        }
+            }else{
+                if(localStorage.getItem('accessToken')){
+                    axios({
+                        method: 'get',
+                        url: '/api/auth/me',
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                        }
+                    }).then(response => {
+        
+                        const user = response.data;
+        
+                        localStorage.setItem('user', JSON.stringify(user));
+        
+                        dispatch({
+                            type: UserActionTypes.UPDATE_SUCCESS,
+                            payload: {
+                                data: user
+                            }
+                        });
+                    }).catch(error => {
+                        console.log(error);
+                        dispatch({
+                            type: UserActionTypes.UPDATE_ERROR,
+                            payload: {
+                                error
+                            }
+                        });
+                    });
+                }
+            }
+        });
     }
 }
 
