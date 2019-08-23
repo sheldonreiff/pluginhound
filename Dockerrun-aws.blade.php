@@ -2,15 +2,15 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "waves-saver-app",
-      "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/waves-saver/app:{{ $tag }}",
+      "name": "pluginhound-app",
+      "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/pluginhound/app:{{ $tag }}",
       "essential": true,
       "memory": 200,
       "cpu": 1
     },
     {
-      "name": "waves-saver-web",
-      "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/waves-saver/web:{{ $tag }}",
+      "name": "pluginhound-web",
+      "image": "873481467694.dkr.ecr.us-east-1.amazonaws.com/pluginhound/web:{{ $tag }}",
       "essential": true,
       "memory": 200,
       "cpu": 1,
@@ -22,7 +22,7 @@
         }
       ],
       "links": [
-        "waves-saver-app"
+        "pluginhound-app"
       ]
     }
   ]

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'waves-saver'),
+    'name' => env('APP_NAME', 'pluginhound'),
 
     /*
     |--------------------------------------------------------------------------

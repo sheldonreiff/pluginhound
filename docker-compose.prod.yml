@@ -1,8 +1,8 @@
 version: '3.2'
 services:
-  waves-saver-app:
-    container_name: waves-saver-app
-    image: ${DOCKER_REGISTRY}/waves-saver/app:${DOCKER_TAG}
+  pluginhound-app:
+    container_name: pluginhound-app
+    image: ${DOCKER_REGISTRY}/pluginhound/app:${DOCKER_TAG}
     build:
       context: ./
       dockerfile: app-prod.dockerfile
@@ -10,9 +10,9 @@ services:
       - TZ=America/New_York
     networks:
       - app-network
-  waves-saver-web:
-    container_name: waves-saver-web
-    image: ${DOCKER_REGISTRY}/waves-saver/web:${DOCKER_TAG}
+  pluginhound-web:
+    container_name: pluginhound-web
+    image: ${DOCKER_REGISTRY}/pluginhound/web:${DOCKER_TAG}
     build:
       context: ./
       dockerfile: web-prod.dockerfile
