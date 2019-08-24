@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ClipLoader } from 'react-spinners';
 import { Notification } from 'react-bulma-components';
+import AlertsDisabled from './AlertsDisabled';
 
 import Alert from './Alert';
 
@@ -31,6 +32,9 @@ class Alerts extends React.Component{
         const { alerts, status, view, extendedAlertView } = this.props;
 
         return <React.Fragment>
+            {alerts.length > 0 &&
+                <AlertsDisabled />
+            }
             {alerts.map((alert, index) => {
                 return <Alert
                     view={view}

@@ -12,7 +12,7 @@ use App\Product;
 use App\User;
 use Illuminate\Support\Facades\Gate;
 
-class GenerateAlerts
+class GenerateAlerts implements ShouldQueue
 {
 
     /**
@@ -28,18 +28,20 @@ class GenerateAlerts
     private function triggeredAlerts($query, $event, $changes)
     {
         return $query->where('product_sku', $event->product->sku)
-        ->where(function($query) use($changes) {
-            $query->where('event', Alert::LESS_THAN)
-            ->where('threshold_unit', Alert::PERCENT)
-            ->where('threshold_value', '<=', $changes->get('percent_change') * -1);
-        })
-        ->orWhere(function($query) use($changes) {
-            $query->where('event', Alert::LESS_THAN)
-            ->where('threshold_unit', Alert::CURRENCY)
-            ->where('threshold_value', '<=', $changes->get('currency_change') * -1);
-        })
-        ->orWhere(function($query) {
-            $query->where('event', Alert::ANY_CHANGE);
+        ->where(function ($query) use($changes) {
+            $query->where(function($query) use($changes) {
+                $query->where('event', Alert::LESS_THAN)
+                ->where('threshold_unit', Alert::PERCENT)
+                ->where('threshold_value', '<=', $changes->get('percent_change') * -1);
+            })
+            ->orWhere(function($query) use($changes) {
+                $query->where('event', Alert::LESS_THAN)
+                ->where('threshold_unit', Alert::CURRENCY)
+                ->where('threshold_value', '<=', $changes->get('currency_change') * -1);
+            })
+            ->orWhere(function($query) {
+                $query->where('event', Alert::ANY_CHANGE);
+            });
         });
     }
 

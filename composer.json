@@ -16,7 +16,8 @@
         "maxbanton/cwh": "^1.1",
         "owen-it/laravel-auditing": "^9.2",
         "predis/predis": "^1.1",
-        "tymon/jwt-auth": "1.0.0-rc.4.1"
+        "tymon/jwt-auth": "1.0.0-rc.4.1",
+        "aws/aws-sdk-php": "~3.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

@@ -60,6 +60,18 @@ services:
       - app-network
     volumes:
       - testdb_data:/var/lib/mysql
+  workers:
+    container_name: pluginhound-workers
+    build:
+      context: ./
+      dockerfile: workers.dockerfile
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - ./:/var/www/html/
+      - ./supervisor-confs/:/etc/supervisor/conf.d/
+    networks:
+      - app-network
   redis:
     container_name: pluginhound-redis
     build:
@@ -69,16 +81,6 @@ services:
       - 3004:6379
     networks:
       - app-network
-  cypress:
-    container_name: pluginhound-cypress
-    build:
-      context: ./
-      dockerfile: cypress.dockerfile
-    tty: true
-    networks:
-      - app-network
-    volumes:
-      - ./:/home/app
 networks:
   app-network:
     driver: bridge

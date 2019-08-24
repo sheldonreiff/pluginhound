@@ -15,6 +15,20 @@
 //     return view('welcome');
 // });
 
+// Route::get('mailable', function () {
+//     $product = App\Product::first();
+//     $changes = collect([
+//         'percent_change' => 50,
+//         'currency_change' => 25,
+//         'any_change' => true,
+//     ]);
+//     $alerts = [
+//         \App\Alert::first(),
+//     ];
+
+//     return new App\Mail\Alert($product, $changes, $alerts);
+// });
+
 Route::get('{path}', function () {
     return view('home');
 })->where('path', '^((?!api)[\s\S])*$');
