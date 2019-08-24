@@ -131,7 +131,7 @@ jobs:
       - run:
           name: Deploying
           command: |
-            eb init --platform "arn:aws:elasticbeanstalk:${AWS_DEFAULT_REGION}::platform/Multi-container Docker running on 64bit Amazon Linux/2.15.2" --region ${AWS_DEFAULT_REGION} "Plugin Hound"
+            eb init --platform "arn:aws:elasticbeanstalk:${AWS_DEFAULT_REGION}::platform/Multi-container Docker running on 64bit Amazon Linux/2.15.2" --region ${AWS_DEFAULT_REGION} "PluginHound"
             eb deploy --label $CIRCLE_SHA1 pluginhound-$CIRCLE_BRANCH
 
       - store_artifacts:
