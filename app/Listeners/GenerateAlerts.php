@@ -53,12 +53,12 @@ class GenerateAlerts implements ShouldQueue
      */
     public function handle($event)
     {
-        if($event->product->exists() && $event->product->isDirty('sale_price') && $event->product->sendAlerts){
+        if($event->priceChanged && $event->alertsEnabled){
             $changes = collect([
                 'percent_change' => $event->product->sale_price
-                    ? (($event->product->sale_price - $event->product->getOriginal('sale_price') ) / $event->product->sale_price) * 100
+                    ? (($event->product->sale_price - $event->oldSalePrice ) / $event->product->sale_price) * 100
                     : 100,
-                'currency_change' => $event->product->sale_price - $event->product->getOriginal('sale_price'),
+                'currency_change' => $event->product->sale_price - $event->oldSalePrice,
                 'any_change' => true,
             ]);
         

@@ -16,6 +16,9 @@ class ProductSaving
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $priceChanged;
+    public $alertsEnabled;
+    public $oldSalePrice;
     public $product;
     /**
      * Create a new event instance.
@@ -24,6 +27,10 @@ class ProductSaving
      */
     public function __construct(Product $product)
     {
-        $this->product = $product;
+        $this->priceChanged = $product->exists() && $product->isDirty('sale_price');
+        $this->alertsEnabled = $product->sendAlerts;
+        $this->oldSalePrice = $product->getOriginal('sale_price');
+
+        $this->product = (object)$product->getAttributes();
     }
 }

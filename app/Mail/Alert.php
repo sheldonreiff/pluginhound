@@ -22,7 +22,7 @@ class Alert extends Mailable
      *
      * @return void
      */
-    public function __construct(Product $product, $changes, $alerts)
+    public function __construct(object $product, $changes, $alerts)
     {
         $this->product = $product;
         $this->changes = $changes;
