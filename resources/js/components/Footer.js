@@ -8,7 +8,6 @@ const Content = styled(Hero.Footer)`
     display: flex;
     justify-content: center;
     flex-shrink: 0;
-    margin: -10px;
     & > *{
         margin: 0 10px;
     }
