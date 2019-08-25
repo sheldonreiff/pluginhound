@@ -24,6 +24,7 @@ services:
       - app-network
   pluginhound-workers:
     container_name: pluginhound-workers
+    image: ${DOCKER_REGISTRY}/pluginhound/workers:${DOCKER_TAG}
     build:
       context: ./
       dockerfile: workers-prod.dockerfile
