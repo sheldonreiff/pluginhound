@@ -31,6 +31,6 @@
       "essential": true,
       "memoryReservation": 200,
       "cpu": 1
-    },
+    }
   ]
 }
