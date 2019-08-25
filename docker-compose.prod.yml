@@ -20,9 +20,6 @@ services:
     tty: true
     environment:
       - TZ=America/New_York
-    volumes:
-      - ./:/var/www/
-      - ./.nginx/conf.d/:/etc/nginx/conf.d/
     ports:
       - 443:443
       - 80:80
