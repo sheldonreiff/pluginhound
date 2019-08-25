@@ -9,6 +9,6 @@ COPY ./.nginx/conf-prod.d/ /etc/nginx/conf-prod.d/
 RUN apt-get update && \
     apt-get install -y certbot python-certbot-nginx
 
-RUN ["chmod", "+x", "/var/www/start-nginx.sh"]
+RUN ["chmod", "+x", "./start-nginx-prod.sh"]
 
-CMD ["/var/www/start-nginx.sh"]
+CMD ["./start-nginx-prod.sh"]
