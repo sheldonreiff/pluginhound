@@ -8,7 +8,7 @@ services:
     environment:
       - TZ=America/New_York
     volumes:
-      - ./:/var/www/html/
+      - ./:/var/www/
     networks:
       - app-network
   web:
@@ -16,12 +16,15 @@ services:
     build:
       context: ./
       dockerfile: web.dockerfile
-    environment:
-      - TZ=America/New_York
+    restart: unless-stopped
+    tty: true
     volumes:
-      - ./:/usr/local/apache2/htdocs/
+      - ./:/var/www/
+      - ./.nginx/conf.d/:/etc/nginx/conf.d/
     ports:
-      - 3002:80
+      - 3006:443
+      - 3007:80
+    restart: unless-stopped
     networks:
       - app-network
   db:
@@ -68,7 +71,7 @@ services:
     environment:
       - TZ=America/New_York
     volumes:
-      - ./:/var/www/html/
+      - ./:/var/www/
       - ./supervisor-confs/:/etc/supervisor/conf.d/
     networks:
       - app-network

@@ -16,10 +16,17 @@ services:
     build:
       context: ./
       dockerfile: web-prod.dockerfile
+    restart: unless-stopped
+    tty: true
     environment:
       - TZ=America/New_York
+    volumes:
+      - ./:/var/www/
+      - ./.nginx/conf.d/:/etc/nginx/conf.d/
     ports:
+      - 443:443
       - 80:80
+    restart: unless-stopped
     networks:
       - app-network
   pluginhound-workers:

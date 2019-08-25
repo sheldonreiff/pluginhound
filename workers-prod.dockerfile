@@ -4,11 +4,11 @@ RUN docker-php-ext-install pdo pdo_mysql bcmath
 
 RUN chown www-data /var/www
 
-COPY ./ /var/www/html
+COPY ./ /var/www
 
 COPY ./supervisor-confs/laravel-worker.prod.conf /etc/supervisor/conf.d/
 
-RUN chmod -fR 777 /var/www/html/storage
+RUN chmod -fR 777 /var/www/storage
 
 RUN apt-get update && \
     apt-get install -y supervisor

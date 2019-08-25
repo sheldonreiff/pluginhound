@@ -1,6 +1,8 @@
-FROM httpd:2.4
+FROM nginx:stable
 
-COPY ./httpd-dev.conf /usr/local/apache2/conf/httpd.conf
-COPY ./httpd-vhosts-dev.conf /usr/local/apache2/conf/extra/httpd-vhosts.conf
+RUN apt-get update && \
+    apt-get install -y certbot python-certbot-nginx
 
-COPY ./ /usr/local/apache2/htdocs/ 
+RUN ["chmod", "+x", "./nginx-start.sh"]
+
+CMD start-nginx.sh

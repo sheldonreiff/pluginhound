@@ -1,6 +1,6 @@
 #!/bin/sh
 set -xe
 
-php /var/www/html/artisan migrate
+php /var/www/artisan migrate
 
 php-fpm
