@@ -3,6 +3,6 @@ FROM nginx:stable
 RUN apt-get update && \
     apt-get install -y certbot python-certbot-nginx
 
-RUN ["chmod", "+x", "./nginx-start.sh"]
+RUN ["chmod", "+x", "/var/www/nginx-start.sh"]
 
-CMD start-nginx.sh
+CMD ["/var/www/start-nginx.sh"]
