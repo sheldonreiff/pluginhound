@@ -8,4 +8,6 @@ set -xe
 
 # certbot renew --dry-run
 
-nginx -g 'daemon off;'
+nginx
+
+tail -f /dev/null
