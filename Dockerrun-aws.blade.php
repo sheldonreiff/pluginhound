@@ -19,6 +19,11 @@
           "hostPort": 80,
           "containerPort": 80,
           "protocol": "tcp"
+        },
+        {
+          "hostPort": 443,
+          "containerPort": 443,
+          "protocol": "tcp"
         }
       ],
       "links": [
