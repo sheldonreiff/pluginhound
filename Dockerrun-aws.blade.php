@@ -28,6 +28,13 @@
       ],
       "links": [
         "pluginhound-app"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "letsencrypt",
+          "containerPath": "/etc/letsencrypt/",
+          "readOnly": true
+        }
       ]
     },
     {
@@ -37,5 +44,13 @@
       "memoryReservation": 200,
       "cpu": 1
     }
-  ]
+  ],
+  "volumes": [
+    {
+      "name": "letsencrypt",
+      "host": {
+        "sourcePath": "/home/letsencrypt/"
+      }
+    }
+  ],
 }

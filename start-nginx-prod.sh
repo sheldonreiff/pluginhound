@@ -3,11 +3,11 @@ set -xe
 
 nginx
 
-# if [ ! -d /etc/letsencrypt/live/test1.pluginhound.com  ];
-# then
-# 	certbot --debug --non-interactive --agree-tos --debug --nginx --email sheldonreiff@gmail.com --domains test1.pluginhound.com --keep-until-expiring
-# fi
+if [ ! -d /etc/letsencrypt/live/$DOMAIN ];
+then
+	certbot --debug --non-interactive --agree-tos --debug --nginx --email $SSL_ACCOUNT_EMAIL --domains $DOMAIN,www.$DOMAIN --keep-until-expiring
+fi
 
-# certbot renew --dry-run
+certbot renew --dry-run
 
 tail -f /dev/null
