@@ -16,7 +16,6 @@ services:
     build:
       context: ./
       dockerfile: web-prod.dockerfile
-    restart: unless-stopped
     tty: true
     environment:
       - TZ=America/New_York

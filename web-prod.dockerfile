@@ -11,4 +11,6 @@ RUN apt-get update && \
 
 RUN ["chmod", "+x", "./start-nginx-prod.sh"]
 
+EXPOSE 443
+
 CMD ["./start-nginx-prod.sh"]
