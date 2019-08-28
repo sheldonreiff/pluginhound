@@ -52,5 +52,5 @@
         "sourcePath": "/home/letsencrypt/"
       }
     }
-  ],
+  ]
 }
