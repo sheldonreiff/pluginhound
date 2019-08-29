@@ -32,8 +32,7 @@
       "mountPoints": [
         {
           "sourceVolume": "letsencrypt",
-          "containerPath": "/etc/letsencrypt/",
-          "readOnly": true
+          "containerPath": "/etc/letsencrypt/"
         }
       ]
     },
@@ -49,7 +48,7 @@
     {
       "name": "letsencrypt",
       "host": {
-        "sourcePath": "/home/letsencrypt/"
+        "sourcePath": "/letsencrypt/"
       }
     }
   ],
