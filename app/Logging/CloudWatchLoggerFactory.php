@@ -24,10 +24,10 @@ class CloudWatchLoggerFactory
         $client = new CloudWatchLogsClient($sdkParams);
 
         // Log group name, will be created if none
-        $groupName = config('app.name') . '-' . config('app.env');
+        $groupName = config('app.name');
 
         // Log stream name, will be created if none
-        $streamName = config('app.url');
+        $streamName = config('app.name') . '-' . config('app.env');
 
         // Days to keep logs, 14 by default. Set to `null` to allow indefinite retention.
         $retentionDays = $config["retention"];
