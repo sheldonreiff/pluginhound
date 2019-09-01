@@ -1,11 +1,12 @@
 import React from 'react';
-import { Heading, Image, Tag, Box } from 'react-bulma-components';
+import { Heading, Image, Box } from 'react-bulma-components';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { darken } from 'polished';
 import { Link } from 'react-router-dom';
 import DiscountBadge from '../Product/DiscountBadge';
 const isTouchDevice = require('is-touch-device');
+import ProductTypeBadge from '../Product/ProductTypeBadge';
 
 const ProductLink = styled(Link)`
     display: flex;
@@ -16,7 +17,7 @@ const ProductTileContainer = styled(Box)`
     display: grid;
     grid-template-areas:
     "title title title"
-    "thumbnail thumbnail price";
+    "thumbnail meta price";
     grid-gap: .5rem;
 
     &:hover {
@@ -24,6 +25,7 @@ const ProductTileContainer = styled(Box)`
         cursor: pointer;
     }
     width: 100%;
+    max-width: 500px;
 `;
 
 const PriceContainer = styled.div`
@@ -34,6 +36,10 @@ const Price = styled(Heading)`
     text-align: right;
 `;
 
+const MetaContainer = styled.div`
+    grid-area: meta;
+`;
+
 const ProductTile = props => {
 
     const { product } = props;
@@ -41,6 +47,11 @@ const ProductTile = props => {
     return <ProductLink to={`/product/${product.sku}`} data-sku={product.sku}>
         <ProductTileContainer isTouchDevice={isTouchDevice()}>
             <Heading style={{gridArea: 'title'}} size={5} className='product-title'>{product.name}</Heading>
+            <MetaContainer>
+                <ProductTypeBadge 
+                    type={product.type}
+                />
+            </MetaContainer>
             <PriceContainer>
                 <Price subtitle>${product.sale_price}</Price>
                 <DiscountBadge product={product} />

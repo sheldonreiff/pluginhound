@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect }  from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Notification, Tag, Heading, Button } from 'react-bulma-components';
+import { Notification, Heading, Button } from 'react-bulma-components';
 import { SizeMe } from 'react-sizeme';
 import { ScaleLoader, ClipLoader } from 'react-spinners';
 import styled from 'styled-components';
@@ -14,6 +14,7 @@ import moment from 'moment';
 
 import Alerts from '../Alerts/Alerts';
 import DiscountBadge from './DiscountBadge';
+import ProductTypeBadge from './ProductTypeBadge';
 
 import { getProduct, getProductHistory, setProduct } from '../../actions/product';
 import { loadAlerts, newAlert, deleteAlert, upsertAlert } from '../../actions/alerts';
@@ -28,20 +29,6 @@ const LoaderContainer = styled.div`
     justify-content: center;
     align-items: center;
 `;
-
-const ProductType = props => {
-    let color = 'black';
-    if(props.type === 'plugin'){
-        color = 'info';
-    }else if(props.type === 'bundle'){
-        color = 'warning';
-    }
-
-    return <Tag
-        color={color}
-        style={{textTransform: 'capitalize'}}
-    >{props.type}</Tag>;
-}
 
 const ProductMetaContainer = styled.div`
     display: flex;
@@ -101,7 +88,7 @@ class Product extends React.Component{
     componentDidMount(){
         this.props.getProduct();
         this.props.getProductHistory({
-            start: moment().subtract(60, 'days'),
+            start: moment().subtract(6, 'months'),
             end: moment(),
         });
     }
@@ -130,7 +117,7 @@ class Product extends React.Component{
                                 <ProductMetaContainerLeft>
                                     <Heading subtitle>${product.sale_price}</Heading>
                                     <DiscountBadge product={product} />
-                                    <ProductType type={product.type} />
+                                    <ProductTypeBadge type={product.type} />
                                     {product.category &&
                                         <Heading subtitle size={6} className='category'>{product.category}</Heading>
                                     }

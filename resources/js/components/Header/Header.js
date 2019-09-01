@@ -109,7 +109,7 @@ class Header extends Component {
                 >
                     <NavContainer>
                         <Logo onClick={this.goHome}>
-                            <WordMark>Plugin Hound</WordMark>
+                            <WordMark>PluginHound</WordMark>
                             <LogoImage src='./images/logo.png' alt='logo' />
                          </Logo>
                         <Navbar.Burger

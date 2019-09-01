@@ -128,6 +128,8 @@ abstract class TestCase extends BaseTestCase
 
     protected function importProducts(iterable $testProductKeys=[])
     {
+        $product = new Product();
+
         $products = $testProductKeys
         ? array_intersect_key($this->testProducts, array_flip($testProductKeys))
         : $this->testProducts;
@@ -137,7 +139,7 @@ abstract class TestCase extends BaseTestCase
             'pageFunctionResult' => $products
         ];
 
-        Product::transformAndSaveResults($import);
+        $product->transformAndSaveResults($import);
 
         return $import;
     }    

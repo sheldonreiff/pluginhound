@@ -10,6 +10,6 @@ COPY ./ /var/www
 
 RUN chmod -fR 777 /var/www/storage
 
-RUN ["chmod", "+x", "/var/www/start.sh"]
+RUN ["chmod", "+x", "/var/www/start-php.sh"]
 
-CMD ["/var/www/start.sh"]
+CMD ["/var/www/start-php.sh"]

@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->string('sku', 50);
             $table->string('name', 250);
-            $table->enum('type', ['plugin', 'bundle']);
+            $table->string('type', 100);
             $table->float('msrp', 10, 2)->nullable();
             $table->float('sale_price', 10, 2)->nullable();
             $table->string('category', 50)->nullable();
@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
             $table->date('sale_end')->nullable();
             $table->string('badge', 50)->nullable();
             $table->string('thumbnail_url', 300)->nullable();
+            $table->string('url')->nullable();
             $table->date('scraped_date');
             $table->dateTime('scraped_at');
             $table->timestamps();

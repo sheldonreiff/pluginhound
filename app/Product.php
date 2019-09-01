@@ -8,6 +8,7 @@ use Custom\ApifyClient;
 use OwenIt\Auditing\Contracts\Auditable;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class Product extends Model implements Auditable
 {
@@ -73,7 +74,7 @@ class Product extends Model implements Auditable
         }
     }
 
-    public static function transformAndSaveResults($crawler_data)
+    public function transformAndSaveResults($crawler_data)
     {
         foreach($crawler_data->pageFunctionResult as $product){
             Product::updateOrCreate(['sku' => $product->sku],
@@ -84,11 +85,13 @@ class Product extends Model implements Auditable
                     'msrp' => floatval($product->msrp),
                     'sale_price' => floatval($product->salePrice),
                     'note' => $product->note,
-                    'sale_end' => date('Y-m-d H:i:s', strtotime($product->saleEnd)),
+                    'sale_end' => $product->saleEnd
+                        ? Carbon::parse($product->saleEnd)->format('Y-m-d H:i:s')
+                        : null,
                     'badge' => $product->badge,
                     'thumbnail_url' => $product->thumbnailUrl,
-                    'scraped_date' => date('Y-m-d', strtotime($crawler_data->pageFunctionFinishedAt)), # for display and aggregation purposes, only care about date
-                    'scraped_at' => date('Y-m-d H:i:s', strtotime($crawler_data->pageFunctionFinishedAt)),
+                    'scraped_date' => Carbon::parse($crawler_data->pageFunctionFinishedAt)->format('Y-m-d'), # for display and aggregation purposes, only care about date
+                    'scraped_at' => Carbon::parse($crawler_data->pageFunctionFinishedAt)->format('Y-m-d H:i:s'),
                     'url' => $product->url,
                 ]
             );
@@ -125,7 +128,7 @@ class Product extends Model implements Auditable
 
         return DB::table(DB::raw("({$withRank->toSql()}) as sub"))
         ->mergeBindings($withRank)
-        ->where('discount_rank', '>=', .5)
+        ->where('discount_rank', '>=', .9)
         ->orderBy('discount_rank', 'desc');
     }
 

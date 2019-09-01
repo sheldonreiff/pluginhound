@@ -22,15 +22,16 @@ services:
       - ./:/var/www/
       - ./.nginx/conf.d/:/etc/nginx/conf.d/
     ports:
-      - 3006:443
-      - 3007:80
+      - 3002:80
     networks:
       - app-network
+    depends_on:
+      - app
   db:
     container_name: pluginhound-db
     restart: always
     ports:
-      - 3003:3306
+      - 3008:3306
     build:
       context: ./
       dockerfile: database.dockerfile

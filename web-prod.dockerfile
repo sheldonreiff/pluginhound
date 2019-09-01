@@ -4,7 +4,7 @@ WORKDIR /var/www
 
 COPY ./ ./
 
-COPY ./.nginx/conf-prod.d/ /etc/nginx/conf.d/
+COPY ./.nginx /opt/.nginx
 
 RUN apt-get update && \
     apt-get install -y certbot python-certbot-nginx

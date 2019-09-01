@@ -6,7 +6,7 @@ RUN chown www-data /var/www
 
 COPY ./ /var/www
 
-COPY ./supervisor-confs/laravel-worker.prod.conf /etc/supervisor/conf.d/
+COPY ./supervisor-confs-prod/laravel-worker.conf /etc/supervisor/conf.d/
 
 RUN chmod -fR 777 /var/www/storage
 
