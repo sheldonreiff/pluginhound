@@ -99,6 +99,29 @@ class AuthTest extends TestCase
     }
 
     /** @test */
+    public function can_update_myself()
+    {
+        $new_first_name = 'John';
+        $new_last_name = 'Smith';
+        $new_email = 'test@example.com';
+
+        $this->json('patch', '/api/me', [
+            'first_name' => $new_first_name,
+            'last_name' => $new_last_name,
+            'email' => $new_email,
+        ])
+        ->assertOk();
+
+        $this->json('get', '/api/auth/me')
+        ->assertOk()
+        ->assertJson([
+            'first_name' => $new_first_name,
+            'last_name' => $new_last_name,
+            'email' => $new_email,
+        ]);
+    }
+
+    /** @test */
     public function can_reset_password_from_emailed_link()
     {
         Notification::fake();
