@@ -3,9 +3,9 @@ set -xe
 
 if [ "$APP_ENV" = "test" ];
 then
-	cp -r /opt/.nginx/conf-test.d/ /etc/nginx/conf.d/
+	cp -r /opt/.nginx/conf-test.d/. /etc/nginx/conf.d/
 else
-	cp -r /opt/.nginx/conf-prod.d/ /etc/nginx/conf.d/
+	cp -r /opt/.nginx/conf-prod.d/. /etc/nginx/conf.d/
 fi
 
 nginx
