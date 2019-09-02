@@ -107,6 +107,8 @@ jobs:
 
             DOCKER_TAG=$CIRCLE_SHA1
             php artisan build:dockerrun $DOCKER_TAG
+            if [ "$APP_ENV" = "test" ]; then cp ./robots-test.txt ./public/robots.txt; fi
+
 
       - run:
           name: Build and push Docker image to ECR
