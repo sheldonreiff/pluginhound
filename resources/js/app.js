@@ -38,6 +38,9 @@ const Content = styled.div`
     padding-bottom: 20px;
     padding-right: 3%;
     padding-left: 3%;
+
+    max-width: 1650px;
+    margin: auto;
 `;
 
 const Home = props => <Products key='deals' view='bestDeals' />;

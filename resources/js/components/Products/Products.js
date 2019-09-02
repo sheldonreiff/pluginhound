@@ -28,7 +28,6 @@ const MainGrid = styled.div`
     display: grid!important;
     grid-gap: 15px;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    max-width: 1550px;
 `;
 
 const SearchQuery = styled.span`

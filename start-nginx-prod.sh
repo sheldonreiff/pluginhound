@@ -17,4 +17,6 @@ fi
 
 certbot renew --dry-run
 
-tail -f /dev/null
+nginx -s quit
+
+nginx -g 'daemon off;'

@@ -1,5 +1,3 @@
 #!/bin/sh
 
-nginx
-
-tail -f /dev/null
+nginx -g 'daemon off;'
