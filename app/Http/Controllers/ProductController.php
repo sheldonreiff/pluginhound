@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Product;
 use Gate;
+use App\Jobs\ImportProducts;
 
 use App\Http\Resources\Product as ProductResource;
 use App\Http\Resources\ProductHistory as ProductHistoryResoruce;
@@ -51,7 +52,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Product $product)
+    public function store(Request $request)
     {
         if(Gate::denies('import-products')){
             abort(403, 'User not allowed to import products');
@@ -62,7 +63,7 @@ class ProductController extends Controller
             'eventData.actorRunId' => ['required', 'string'],
         ]);
 
-        $product->import($request->eventData['actorId'], $request->eventData['actorRunId']);
+        ImportProducts::dispatch($request->eventData['actorId'], $request->eventData['actorRunId']);
     }
 
     /**
