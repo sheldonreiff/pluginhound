@@ -9,11 +9,13 @@ const StyledNotification = styled(Notification)`
 `;
 
 const AlertsDisabled = props => {
-    return <StyledNotification
-        color='info'
-    >
-        Alerts won't be sent until you <Link to='/account/personal-info'>veify</Link> your email
-    </StyledNotification>;
+    return props.verified
+        ? null
+        :<StyledNotification
+            color='info'
+        >
+            Alerts won't be sent until you <Link to='/account/personal-info'>veify</Link> your email
+        </StyledNotification>;
 }
 
 const mapStateToProps = state => ({
