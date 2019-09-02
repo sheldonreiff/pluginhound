@@ -33,13 +33,15 @@ class ProductImportTest extends TestCase
     /** @test */
     public function missing_products_are_deleted()
     {
-        $this->importProducts(['a']);
+        $this->importProducts(['a', 'b']);
 
         $this->assertDatabaseHas('products', [
             'sku' => $this->testProducts['a']->sku,
             'sale_price' => $this->testProducts['a']->salePrice,
             'thumbnail_url' => $this->testProducts['a']->thumbnailUrl
         ]);
+
+        $this->importProducts(['a']);
 
         $this->assertDatabaseMissing('products', [
             'sku' => $this->testProducts['b']->sku,

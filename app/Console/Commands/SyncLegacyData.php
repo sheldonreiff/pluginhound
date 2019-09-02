@@ -80,7 +80,7 @@ class SyncLegacyData extends Command
                     $product->transformAndSaveResults((object)[
                         'pageFunctionResult' => [$record],
                         'pageFunctionFinishedAt' => $record->time,
-                    ]);
+                    ], false);
                     $saved += 1;
                 }
 

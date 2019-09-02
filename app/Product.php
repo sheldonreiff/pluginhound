@@ -74,7 +74,7 @@ class Product extends Model implements Auditable
         }
     }
 
-    public function transformAndSaveResults($crawler_data)
+    public function transformAndSaveResults($crawler_data, $delete=true)
     {
         foreach($crawler_data->pageFunctionResult as $product){
             Product::updateOrCreate(['sku' => $product->sku],
@@ -97,9 +97,12 @@ class Product extends Model implements Auditable
             );
         }
 
-        $all_skus = array_column((array)$crawler_data->pageFunctionResult, 'sku');
+        if($delete){
+            $all_skus = array_column((array)$crawler_data->pageFunctionResult, 'sku');
 
-        Product::whereNotIn('sku', $all_skus);
+            Product::whereNotIn('sku', $all_skus)
+            ->delete();
+        }
     }
 
     public static function comparisons()
