@@ -163,9 +163,7 @@ export const logout = () => {
 // }
 
 const validateUser = () => {
-    const storedUser = localStorage.getItem('user');
-
-    const decoded = jwt_decode(storedUser);
+    const decoded = jwt_decode(localStorage.getItem('accessToken'));
 
     return new Date().getTime() / 1000 > decoded.exp;
 }

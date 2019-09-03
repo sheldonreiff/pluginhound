@@ -25,6 +25,8 @@ class Search extends React.Component{
         history.push('/search');
 
         this.props.onSearch();
+
+        e.target.blur();
     }
 
     render(){

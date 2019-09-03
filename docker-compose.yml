@@ -49,7 +49,7 @@ services:
     container_name: pluginhound-test-db
     restart: always
     ports:
-      - 3005:3306
+      - 3009:3306
     build:
       context: ./
       dockerfile: database.dockerfile
