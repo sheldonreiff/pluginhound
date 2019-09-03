@@ -6,6 +6,7 @@ import history from '../history';
 import React from 'react';
 import { ClipLoader } from 'react-spinners';
 const queryString = require('query-string');
+import jwt_decode from 'jwt-decode';
 
 import { loadProducts } from './products';
 
@@ -105,6 +106,13 @@ export const login = ({ email, password }) => {
                 }
             });
         });
+
+        const intervalId = setInterval( () => {
+            if(!validateUser()){
+                dispatch(logout());
+                clearInterval(intervalId);
+            }
+        }, 10000);
     };
 };
 
@@ -131,69 +139,66 @@ export const logout = () => {
     }
 }
 
-const validUser = (dispatch, callback) => {
+// const validUser = (dispatch, callback) => {
+//     const storedUser = localStorage.getItem('user');
+
+//     if(storedUser){
+//         dispatch({
+//             type: UserActionTypes.UPDATE_VERIFYING,
+//         });
+//         axios({
+//             method: 'get',
+//             url: '/api/auth/validate',
+//             headers: {
+//                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+//             }
+//         }).then(res => {
+//             callback(true, storedUser);
+//         }).catch(error => {
+//             dispatch(logout());
+//         });
+//     }else{
+//         callback(false);
+//     }
+// }
+
+const validateUser = () => {
     const storedUser = localStorage.getItem('user');
 
-    if(storedUser){
-        dispatch({
-            type: UserActionTypes.UPDATE_VERIFYING,
-        });
-        axios({
-            method: 'get',
-            url: '/api/auth/validate',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-            }
-        }).then(res => {
-            callback(true, storedUser);
-        }).catch(error => {
-            dispatch(logout());
-        });
-    }else{
-        callback(false);
-    }
+    const decoded = jwt_decode(storedUser);
+
+    return new Date().getTime() / 1000 > decoded.exp;
 }
 
 export const getMe = () => {
     return dispatch => {
-        validUser(dispatch, (retreivedFromStorage, user) => {
-            if(retreivedFromStorage){
-                dispatch({
-                    type: UserActionTypes.UPDATE_SUCCESS,
-                    payload: {
-                        data: JSON.parse(user)
-                    }
-                });
+    if(localStorage.getItem('accessToken')){
+        axios({
+            method: 'get',
+            url: '/api/auth/me',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
-            if(localStorage.getItem('accessToken')){
-                axios({
-                    method: 'get',
-                    url: '/api/auth/me',
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-                    }
-                }).then(response => {
-    
-                    const user = response.data;
-    
-                    localStorage.setItem('user', JSON.stringify(user));
-    
-                    dispatch({
-                        type: UserActionTypes.UPDATE_SUCCESS,
-                        payload: {
-                            data: user
-                        }
-                    });
-                }).catch(error => {
-                    console.log(error);
-                    dispatch({
-                        type: UserActionTypes.UPDATE_ERROR,
-                        payload: {
-                            error
-                        }
-                    });
-                });
-            }
+        }).then(response => {
+
+            const user = response.data;
+
+            localStorage.setItem('user', JSON.stringify(user));
+
+            dispatch({
+                type: UserActionTypes.UPDATE_SUCCESS,
+                payload: {
+                    data: user
+                }
+            });
+        }).catch(error => {
+            console.log(error);
+            dispatch({
+                type: UserActionTypes.UPDATE_ERROR,
+                payload: {
+                    error
+                }
+            });
         });
     }
 }
