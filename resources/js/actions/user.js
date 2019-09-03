@@ -172,34 +172,35 @@ const validateUser = () => {
 
 export const getMe = () => {
     return dispatch => {
-    if(localStorage.getItem('accessToken')){
-        axios({
-            method: 'get',
-            url: '/api/auth/me',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-            }
-        }).then(response => {
-
-            const user = response.data;
-
-            localStorage.setItem('user', JSON.stringify(user));
-
-            dispatch({
-                type: UserActionTypes.UPDATE_SUCCESS,
-                payload: {
-                    data: user
+        if(localStorage.getItem('accessToken')){
+            axios({
+                method: 'get',
+                url: '/api/auth/me',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 }
+            }).then(response => {
+
+                const user = response.data;
+
+                localStorage.setItem('user', JSON.stringify(user));
+
+                dispatch({
+                    type: UserActionTypes.UPDATE_SUCCESS,
+                    payload: {
+                        data: user
+                    }
+                });
+            }).catch(error => {
+                console.log(error);
+                dispatch({
+                    type: UserActionTypes.UPDATE_ERROR,
+                    payload: {
+                        error
+                    }
+                });
             });
-        }).catch(error => {
-            console.log(error);
-            dispatch({
-                type: UserActionTypes.UPDATE_ERROR,
-                payload: {
-                    error
-                }
-            });
-        });
+        }
     }
 }
 
