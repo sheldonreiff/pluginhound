@@ -109,8 +109,8 @@ export const login = ({ email, password }) => {
 
         const intervalId = setInterval( () => {
             if(!validateUser()){
-                dispatch(logout());
                 clearInterval(intervalId);
+                dispatch(logout());   
             }
         }, 10000);
     };
@@ -135,32 +135,9 @@ export const logout = () => {
 
         history.push('/');
 
-        dispatch(loadProducts('bestDeals'));
+        dispatch(loadProducts({ view: 'bestDeals', reload: true }));
     }
 }
-
-// const validUser = (dispatch, callback) => {
-//     const storedUser = localStorage.getItem('user');
-
-//     if(storedUser){
-//         dispatch({
-//             type: UserActionTypes.UPDATE_VERIFYING,
-//         });
-//         axios({
-//             method: 'get',
-//             url: '/api/auth/validate',
-//             headers: {
-//                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-//             }
-//         }).then(res => {
-//             callback(true, storedUser);
-//         }).catch(error => {
-//             dispatch(logout());
-//         });
-//     }else{
-//         callback(false);
-//     }
-// }
 
 const validateUser = () => {
     const token = localStorage.getItem('accessToken');
