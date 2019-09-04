@@ -169,7 +169,7 @@ const validateUser = () => {
         return false;
     }
 
-    const decoded = jwt_decode();
+    const decoded = jwt_decode(token);
 
     return new Date().getTime() / 1000 < decoded.exp;
 }
