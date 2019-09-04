@@ -163,9 +163,15 @@ export const logout = () => {
 // }
 
 const validateUser = () => {
-    const decoded = jwt_decode(localStorage.getItem('accessToken'));
+    const token = localStorage.getItem('accessToken');
 
-    return new Date().getTime() / 1000 > decoded.exp;
+    if(!token){
+        return false;
+    }
+
+    const decoded = jwt_decode();
+
+    return new Date().getTime() / 1000 < decoded.exp;
 }
 
 export const getMe = () => {
