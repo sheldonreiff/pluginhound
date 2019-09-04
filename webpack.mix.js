@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
 
+const CompressionPlugin = require('compression-webpack-plugin');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -24,5 +26,6 @@ mix.copyDirectory('resources/assets/fonts', 'public/fonts');
 mix.webpackConfig({
    watchOptions: {
       ignored: /node_modules/
-    }
+   },
+   plugins: [new CompressionPlugin()],
 });
