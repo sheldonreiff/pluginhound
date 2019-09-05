@@ -41,7 +41,7 @@ class GenerateAlerts implements ShouldQueue
             })
             ->orWhere(function($query) use($event) {
                 $query->where('event', Alert::LESS_THAN_ABSOLUTE)
-                ->where('threshold_value', '<=', $event->product->sale_price);
+                ->where('threshold_value', '>=', $event->product->sale_price);
             })
             ->orWhere(function($query) {
                 $query->where('event', Alert::ANY_CHANGE);

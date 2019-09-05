@@ -115,8 +115,6 @@ class AlertTest extends TestCase
         $user = $this->user;
         $testProduct = $this->testProducts['a'];
 
-        dd(User::all());
-
         Notification::assertSentTo($this->user,
         \App\Notifications\Alert::class,
         function ($notification) use ($user, $testProduct){
