@@ -121,6 +121,12 @@ abstract class TestCase extends BaseTestCase
                 'alert_method' => 'email',
                 'product_sku' => $this->testProducts['b']->sku,
             ],
+            'c' => [
+                'event' => 'less_than_absolute',
+                'threshold_value' => 40,
+                'alert_method' => 'email',
+                'product_sku' => $this->testProducts['b']->sku,
+            ],
         ];
 
         $this->faker = \Faker\Factory::create();

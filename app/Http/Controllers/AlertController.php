@@ -15,7 +15,7 @@ class AlertController extends Controller
     private function getAcceptedFields(AlertStoreRequest $request, Product $product=null)
     {
         $fields = collect(
-            $request->get('event') === 'any_change'
+            $request->get('event') === Alert::ANY_CHANGE
             ? $request->only(['alert_method', 'event', 'product_sku'])
             : $request->only(['alert_method', 'event', 'threshold_unit', 'threshold_value', 'product_sku'])
         );

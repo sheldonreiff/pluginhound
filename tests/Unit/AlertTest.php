@@ -98,6 +98,38 @@ class AlertTest extends TestCase
     }
 
     /** @test */
+    public function email_is_sent_when_theshold_passed_for_absolute_change()
+    {
+        Notification::fake();
+
+        $this->importProducts(['a']);
+
+        $this->user
+        ->alerts()
+        ->create($this->testAlerts['c']);
+
+        Notification::assertNothingSent();
+
+        $this->importProducts(['a_decreased']);
+
+        $user = $this->user;
+        $testProduct = $this->testProducts['a'];
+
+        dd(User::all());
+
+        Notification::assertSentTo($this->user,
+        \App\Notifications\Alert::class,
+        function ($notification) use ($user, $testProduct){
+            $mailData = $notification->toMail($user)->build();
+
+            $this->assertStringContainsString("Price Changed", $mailData->subject);
+            $this->assertStringContainsString($testProduct->name, $mailData->subject);
+
+            return true;
+        });
+    }
+
+    /** @test */
     public function alert_email_is_not_sent_when_email_is_not_verified()
     {
         Notification::fake();

@@ -14,11 +14,12 @@ class Alert extends Model
      */
     const LESS_THAN = 'less_than';
     const ANY_CHANGE = 'any_change';
+    const LESS_THAN_ABSOLUTE = 'less_than_absolute';
     /**
      * Threshold unit types
      */
     const PERCENT = 'percent';
-    const CURRENCY = 'currenct';
+    const CURRENCY = 'currency';
     
     public function user()
     {

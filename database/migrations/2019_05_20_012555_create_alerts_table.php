@@ -16,10 +16,10 @@ class CreateAlertsTable extends Migration
         Schema::create('alerts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->enum('event', ['less_than', 'any_change']);
-            $table->enum('threshold_unit', ['percent', 'currency'])->nullable();
+            $table->string('event', 100);
+            $table->string('threshold_unit', 100)->nullable();
             $table->float('threshold_value')->nullable();
-            $table->enum('alert_method', ['email']);
+            $table->string('alert_method', 100);
             $table->string('product_sku', 50);
             $table->timestamps();
 
