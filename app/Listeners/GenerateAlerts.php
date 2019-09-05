@@ -28,7 +28,7 @@ class GenerateAlerts implements ShouldQueue
     private function triggeredAlerts($query, $event, $changes)
     {
         return $query->where('product_sku', $event->product->sku)
-        ->where(function ($query) use($changes) {
+        ->where(function ($query) use($changes, $event) {
             $query->where(function($query) use($changes) {
                 $query->where('event', Alert::LESS_THAN)
                 ->where('threshold_unit', Alert::PERCENT)
@@ -39,7 +39,7 @@ class GenerateAlerts implements ShouldQueue
                 ->where('threshold_unit', Alert::CURRENCY)
                 ->where('threshold_value', '<=', $changes->get('currency_change') * -1);
             })
-            ->orWhere(function($query) {
+            ->orWhere(function($query) use($event) {
                 $query->where('event', Alert::LESS_THAN_ABSOLUTE)
                 ->where('threshold_value', '<=', $event->product->sale_price);
             })

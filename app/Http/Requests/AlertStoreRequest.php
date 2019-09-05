@@ -32,7 +32,7 @@ class AlertStoreRequest extends FormRequest
             'alert_method' => ['required', 'in:email'],
             'event' => ['required', Rule::in(Alert::LESS_THAN, Alert::ANY_CHANGE, Alert::LESS_THAN_ABSOLUTE)],
             'threshold_unit' => ['nullable', Rule::in(Alert::PERCENT, Alert::CURRENCY), 'required_with:threshold_value'],
-            'threshold_value' => ['nullable', 'numeric', Rule::requiredIf($this->request->get('event') === 'less_than')],
+            'threshold_value' => ['nullable', 'numeric', Rule::requiredIf(in_array($this->request->get('event'), ['less_than', 'less_than_absolute']))],
         ];
     }
 }

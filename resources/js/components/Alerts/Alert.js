@@ -110,7 +110,8 @@ class Alert extends React.Component{
                         disabled={disabled}
                     >
                         <option />
-                        <option value='less_than'>the price decreases by</option>
+                        <option value='less_than'>the price drops by</option>
+                        <option value='less_than_absolute'>the price drops less than or equal to</option>
                         <option value='any_change'>the price changes at all</option>
                     </Form.Select>
                 </div>
@@ -126,16 +127,21 @@ class Alert extends React.Component{
                                 disabled={disabled}
                             />
                         </Form.Field>
+                        {alert.event === 'less_than_absolute' &&
+                            <span>dollars</span>
+                        }
 
-                        <Form.Select
-                            value={alert.threshold_unit}
-                            onChange={(e) => updateAlert({ view, alertKey, key: 'threshold_unit', value: e.target.value })}
-                            disabled={disabled}
-                        >
-                            <option />
-                            <option value='currency'>dollars</option>
-                            <option value='percent'>percent</option>
-                        </Form.Select>
+                        {alert.event !== 'less_than_absolute' &&
+                            <Form.Select
+                                value={alert.threshold_unit}
+                                onChange={(e) => updateAlert({ view, alertKey, key: 'threshold_unit', value: e.target.value })}
+                                disabled={disabled}
+                            >
+                                <option />
+                                <option value='currency'>dollars</option>
+                                <option value='percent'>percent</option>
+                            </Form.Select>
+                        }
                     </SiblingContainer>
                 }
 
