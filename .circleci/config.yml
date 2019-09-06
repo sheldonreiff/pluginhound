@@ -102,8 +102,8 @@ jobs:
       - run:
           name: Make Sentry release
           command: |
-            sentry-cli releases -p ${SENTRY_PROJECT_NAME} new ${CIRCLE_SHA1}
-            sentry-cli releases -p ${SENTRY_PROJECT_NAME} set-commits --auto ${CIRCLE_SHA1}
+            sentry-cli releases new ${CIRCLE_SHA1}
+            sentry-cli releases set-commits ${CIRCLE_SHA1} --auto 
 
       - run:
           name: Build
@@ -145,7 +145,7 @@ jobs:
       - run:
           name: Finalize Sentry release
           command: |
-            sentry-cli releases -p ${SENTRY_PROJECT_NAME} finalize ${CIRCLE_SHA1}
+            sentry-cli releases finalize ${CIRCLE_SHA1}
 
       - store_artifacts:
           path: Dockerrun.aws.json
