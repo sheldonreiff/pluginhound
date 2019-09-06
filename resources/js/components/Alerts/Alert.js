@@ -40,6 +40,7 @@ const SiblingContainer = styled.div`
     & > * {
         margin: 10px;
     }
+    align-items: center;
 `;
 
 const StyledBox = styled(Box)`
@@ -110,8 +111,8 @@ class Alert extends React.Component{
                         disabled={disabled}
                     >
                         <option />
-                        <option value='less_than'>the price drops by</option>
-                        <option value='less_than_absolute'>the price drops less than or equal to</option>
+                        <option value='decrease_by'>the price drops by</option>
+                        <option value='less_than'>the price drops to less than or equal to</option>
                         <option value='any_change'>the price changes at all</option>
                     </Form.Select>
                 </div>
@@ -127,11 +128,11 @@ class Alert extends React.Component{
                                 disabled={disabled}
                             />
                         </Form.Field>
-                        {alert.event === 'less_than_absolute' &&
+                        {alert.event === 'less_than' &&
                             <span>dollars</span>
                         }
 
-                        {alert.event !== 'less_than_absolute' &&
+                        {alert.event !== 'less_than' &&
                             <Form.Select
                                 value={alert.threshold_unit}
                                 onChange={(e) => updateAlert({ view, alertKey, key: 'threshold_unit', value: e.target.value })}

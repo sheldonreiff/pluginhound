@@ -63,7 +63,7 @@ export default function Alerts(state=initial, action){
                         alerts: { $push: [{
                             alert_method: 'email',
                             product_sku: action.payload.sku,
-                            event: 'less_than',
+                            event: 'decrease_by',
                             threshold_unit: 'percent',
                             threshold_value: 20,
                             status: null,

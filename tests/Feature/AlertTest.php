@@ -68,7 +68,7 @@ class AlertTest extends TestCase
         ->decodeResponseJson();
 
         $alertDiff = collect([
-            'event' => 'less_than',
+            'event' => 'decrease_by',
             'threshold_unit' => 'currency',
             'threshold_value' => 15,
             'product_sku' => $this->testAlerts['a']['product_sku'],
@@ -97,7 +97,7 @@ class AlertTest extends TestCase
         ->create($this->testAlerts['a']);
         
         $alertDiff = collect([
-            'event' => 'less_than',
+            'event' => 'decrease_by',
             'threshold_unit' => 'currency',
             'threshold_value' => 15,
             'product_sku' => $this->testAlerts['a']['product_sku'],

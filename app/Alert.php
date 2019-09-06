@@ -12,9 +12,9 @@ class Alert extends Model
     /**
      * Event types
      */
-    const LESS_THAN = 'less_than';
+    const DECREASE_BY = 'decrease_by';
     const ANY_CHANGE = 'any_change';
-    const LESS_THAN_ABSOLUTE = 'less_than_absolute';
+    const LESS_THAN = 'less_than';
     /**
      * Threshold unit types
      */

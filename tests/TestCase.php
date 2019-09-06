@@ -108,21 +108,21 @@ abstract class TestCase extends BaseTestCase
 
         $this->testAlerts = [
             'a' => [
-                'event' => 'less_than',
+                'event' => 'decrease_by',
                 'threshold_unit' => 'percent',
                 'threshold_value' => 20,
                 'alert_method' => 'email',
                 'product_sku' => $this->testProducts['a']->sku,
             ],
             'b' => [
-                'event' => 'less_than',
+                'event' => 'decrease_by',
                 'threshold_unit' => 'percent',
                 'threshold_value' => 20,
                 'alert_method' => 'email',
                 'product_sku' => $this->testProducts['b']->sku,
             ],
             'c' => [
-                'event' => 'less_than_absolute',
+                'event' => 'less_than',
                 'threshold_value' => 40,
                 'alert_method' => 'email',
                 'product_sku' => $this->testProducts['a']->sku,
