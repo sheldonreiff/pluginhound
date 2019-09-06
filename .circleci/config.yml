@@ -97,7 +97,7 @@ jobs:
             sudo python get-pip.py
             sudo pip install awscli --upgrade
             sudo pip install awsebcli --upgrade
-            curl -sL <https://sentry.io/get-cli/> | bash
+            sudo curl -sL https://sentry.io/get-cli/ | bash
 
       - run:
           name: Make Sentry release
