@@ -100,10 +100,10 @@ jobs:
             curl -sL <https://sentry.io/get-cli/> | bash
 
       - run:
-        name: Make Sentry release
-        command: |
-          sentry-cli releases -p ${SENTRY_PROJECT_NAME} new ${CIRCLE_SHA1}
-          sentry-cli releases -p ${SENTRY_PROJECT_NAME} set-commits --auto ${CIRCLE_SHA1}
+          name: Make Sentry release
+          command: |
+            sentry-cli releases -p ${SENTRY_PROJECT_NAME} new ${CIRCLE_SHA1}
+            sentry-cli releases -p ${SENTRY_PROJECT_NAME} set-commits --auto ${CIRCLE_SHA1}
 
       - run:
           name: Build
