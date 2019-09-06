@@ -97,6 +97,13 @@ jobs:
             sudo python get-pip.py
             sudo pip install awscli --upgrade
             sudo pip install awsebcli --upgrade
+            curl -sL <https://sentry.io/get-cli/> | bash
+
+      - run:
+        name: Make Sentry release
+        command: |
+          sentry-cli releases -p ${SENTRY_PROJECT_NAME} new ${CIRCLE_SHA1}
+          sentry-cli releases -p ${SENTRY_PROJECT_NAME} set-commits --auto ${CIRCLE_SHA1}
 
       - run:
           name: Build
@@ -108,7 +115,6 @@ jobs:
             DOCKER_TAG=$CIRCLE_SHA1
             php artisan build:dockerrun $DOCKER_TAG
             if [ "$APP_ENV" = "test" ]; then cp ./robots-test.txt ./public/robots.txt; fi
-
 
       - run:
           name: Build and push Docker image to ECR
@@ -135,6 +141,11 @@ jobs:
           command: |
             eb init --platform "arn:aws:elasticbeanstalk:${AWS_DEFAULT_REGION}::platform/Multi-container Docker running on 64bit Amazon Linux/2.15.2" --region ${AWS_DEFAULT_REGION} "PluginHound"
             eb deploy --label $CIRCLE_SHA1 pluginhound-$CIRCLE_BRANCH
+
+      - run:
+          name: Finalize Sentry release
+          command: |
+            sentry-cli releases -p ${SENTRY_PROJECT_NAME} finalize ${CIRCLE_SHA1}
 
       - store_artifacts:
           path: Dockerrun.aws.json
