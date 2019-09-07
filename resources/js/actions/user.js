@@ -7,6 +7,8 @@ import React from 'react';
 import { ClipLoader } from 'react-spinners';
 const queryString = require('query-string');
 import jwt_decode from 'jwt-decode';
+import * as Sentry from '@sentry/browser';
+
 
 import { loadProducts } from './products';
 
@@ -33,7 +35,6 @@ export const register = ({ firstName, lastName, email, password, confirmPassword
             });
 
         }).catch(error => {
-            console.log(error);
             dispatch({
                 type: UserActionTypes.REGISTER_ERROR,
                 payload: {
@@ -98,7 +99,6 @@ export const login = ({ email, password }) => {
             }));
 
         }).catch(error => {
-            console.log(error);
             dispatch({
                 type: UserActionTypes.LOGIN_ERROR,
                 payload: {
@@ -164,6 +164,8 @@ export const getMe = () => {
 
                 const user = response.data;
 
+                Sentry.setUser(user);
+
                 localStorage.setItem('user', JSON.stringify(user));
 
                 dispatch({
@@ -173,7 +175,6 @@ export const getMe = () => {
                     }
                 });
             }).catch(error => {
-                console.log(error);
                 dispatch({
                     type: UserActionTypes.UPDATE_ERROR,
                     payload: {
@@ -285,8 +286,6 @@ export const sendPasswordReset = (email) => {
                 type: UserActionTypes.SEND_RESET_SUCCESS,
             });
         }).catch(error => {
-            console.log(error);
-
             dispatch({
                 type: UserActionTypes.SEND_RESET_ERROR,
             });

@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import * as Sentry from '@sentry/browser';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+
+Sentry.init({
+    dsn: "https://79294f92d77c4589832c5dc7ba0b5e6f@sentry.io/1554273",
+    environment: process.env.MIX_APP_ENV,
+});
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import 'react-redux-notify/dist/ReactReduxNotify.css';

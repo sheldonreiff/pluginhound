@@ -29,6 +29,7 @@
         "sass-loader": "^7.1.0"
     },
     "dependencies": {
+        "@sentry/browser": "^5.6.3",
         "babel-runtime": "^6.26.0",
         "bulma-pagination-react": "^0.1.1",
         "cypress": "^3.4.1",
