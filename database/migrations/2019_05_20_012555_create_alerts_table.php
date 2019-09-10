@@ -28,10 +28,6 @@ class CreateAlertsTable extends Migration
             $table->foreign('user_id')
             ->references('id')->on('users')
             ->onDelete('cascade');
-
-            $table->foreign('product_sku')
-            ->references('sku')->on('products')
-            ->onDelete('cascade');
         });
     }
 

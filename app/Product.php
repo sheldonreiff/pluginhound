@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Custom\ApifyClient;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
@@ -13,6 +14,7 @@ use Illuminate\Support\Carbon;
 class Product extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
 
     protected $primaryKey = 'sku';
     public $incrementing = false;
@@ -76,6 +78,10 @@ class Product extends Model implements Auditable
 
     public function transformAndSaveResults($crawler_data, $delete=true)
     {
+        if(empty($crawler_data->pageFunctionResult)){
+            throw new \ErrorException('Import payload is empty. Imported aborted.');
+        }
+
         foreach($crawler_data->pageFunctionResult as $product){
             Product::updateOrCreate(['sku' => $product->sku],
                 [
