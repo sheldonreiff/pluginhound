@@ -30,6 +30,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
 
             $table->primary('sku');
+            $table->softDeletes();
         });
     }
 
