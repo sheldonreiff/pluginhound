@@ -17,9 +17,15 @@ class ProductHistory extends JsonResource
     public function toArray($request)
     {
         return [
-            'sale_price' => !empty($this['sale_price']['new']) ? $this['sale_price']['new'] : null,
-            'msrp' => !empty($this['msrp']['new']) ? $this['msrp']['new'] : null,
-            'date' => !empty($this['scraped_date']['new']) ? Carbon::parse($this['scraped_date']['new'])->format('Y-m-d') : null,
+            'sale_price' => !empty($this['sale_price']['new'])
+                ? $this['sale_price']['new']
+                : null,
+            'msrp' => !empty($this['msrp']['new'])
+                ? $this['msrp']['new']
+                : null,
+            'date' => !empty($this['scraped_date']['new'])
+                ? Carbon::parse($this['scraped_date']['new'])->format('Y-m-d')
+                : null,
         ];
     }
 }

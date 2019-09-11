@@ -43,10 +43,10 @@ class ProductImportTest extends TestCase
 
         $this->importProducts(['a']);
 
-        $this->assertDatabaseMissing('products', [
+        $this->assertSoftDeleted('products', [
             'sku' => $this->testProducts['b']->sku,
             'sale_price' => $this->testProducts['b']->salePrice,
-            'thumbnail_url' => $this->testProducts['b']->thumbnailUrl
+            'thumbnail_url' => $this->testProducts['b']->thumbnailUrl,
         ]);
     }
 

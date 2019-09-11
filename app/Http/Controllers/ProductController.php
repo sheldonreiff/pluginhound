@@ -43,7 +43,9 @@ class ProductController extends Controller
             ->where('name', 'like', "%$request->q%");
         }
 
-        return $products->paginate($request->perPage);
+        return $products
+        ->orderBy('name', 'asc')
+        ->paginate($request->perPage);
     }
 
     /**

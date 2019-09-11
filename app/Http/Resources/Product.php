@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class Product extends JsonResource
 {
@@ -21,10 +22,14 @@ class Product extends JsonResource
             'msrp' => $this->msrp,
             'name' => $this->name,
             'note' => $this->note,
-            'sale_end' => $this->sale_end,
+            'sale_end' => $this->sale_end
+                ? Carbon::parse($this->sale_end)->format('Y-m-d')
+                : null,
             'sale_price' => $this->sale_price,
             'scraped_at' => $this->scraped_at,
-            'scraped_date' => $this->scraped_date,
+            'scraped_date' => $this->scraped_date
+                ? Carbon::parse($this->scraped_date)->format('Y-m-d')
+                : null,
             'sku' => $this->sku,
             'thumbnail_url' => $this->thumbnail_url,
             'type' => $this->type,

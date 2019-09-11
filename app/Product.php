@@ -38,7 +38,8 @@ class Product extends Model implements Auditable
     ];
 
     protected $cast = [
-        'scraped_date' => 'datetime:Y-m-d'
+        'scraped_date' => 'datetime:Y-m-d',
+        'scraped_end' => 'datetime:Y-m-d',
     ];
 
     public function sendAlerts()
@@ -113,7 +114,17 @@ class Product extends Model implements Auditable
 
     public static function comparisons()
     {
-        $history = \OwenIt\Auditing\Models\Audit::where('auditable_type', 'App\Product')
+        $allEvents = DB::table('audits')
+        ->where('auditable_type', 'App\Product')
+        ->whereIn('event', ['created', 'updated'])
+        ->selectRaw('*, ROW_NUMBER() OVER (PARTITION BY auditable_id ORDER BY created_at asc) as createdRank');
+
+        $historicalOnlyEvents = DB::table( DB::raw("({$allEvents->toSql()}) as allEvents") )
+        ->mergeBindings($allEvents)
+        ->where('createdRank', '>', 1);
+
+        $historicalAggregate = DB::table( DB::raw("({$historicalOnlyEvents->toSql()}) as historicalOnlyEvents") )
+        ->mergeBindings($historicalOnlyEvents)
         ->groupBy('auditable_id')
         ->select(DB::raw("
             auditable_id as sku,
@@ -121,21 +132,25 @@ class Product extends Model implements Auditable
         "));
 
         return DB::table('products')
-        ->joinSub($history, 'history', function($join){
-            $join->on('products.sku', '=', 'history.sku');
+        ->joinSub($historicalAggregate, 'historicalAggregate', function($join){
+            $join->on('products.sku', '=', 'historicalAggregate.sku');
         })
-        ->select(DB::raw("products.*, history.average_sale_price, (history.average_sale_price - products.sale_price) / history.average_sale_price as discount"));
+        ->select(DB::raw("
+            products.*,
+            historicalAggregate.average_sale_price,
+            (historicalAggregate.average_sale_price - products.sale_price) / historicalAggregate.average_sale_price as discount
+        "));
     }
 
     public static function bestDeals()
     {
         $comparisons = self::comparisons();
         
-        $withRank = DB::table( DB::raw("({$comparisons->toSql()}) as sub") )
+        $withRank = DB::table( DB::raw("({$comparisons->toSql()}) as withRank") )
         ->mergeBindings($comparisons)
-        ->select(DB::raw('sub.*, percent_rank() OVER (ORDER BY discount) as discount_rank'));
+        ->select(DB::raw('withRank.*, percent_rank() OVER (ORDER BY discount) as discount_rank'));
 
-        return DB::table(DB::raw("({$withRank->toSql()}) as sub"))
+        return DB::table(DB::raw("({$withRank->toSql()}) as withRank"))
         ->mergeBindings($withRank)
         ->where('discount_rank', '>=', .9)
         ->orderBy('discount_rank', 'desc');

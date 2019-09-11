@@ -5,6 +5,8 @@ namespace Tests;
 use App\Product;
 use App\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -54,10 +56,10 @@ abstract class TestCase extends BaseTestCase
         $this->testProducts = [
             'a' => (object) [
                 'sku' => 'TESTSKU1',
-                'name' => 'My great product',
+                'name' => 'My great product A',
                 'type' => 'plugin',
-                'msrp' => '79.000000000',
-                'salePrice' => '49.000000000',
+                'msrp' => 79,
+                'salePrice' => 49,
                 'category' => 'Post Production',
                 'note' => 'nonsense',
                 'saleEnd' => '12/3/2019 5:00:00 AM',
@@ -67,10 +69,10 @@ abstract class TestCase extends BaseTestCase
             ],
             'b' => (object) [
                 'sku' => 'TESTSKU2',
-                'name' => 'My better great product',
+                'name' => 'My great product B',
                 'type' => 'plugin',
-                'msrp' => '79.000000000',
-                'salePrice' => '79.000000000',
+                'msrp' => 79,
+                'salePrice' => 79,
                 'category' => 'Post Production',
                 'note' => null,
                 'saleEnd' => null,
@@ -80,10 +82,10 @@ abstract class TestCase extends BaseTestCase
             ],
             'a_decreased' => (object) [
                 'sku' => 'TESTSKU1',
-                'name' => 'My great product',
+                'name' => 'My great product A',
                 'type' => 'plugin',
-                'msrp' => '79.000000000',
-                'salePrice' => '29.000000000',
+                'msrp' => 79,
+                'salePrice' => 29,
                 'category' => 'Post Production',
                 'note' => 'nonsense',
                 'saleEnd' => '12/3/2019 5:00:00 AM',
@@ -93,10 +95,10 @@ abstract class TestCase extends BaseTestCase
             ],
             'b_decreased' => (object) [
                 'sku' => 'TESTSKU2',
-                'name' => 'My better great product',
+                'name' => 'My great product B',
                 'type' => 'plugin',
-                'msrp' => '69.000000000',
-                'salePrice' => '69.000000000',
+                'msrp' => 69.99,
+                'salePrice' => 69.99,
                 'category' => 'Post Production',
                 'note' => null,
                 'saleEnd' => null,
@@ -136,17 +138,46 @@ abstract class TestCase extends BaseTestCase
     {
         $product = new Product();
 
-        $products = $testProductKeys
-        ? array_intersect_key($this->testProducts, array_flip($testProductKeys))
-        : $this->testProducts;
+        $originalKeys = collect($testProductKeys ?: array_keys($this->testProducts))->filter( function($item){
+            return !Str::Contains($item, '_decreased');
+        });
 
-        $import = (object)[
+        $changedKeys = collect($testProductKeys ?: array_keys($this->testProducts))->filter( function($item){
+            return Str::Contains($item, '_decreased');
+        });
+
+        $orignialProducts = array_intersect_key(
+            $this->testProducts,
+            array_flip($originalKeys->toArray())
+        );
+
+        $changedProducts = array_intersect_key(
+            $this->testProducts,
+            array_flip($changedKeys->toArray())
+        );
+
+        $originalImport = (object)[
             'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
-            'pageFunctionResult' => $products
+            'pageFunctionResult' => $orignialProducts
         ];
 
-        $product->transformAndSaveResults($import);
+        $changedImport = (object)[
+            'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
+            'pageFunctionResult' => $changedProducts
+        ];
 
-        return $import;
+        if($orignialProducts){
+            $product->transformAndSaveResults($originalImport);
+        }
+        sleep(1); // do audit trail has different created_at values
+        if($changedProducts){
+            $product->transformAndSaveResults($changedImport);
+        }
     }    
+
+    protected function dateTimeToDate($dateTime){
+        return $dateTime
+            ? Carbon::parse($dateTime)->format('Y-m-d')
+            : null;
+    }
 }
