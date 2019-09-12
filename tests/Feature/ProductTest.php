@@ -45,7 +45,7 @@ class ProductTest extends TestCase
                     'sale_price' => intval($this->testProducts['a_decreased']->salePrice),
                 ],
                 [
-                    'date' => $this->dateTimeToDate($import->pageFunctionFinishedAt),
+                    'date' => $this->dateTimeToDate($import['changed']->pageFunctionFinishedAt),
                     'sale_price' => intval($this->testProducts['a']->salePrice),
                 ],
             ]
@@ -132,7 +132,7 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function returns_product_discount()
+    public function calculates_product_discount_correctly()
     {
         $import = $this->importProducts();
 

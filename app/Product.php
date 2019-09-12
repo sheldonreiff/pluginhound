@@ -117,7 +117,7 @@ class Product extends Model implements Auditable
         $allEvents = DB::table('audits')
         ->where('auditable_type', 'App\Product')
         ->whereIn('event', ['created', 'updated'])
-        ->selectRaw('*, ROW_NUMBER() OVER (PARTITION BY auditable_id ORDER BY created_at asc) as createdRank');
+        ->selectRaw('*, ROW_NUMBER() OVER (PARTITION BY auditable_id ORDER BY created_at desc) as createdRank');
 
         $historicalOnlyEvents = DB::table( DB::raw("({$allEvents->toSql()}) as allEvents") )
         ->mergeBindings($allEvents)

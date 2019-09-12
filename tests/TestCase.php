@@ -156,23 +156,25 @@ abstract class TestCase extends BaseTestCase
             array_flip($changedKeys->toArray())
         );
 
-        $originalImport = (object)[
-            'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
-            'pageFunctionResult' => $orignialProducts
-        ];
-
-        $changedImport = (object)[
-            'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
-            'pageFunctionResult' => $changedProducts
+        $imports = [
+            'original' => (object)[
+                'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
+                'pageFunctionResult' => $orignialProducts,
+            ],
+            'changed' => (object)[
+                'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
+                'pageFunctionResult' => $changedProducts,
+            ],
         ];
 
         if($orignialProducts){
-            $product->transformAndSaveResults($originalImport);
+            $product->transformAndSaveResults($imports['original']);
         }
         sleep(1); // do audit trail has different created_at values
         if($changedProducts){
-            $product->transformAndSaveResults($changedImport);
+            $product->transformAndSaveResults($imports['changed']);
         }
+        return $imports;
     }    
 
     protected function dateTimeToDate($dateTime){

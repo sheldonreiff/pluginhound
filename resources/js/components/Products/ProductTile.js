@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, Image, Box } from 'react-bulma-components';
+import { Heading, Image, Box, Tag } from 'react-bulma-components';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { darken } from 'polished';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import DiscountBadge from '../Product/DiscountBadge';
 const isTouchDevice = require('is-touch-device');
 import ProductTypeBadge from '../Product/ProductTypeBadge';
+import Price from '../Product/Price';
 
 const ProductLink = styled(Link)`
     display: flex;
@@ -28,11 +29,11 @@ const ProductTileContainer = styled(Box)`
     max-width: 500px;
 `;
 
-const PriceContainer = styled.div`
+const SaleContainer = styled.div`
     grid-area: price;
 `;
 
-const Price = styled(Heading)`
+const PriceContainer = styled(Heading)`
     text-align: right;
 `;
 
@@ -52,10 +53,12 @@ const ProductTile = props => {
                     type={product.type}
                 />
             </MetaContainer>
-            <PriceContainer>
-                <Price subtitle>${product.sale_price}</Price>
+            <SaleContainer>
+                <PriceContainer subtitle>
+                    <Price price={product.sale_price} />
+                </PriceContainer>
                 <DiscountBadge product={product} />
-            </PriceContainer>
+            </SaleContainer>
             <Image size={96} style={{gridArea: 'thumbnail'}} src={product.thumbnail_url} />
         </ProductTileContainer>
     </ProductLink>

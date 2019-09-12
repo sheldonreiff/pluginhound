@@ -15,6 +15,7 @@ import moment from 'moment';
 import Alerts from '../Alerts/Alerts';
 import DiscountBadge from './DiscountBadge';
 import ProductTypeBadge from './ProductTypeBadge';
+import Price from './Price';
 
 import { getProduct, getProductHistory, setProduct } from '../../actions/product';
 import { loadAlerts, newAlert, deleteAlert, upsertAlert } from '../../actions/alerts';
@@ -115,7 +116,9 @@ class Product extends React.Component{
 
                             <ProductMetaContainer>
                                 <ProductMetaContainerLeft>
-                                    <Heading subtitle>${product.sale_price}</Heading>
+                                    <Heading subtitle>
+                                        <Price price={product.sale_price} />
+                                    </Heading>
                                     <DiscountBadge product={product} />
                                     <ProductTypeBadge type={product.type} />
                                     {product.category &&
