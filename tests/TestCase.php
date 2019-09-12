@@ -158,12 +158,12 @@ abstract class TestCase extends BaseTestCase
 
         $imports = [
             'original' => (object)[
-                'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
-                'pageFunctionResult' => $orignialProducts,
+                'finishedAt' => (new \DateTime())->format(\DateTime::ATOM),
+                'products' => $orignialProducts,
             ],
             'changed' => (object)[
-                'pageFunctionFinishedAt' => (new \DateTime())->format(\DateTime::ATOM),
-                'pageFunctionResult' => $changedProducts,
+                'finishedAt' => (new \DateTime())->format(\DateTime::ATOM),
+                'products' => $changedProducts,
             ],
         ];
 

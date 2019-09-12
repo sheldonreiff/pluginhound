@@ -78,8 +78,8 @@ class SyncLegacyData extends Command
                 foreach($batch as $item){
                     $record = (object)$item;
                     $product->transformAndSaveResults((object)[
-                        'pageFunctionResult' => [$record],
-                        'pageFunctionFinishedAt' => $record->time,
+                        'products' => [$record],
+                        'finishedAt' => $record->time,
                     ], false);
                     $saved += 1;
                 }

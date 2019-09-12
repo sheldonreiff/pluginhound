@@ -79,11 +79,11 @@ class Product extends Model implements Auditable
 
     public function transformAndSaveResults($crawler_data, $delete=true)
     {
-        if(empty($crawler_data->pageFunctionResult)){
+        if(empty($crawler_data->products)){
             throw new \ErrorException('Import payload is empty. Imported aborted.');
         }
 
-        foreach($crawler_data->pageFunctionResult as $product){
+        foreach($crawler_data->products as $product){
             Product::updateOrCreate(['sku' => $product->sku],
                 [
                     'type' => $product->type,
@@ -97,15 +97,15 @@ class Product extends Model implements Auditable
                         : null,
                     'badge' => $product->badge,
                     'thumbnail_url' => $product->thumbnailUrl,
-                    'scraped_date' => Carbon::parse($crawler_data->pageFunctionFinishedAt)->format('Y-m-d'), # for display and aggregation purposes, only care about date
-                    'scraped_at' => Carbon::parse($crawler_data->pageFunctionFinishedAt)->format('Y-m-d H:i:s'),
+                    'scraped_date' => Carbon::parse($crawler_data->finishedAt)->format('Y-m-d'), # for display and aggregation purposes, only care about date
+                    'scraped_at' => Carbon::parse($crawler_data->finishedAt)->format('Y-m-d H:i:s'),
                     'url' => $product->url,
                 ]
             );
         }
 
         if($delete){
-            $all_skus = array_column((array)$crawler_data->pageFunctionResult, 'sku');
+            $all_skus = array_column((array)$crawler_data->products, 'sku');
 
             Product::whereNotIn('sku', $all_skus)
             ->delete();
@@ -132,7 +132,7 @@ class Product extends Model implements Auditable
         "));
 
         return DB::table('products')
-        ->joinSub($historicalAggregate, 'historicalAggregate', function($join){
+        ->leftJoinSub($historicalAggregate, 'historicalAggregate', function($join){
             $join->on('products.sku', '=', 'historicalAggregate.sku');
         })
         ->select(DB::raw("
