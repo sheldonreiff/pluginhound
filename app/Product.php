@@ -132,6 +132,7 @@ class Product extends Model implements Auditable
         "));
 
         return DB::table('products')
+        ->whereNull('deleted_at')
         ->leftJoinSub($historicalAggregate, 'historicalAggregate', function($join){
             $join->on('products.sku', '=', 'historicalAggregate.sku');
         })
