@@ -27,7 +27,7 @@ class GenerateAlerts implements ShouldQueue
 
     private function triggeredAlerts($query, $event, $changes)
     {
-        return $query->where('product_sku', $event->product->sku)
+        return $query->where('product_sku', $event->productAttributes->sku)
         ->where(function ($query) use($changes, $event) {
             $query->where(function($query) use($changes) {
                 $query->where('event', Alert::DECREASE_BY)
@@ -41,7 +41,7 @@ class GenerateAlerts implements ShouldQueue
             })
             ->orWhere(function($query) use($event) {
                 $query->where('event', Alert::LESS_THAN)
-                ->where('threshold_value', '>=', $event->product->sale_price);
+                ->where('threshold_value', '>=', $event->productAttributes->sale_price);
             })
             ->orWhere(function($query) {
                 $query->where('event', Alert::ANY_CHANGE);
@@ -59,10 +59,10 @@ class GenerateAlerts implements ShouldQueue
     {
         if($event->priceChanged && $event->alertsEnabled){
             $changes = collect([
-                'percent_change' => $event->product->sale_price
-                    ? (($event->product->sale_price - $event->oldSalePrice ) / $event->product->sale_price) * 100
+                'percent_change' => $event->productAttributes->sale_price
+                    ? (($event->productAttributes->sale_price - $event->oldSalePrice ) / $event->productAttributes->sale_price) * 100
                     : 100,
-                'currency_change' => $event->product->sale_price - $event->oldSalePrice,
+                'currency_change' => $event->productAttributes->sale_price - $event->oldSalePrice,
                 'any_change' => true,
             ]);
         
@@ -75,7 +75,7 @@ class GenerateAlerts implements ShouldQueue
             
             $usersToAlert->each(function ($user, $key) use($event, $changes) {
                 if(Gate::forUser($user)->allows('send-alert')){
-                    $user->notify(new AlertNotification($event->product, $changes, $user->alerts));
+                    $user->notify(new AlertNotification($event->productAttributes, $changes, $user->alerts));
                 }
             });
         }

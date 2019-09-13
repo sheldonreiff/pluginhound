@@ -145,11 +145,11 @@ class Product extends Model implements Auditable
 
     public static function bestDeals()
     {
-        $comparisons = self::comparisons();
+        $comparisons = DB::table('products');
         
         $withRank = DB::table( DB::raw("({$comparisons->toSql()}) as withRank") )
         ->mergeBindings($comparisons)
-        ->select(DB::raw('withRank.*, percent_rank() OVER (ORDER BY discount) as discount_rank'));
+        ->select(DB::raw('withRank.*, percent_rank() OVER (ORDER BY cached_discount) as discount_rank'));
 
         return DB::table(DB::raw("({$withRank->toSql()}) as withRank"))
         ->mergeBindings($withRank)
@@ -157,15 +157,27 @@ class Product extends Model implements Auditable
         ->orderBy('discount_rank', 'desc');
     }
 
-    public function discount(){
-        return self::comparisons()
-        ->where('products.sku', $this->sku)
-        ->pluck('discount')
-        ->first();
+    public function discount($fresh=false)
+    {
+        return $fresh || !$this->cached_discount
+            ? self::comparisons()
+                ->where('products.sku', $this->sku)
+                ->pluck('discount')
+                ->first()
+            : $this->cached_discount;
     }
 
-    public function averageSalePrice()
+    public function averageSalePrice($fresh=false)
     {
-        return $this->audits->avg('new_values->sale_price');
+        return $fresh || !$this->cached_average_sale_price
+            ? $this->audits->avg('new_values->sale_price')
+            : $this->cached_average_sale_price;
+    }
+
+    public function cacheProductAggregates()
+    {
+        $this->cached_average_sale_price = $this->averageSalePrice(true);
+        $this->cached_discount = $this->discount(true);
+        $this->save();
     }
 }

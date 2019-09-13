@@ -31,6 +31,7 @@ class ProductSaving
         $this->alertsEnabled = $product->sendAlerts;
         $this->oldSalePrice = $product->getOriginal('sale_price');
 
-        $this->product = (object)$product->getAttributes();
+        $this->productAttributes = (object)$product->getAttributes();
+        $this->product = $product;
     }
 }
