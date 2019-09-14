@@ -49,7 +49,7 @@ class AuthTest extends TestCase
     /** @test */
     public function can_get_myself()
     {
-        $this->json('get', '/api/auth/me')
+        $this->json('get', '/api/me')
         ->assertOk()
         ->assertJson(
             collect($this->userData
@@ -112,7 +112,7 @@ class AuthTest extends TestCase
         ])
         ->assertOk();
 
-        $this->json('get', '/api/auth/me')
+        $this->json('get', '/api/me')
         ->assertOk()
         ->assertJson([
             'first_name' => $new_first_name,
