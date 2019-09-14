@@ -37,7 +37,6 @@ Route::group([
          */
         Route::post('auth/logout', 'Auth\AuthController@logout');
         Route::post('auth/refresh', 'Auth\AuthController@refresh');
-        Route::get('auth/me', 'Auth\AuthController@me');
         Route::get('auth/validate', 'Auth\AuthController@validate');
     
         /**
@@ -63,6 +62,7 @@ Route::group([
         /**
          * Me
          */
+        Route::get('me', 'Auth\AuthController@me');
         Route::patch('me', 'UserController@update');
     });
 

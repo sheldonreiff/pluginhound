@@ -33,8 +33,9 @@ const DiscountBadge = props => {
                     <Popover.Content>Calculated as a percentage difference from the average of historical sale prices</Popover.Content>
                 </Popover>
             }
-            >
-                {discountDisplay}
+            className='discountBadge'
+        >
+            {discountDisplay}
         </OverlayTrigger>
     </div>;
 }

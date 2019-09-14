@@ -17,8 +17,11 @@ const ProductTypeBadge = props => {
     }
 
     return <Badge
-        color={color}
-    >{props.type}</Badge>;
+            color={color}
+            className='productTypeBadge'
+        >
+        {props.type}
+    </Badge>;
 }
 
 ProductTypeBadge.propTypes = {

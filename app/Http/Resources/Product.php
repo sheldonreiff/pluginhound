@@ -18,7 +18,6 @@ class Product extends JsonResource
         return [
             'badge' => $this->badge,
             'category' => $this->category,
-            'created_at' => $this->created_at,
             'msrp' => $this->msrp,
             'name' => $this->name,
             'note' => $this->note,
@@ -26,14 +25,13 @@ class Product extends JsonResource
                 ? Carbon::parse($this->sale_end)->format('Y-m-d')
                 : null,
             'sale_price' => $this->sale_price,
-            'scraped_at' => $this->scraped_at,
             'scraped_date' => $this->scraped_date
                 ? Carbon::parse($this->scraped_date)->format('Y-m-d')
                 : null,
             'sku' => $this->sku,
             'thumbnail_url' => $this->thumbnail_url,
             'type' => $this->type,
-            'updated_at' => $this->updated_at,
+
             'url' => $this->url,
             'discount' => $this->cached_discount,
             'average_sale_price' => $this->cached_average_sale_price,

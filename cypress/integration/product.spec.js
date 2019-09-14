@@ -23,7 +23,7 @@ describe('Product page', () => {
         visitProduct()
 
         cy.fixture('product').then(product => {
-            cy.get('span.tag')
+            cy.get('span.productTypeBadge')
             .should(($span) => {
                 expect($span.text()).to.be.equal(product.data.type);
             })

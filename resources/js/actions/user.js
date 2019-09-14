@@ -162,7 +162,7 @@ export const getMe = () => {
 
             axios({
                 method: 'get',
-                url: '/api/auth/me',
+                url: '/api/me',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 }
@@ -177,7 +177,7 @@ export const getMe = () => {
                 dispatch({
                     type: UserActionTypes.UPDATE_SUCCESS,
                     payload: {
-                        data: user
+                        data: user.data,
                     }
                 });
             }).catch(error => {

@@ -1,0 +1,8 @@
+{
+	"id": 51,
+	"first_name": "John",
+	"last_name": "Smith",
+	"email": "john@example.com",
+	"email_verified_at": null,
+	"type": "user"
+}
