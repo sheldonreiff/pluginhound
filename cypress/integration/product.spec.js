@@ -23,14 +23,19 @@ describe('Product page', () => {
         visitProduct()
 
         cy.fixture('product').then(product => {
-            cy.get('span.productTypeBadge')
-            .should(($span) => {
-                expect($span.text()).to.be.equal(product.data.type);
+            cy.get('.productTypeBadge')
+            .should(($productTypeBadge) => {
+                expect($productTypeBadge.text()).to.be.equal(product.data.type);
             })
 
             cy.get('.product .category')
-            .should(($h6) => {
-                expect($h6.text()).to.equal(product.data.category);
+            .should(($category) => {
+                expect($category.text()).to.equal(product.data.category);
+            })
+
+            cy.get('.discountBadge')
+            .should(($discountBadge) => {
+                expect($discountBadge.text()).to.contain( Math.round(product.data.discount * 100) );
             })
         })
     })

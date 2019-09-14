@@ -19,8 +19,8 @@ const DiscountBadge = props => {
     }
 
     const discountDisplay = discount >= 0
-    ? <Badge color='danger' onClick={(e) => e.preventDefault()}>{discount}% off</Badge>
-    : <Badge color='dark' onClick={(e) => e.preventDefault()}>{discount * -1}% increase</Badge>;
+    ? <Badge color='danger' onClick={(e) => e.preventDefault()} className='discountBadge'>{discount}% off</Badge>
+    : <Badge color='dark' onClick={(e) => e.preventDefault()} className='discountBadge'>{discount * -1}% increase</Badge>;
 
     return <div>
         <OverlayTrigger
@@ -33,7 +33,6 @@ const DiscountBadge = props => {
                     <Popover.Content>Calculated as a percentage difference from the average of historical sale prices</Popover.Content>
                 </Popover>
             }
-            className='discountBadge'
         >
             {discountDisplay}
         </OverlayTrigger>

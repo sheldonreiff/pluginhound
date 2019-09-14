@@ -23,6 +23,7 @@ class AuthTest extends TestCase
             'password_confirmation' => 'slkdfjsFdf23489!!',
             'first_name' => 'John',
             'last_name' => 'Smith',
+            'type' => 'user',
         ]);
 
         $this->json('post', '/api/auth/register', $userData->toArray())
@@ -51,7 +52,7 @@ class AuthTest extends TestCase
     {
         $this->json('get', '/api/me')
         ->assertOk()
-        ->assertJson(
+        ->assertJsonFragment(
             collect($this->userData
             ->toArray())
             ->except(['password', 'password_raw'])
@@ -115,9 +116,12 @@ class AuthTest extends TestCase
         $this->json('get', '/api/me')
         ->assertOk()
         ->assertJson([
-            'first_name' => $new_first_name,
-            'last_name' => $new_last_name,
-            'email' => $new_email,
+            'data' => [
+                'first_name' => $new_first_name,
+                'last_name' => $new_last_name,
+                'email' => $new_email,
+                'type' => 'user',
+            ],
         ]);
     }
 
