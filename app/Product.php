@@ -19,9 +19,21 @@ class Product extends Model implements Auditable
     protected $primaryKey = 'sku';
     public $incrementing = false;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            if($model->calculateAggreates){
+                $model->cacheProductAggregates();
+            }
+        });
+    }
+
     protected $guarded = [];
 
     public $sendAlerts = true;
+    public $calculateAggreates = true;
 
     protected $dispatchesEvents = [
         'saving' => \App\Events\ProductSaving::class,
@@ -50,6 +62,16 @@ class Product extends Model implements Auditable
     public function dontSendAlerts()
     {
         $this->sendAlerts = false;
+    }
+
+    protected function calculateAggregates()
+    {
+        $this->calculateAggreates = true;
+    }
+
+    protected function dontCalculateAggregates()
+    {
+        $this->calculateAggreates = false;
     }
 
     public function import(string $act_id, string $run_id)
@@ -112,7 +134,7 @@ class Product extends Model implements Auditable
         }
     }
 
-    public static function comparisons()
+    public static function historicalAggregates()
     {
         $allEvents = DB::table('audits')
         ->where('auditable_type', 'App\Product')
@@ -133,7 +155,7 @@ class Product extends Model implements Auditable
 
         return DB::table('products')
         ->whereNull('deleted_at')
-        ->leftJoinSub($historicalAggregate, 'historicalAggregate', function($join){
+        ->leftJoinSub($historicalAggregate, 'historicalAggregate', function($join) {
             $join->on('products.sku', '=', 'historicalAggregate.sku');
         })
         ->select(DB::raw("
@@ -145,11 +167,8 @@ class Product extends Model implements Auditable
 
     public static function bestDeals()
     {
-        $comparisons = DB::table('products');
-        
-        $withRank = DB::table( DB::raw("({$comparisons->toSql()}) as withRank") )
-        ->mergeBindings($comparisons)
-        ->select(DB::raw('withRank.*, percent_rank() OVER (ORDER BY cached_discount) as discount_rank'));
+        $withRank = DB::table('products')
+        ->selectRaw('products.*, percent_rank() OVER (ORDER BY cached_discount) as discount_rank');
 
         return DB::table(DB::raw("({$withRank->toSql()}) as withRank"))
         ->mergeBindings($withRank)
@@ -160,24 +179,61 @@ class Product extends Model implements Auditable
     public function discount($fresh=false)
     {
         return $fresh || !$this->cached_discount
-            ? self::comparisons()
+            ? self::historicalAggregates()
                 ->where('products.sku', $this->sku)
                 ->pluck('discount')
                 ->first()
             : $this->cached_discount;
     }
 
-    public function averageSalePrice($fresh=false)
+    public function averageHistoricalSalePrice($fresh=false)
     {
         return $fresh || !$this->cached_average_sale_price
-            ? $this->audits->avg('new_values->sale_price')
+            ? self::historicalAggregates()
+                ->where('products.sku', $this->sku)
+                ->pluck('average_sale_price')
+                ->first()
             : $this->cached_average_sale_price;
+    }
+
+    public function preSaveDiscount()
+    {
+        return $this->exists() && $this->sale_price !== $this->fresh()->sale_price
+            ? ($this->preSaveAverageHistoricalSalePrice() - $this->sale_price) / $this->preSaveAverageHistoricalSalePrice()
+            : false;
+    }
+
+    public function preSaveAverageHistoricalSalePrice()
+    {
+        return $this->exists() && $this->sale_price !== $this->fresh()->sale_price
+            ? $this->audits()->avg('new_values->sale_price')
+            : false;
     }
 
     public function cacheProductAggregates()
     {
-        $this->cached_average_sale_price = $this->averageSalePrice(true);
+        $averageHistoricalSalePrice = $this->preSaveAverageHistoricalSalePrice();
+        if($averageHistoricalSalePrice !== false){
+            $this->cached_average_sale_price = $averageHistoricalSalePrice;
+        }
+
+        $discount = $this->preSaveDiscount();
+        if($averageHistoricalSalePrice !== false){
+            $this->cached_discount = $discount;
+        }
+    }
+
+    public function forceCacheProductAggregates()
+    {
+        $this->cached_average_sale_price = $this->averageHistoricalSalePrice(true);
         $this->cached_discount = $this->discount(true);
         $this->save();
+    }
+
+    public function exists()
+    {
+        return self::find($this->sku)
+            ? true
+            : false;
     }
 }

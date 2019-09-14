@@ -31,11 +31,8 @@ class CacheAllProductAggregates implements ShouldQueue
      */
     public function handle()
     {
-        $count = 0;
         Product::all()->each(function ($product) {
-            $product->cacheProductAggregates();
-            $count++;
+            $product->forceCacheProductAggregates();
         });
-        $this->info("$count products cached");
     }
 }

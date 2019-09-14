@@ -72,6 +72,7 @@ class SyncLegacyData extends Command
             $this->batch()->chunk(500, function ($batch) use( &$saved, &$batchNum ) {
                 $product = new Product();
                 $product->dontSendAlerts();
+                $product->dontCalculateAggregates();
 
                 $this->info("Got {$batch->count()} records");
 

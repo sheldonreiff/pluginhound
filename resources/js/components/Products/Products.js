@@ -27,7 +27,7 @@ const Message = styled.span`
 const MainGrid = styled.div`
     display: grid!important;
     grid-gap: 15px;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 `;
 
 const SearchQuery = styled.span`

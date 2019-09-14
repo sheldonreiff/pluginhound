@@ -19,7 +19,7 @@ class ProductSaving
     public $priceChanged;
     public $alertsEnabled;
     public $oldSalePrice;
-    public $product;
+    public $productAttributes;
     /**
      * Create a new event instance.
      *
@@ -32,6 +32,5 @@ class ProductSaving
         $this->oldSalePrice = $product->getOriginal('sale_price');
 
         $this->productAttributes = (object)$product->getAttributes();
-        $this->product = $product;
     }
 }

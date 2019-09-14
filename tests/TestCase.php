@@ -175,7 +175,12 @@ abstract class TestCase extends BaseTestCase
             $product->transformAndSaveResults($imports['changed']);
         }
         return $imports;
-    }    
+    }
+
+    public function getTestProduct($key)
+    {
+        return Product::find($this->testProducts[$key]->sku);
+    }
 
     protected function dateTimeToDate($dateTime){
         return $dateTime

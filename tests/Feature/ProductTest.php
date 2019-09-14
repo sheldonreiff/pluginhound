@@ -130,26 +130,4 @@ class ProductTest extends TestCase
             ]
         ]);
     }
-
-    /** @test */
-    public function calculates_product_discount_correctly()
-    {
-        $import = $this->importProducts();
-
-        $this->json('GET', 'api/products', [
-            'bestDeals' => 'false',
-            'page' => 1,
-            'perPage' => 12,
-        ])
-        ->assertJson([
-            'data' => [
-                [
-                    'sku' => $this->testProducts['a_decreased']->sku,
-                    'msrp' => $this->testProducts['a_decreased']->msrp,
-                    'sale_price' => $this->testProducts['a_decreased']->salePrice,
-                    'discount' => ($this->testProducts['a']->salePrice - $this->testProducts['a_decreased']->salePrice) / $this->testProducts['a']->salePrice
-                ],
-            ]
-        ]);
-    }
 }

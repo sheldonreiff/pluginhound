@@ -49,8 +49,8 @@ export const loadProducts = ({ view, page=1, perPage=12, reload=false }) => {
                     type: ProductsActionTypes.LOAD_PRODUCTS_SUCCESS,
                     payload: {
                         products: results.data.data,
-                        page: results.data.current_page,
-                        pages: results.data.last_page,
+                        page: results.data.meta.current_page,
+                        pages: results.data.meta.last_page,
                         view,
                     }
                 });

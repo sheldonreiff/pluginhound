@@ -32,20 +32,17 @@ class ProductController extends Controller
             'perPage' => ['integer', 'required'],
         ]);
 
-        if($request->bestDeals === 'true'){
-            $products = Product::bestDeals();
-        }else{
-            $products = Product::comparisons();
-        }
-        
-        if($request->q){
-            $products = $products
-            ->where('name', 'like', "%$request->q%");
-        }
+        $products = $request->bestDeals === 'true'
+            ? Product::bestDeals()
+            : Product::orderBy('name', 'asc');
 
-        return $products
-        ->orderBy('name', 'asc')
-        ->paginate($request->perPage);
+        $products->when($request->q, function ($query) use($request) {
+            $query->where('name', 'like', "%$request->q%");
+        });
+
+        return ProductResource::collection(
+            $products->paginate($request->perPage)
+        );
     }
 
     /**

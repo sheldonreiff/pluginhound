@@ -20,8 +20,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\ProductSaving::class => [
             \App\Listeners\GenerateAlerts::class,
-            \App\Listeners\CacheProductAggregates::class,
-        ]
+        ],
     ];
 
     /**

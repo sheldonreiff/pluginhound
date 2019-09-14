@@ -154,6 +154,12 @@ const validateUser = () => {
 export const getMe = () => {
     return dispatch => {
         if(localStorage.getItem('accessToken')){
+
+            if(!validateUser()){
+                dispatch(logout());
+                return;
+            }
+
             axios({
                 method: 'get',
                 url: '/api/auth/me',

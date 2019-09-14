@@ -14,14 +14,14 @@ class CacheProductAggregates extends Command
      *
      * @var string
      */
-    protected $signature = 'products:cache';
+    protected $signature = 'products:cache {--sku= : A product sku to save aggregates for }';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Cache all product aggregate values (discount, average_sale_price)';
+    protected $description = 'Cache product aggregate values (discount, average_sale_price)';
 
     /**
      * Create a new command instance.
@@ -40,6 +40,12 @@ class CacheProductAggregates extends Command
      */
     public function handle()
     {
-        CacheAllProductAggregates::dispatch();
+        if($this->option('sku')){
+            $product = Product::findOrFail($this->option('sku'))
+            ->forceCacheProductAggregates();
+        }else{
+            CacheAllProductAggregates::dispatch();
+            $this->info('Product cache job queued');
+        }
     }
 }

@@ -35,7 +35,8 @@ class Product extends JsonResource
             'type' => $this->type,
             'updated_at' => $this->updated_at,
             'url' => $this->url,
-            'discount' => $this->discount(),
+            'discount' => $this->cached_discount,
+            'average_sale_price' => $this->cached_average_sale_price,
         ];
     }
 }

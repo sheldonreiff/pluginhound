@@ -73,7 +73,7 @@ export default function Products(state=initial, action){
                         page: { $set: action.payload.page },
                         pages: { $set: action.payload.pages },
                         loadStatus: { $set: 'DONE' },
-                        message: { $set: 'Error loading products' },
+                        message: { $set: null },
                     }
                 }
             });
