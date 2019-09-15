@@ -21,7 +21,7 @@ class ProductTest extends TestCase
             ($this->testProducts['a']->salePrice - $this->testProducts['a_decreased']->salePrice) / $this->testProducts['a']->salePrice,
             $product->cached_discount,
             '',
-            0.1
+            0.001
         );
     }
 
