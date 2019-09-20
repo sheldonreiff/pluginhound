@@ -80,25 +80,28 @@ class ProductController extends Controller
     {
         $audits = $product->audits();
 
-        if($request->start){
-            $audits = $audits
-            ->whereDate('new_values->scraped_date', '>=', $request->start);
-        }
-        if($request->end){
-            $audits = $audits
-            ->whereDate('new_values->scraped_date', '<=', $request->end);
-        }
+        $audits->when($request->start, function($query) {
+            $query->whereDate('new_values->scraped_date', '>=', $request->start);
+        });
 
-        return ProductHistoryResoruce::collection( $audits
-        ->orderBy('new_values->scraped_date', 'asc')
-        ->get()
-        ->map(function($audit, $key){
-            return $audit->getModified();
-        })
-        ->filter(function($item, $key){
-            return !empty($item['sale_price']['new']) 
-            || !empty($item['msrp']['new']);
-        }));
+        $audits->when($request->end, function($query) {
+            $query->whereDate('new_values->scraped_date', '<=', $request->end);
+        });
+
+        return ProductHistoryResoruce::collection(
+            $audits->orderBy('new_values->scraped_date', 'asc')
+            ->get()
+            ->map(function($audit, $key){
+                return $audit->getModified();
+            })
+            ->filter(function($item, $key){
+                return !empty($item['sale_price']['new']) 
+                || !empty($item['msrp']['new']);
+            })
+            ->push(
+                $product->only(['sale_price', 'msrp', 'scraped_date'])
+            )
+        );
     }
 
     /**
