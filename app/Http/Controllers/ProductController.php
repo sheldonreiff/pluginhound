@@ -80,14 +80,13 @@ class ProductController extends Controller
     {
         $audits = $product->audits();
 
-        if($request->start){
-            $audits = $audits
-            ->whereDate('new_values->scraped_at', '>=', $request->start);
-        }
-        if($request->end){
-            $audits = $audits
-            ->whereDate('new_values->scraped_at', '<=', $request->end);
-        }
+        $audits->when($request->start, function($query) {
+            $query->whereDate('new_values->scraped_date', '>=', $request->start);
+        });
+        
+        $audits->when($request->end, function($query) {
+            $query->whereDate('new_values->scraped_date', '<=', $request->end);
+        });
 
         return ProductHistoryResoruce::collection( $audits
         ->orderBy('new_values->scraped_at', 'asc')

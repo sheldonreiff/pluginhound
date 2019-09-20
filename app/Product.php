@@ -41,16 +41,10 @@ class Product extends Model implements Auditable
 
     protected $dates = [
         'scraped_at',
-        'scraped_date',
         'sale_end',
     ];
 
-    protected $auditExclude = [
-        'scraped_at',
-    ];
-
     protected $cast = [
-        'scraped_date' => 'datetime:Y-m-d',
         'scraped_end' => 'datetime:Y-m-d',
     ];
 
@@ -119,7 +113,6 @@ class Product extends Model implements Auditable
                         : null,
                     'badge' => $product->badge,
                     'thumbnail_url' => $product->thumbnailUrl,
-                    'scraped_date' => Carbon::parse($crawler_data->finishedAt)->format('Y-m-d'), # for display and aggregation purposes, only care about date
                     'scraped_at' => Carbon::parse($crawler_data->finishedAt)->format('Y-m-d H:i:s'),
                     'url' => $product->url,
                 ]

@@ -25,7 +25,6 @@ class CreateProductsTable extends Migration
             $table->string('badge', 50)->nullable();
             $table->string('thumbnail_url', 300)->nullable();
             $table->string('url')->nullable();
-            $table->date('scraped_date');
             $table->dateTime('scraped_at');
             $table->timestamps();
 
