@@ -58,12 +58,12 @@ class Product extends Model implements Auditable
         $this->sendAlerts = false;
     }
 
-    protected function calculateAggregates()
+    public function calculateAggregates()
     {
         $this->calculateAggreates = true;
     }
 
-    protected function dontCalculateAggregates()
+    public function dontCalculateAggregates()
     {
         $this->calculateAggreates = false;
     }
