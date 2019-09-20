@@ -80,11 +80,11 @@ class ProductController extends Controller
     {
         $audits = $product->audits();
 
-        $audits->when($request->start, function($query) {
+        $audits->when($request->start, function($query) use($request) {
             $query->whereDate('new_values->scraped_date', '>=', $request->start);
         });
         
-        $audits->when($request->end, function($query) {
+        $audits->when($request->end, function($query) use($request) {
             $query->whereDate('new_values->scraped_date', '<=', $request->end);
         });
 
