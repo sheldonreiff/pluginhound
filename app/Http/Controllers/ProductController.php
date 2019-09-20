@@ -82,15 +82,15 @@ class ProductController extends Controller
 
         if($request->start){
             $audits = $audits
-            ->whereDate('new_values->scraped_date', '>=', $request->start);
+            ->whereDate('new_values->scraped_at', '>=', $request->start);
         }
         if($request->end){
             $audits = $audits
-            ->whereDate('new_values->scraped_date', '<=', $request->end);
+            ->whereDate('new_values->scraped_at', '<=', $request->end);
         }
 
         return ProductHistoryResoruce::collection( $audits
-        ->orderBy('new_values->scraped_date', 'asc')
+        ->orderBy('new_values->scraped_at', 'asc')
         ->get()
         ->map(function($audit, $key){
             return $audit->getModified();

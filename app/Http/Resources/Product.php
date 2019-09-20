@@ -25,8 +25,8 @@ class Product extends JsonResource
                 ? Carbon::parse($this->sale_end)->format('Y-m-d')
                 : null,
             'sale_price' => $this->sale_price,
-            'scraped_date' => $this->scraped_date
-                ? Carbon::parse($this->scraped_date)->format('Y-m-d')
+            'scraped_at' => $this->scraped_at
+                ? Carbon::parse($this->scraped_at)->format('Y-m-d')
                 : null,
             'sku' => $this->sku,
             'thumbnail_url' => $this->thumbnail_url,

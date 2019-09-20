@@ -23,8 +23,8 @@ class ProductHistory extends JsonResource
             'msrp' => !empty($this['msrp']['new'])
                 ? $this['msrp']['new']
                 : null,
-            'date' => !empty($this['scraped_date']['new'])
-                ? Carbon::parse($this['scraped_date']['new'])->format('Y-m-d')
+            'date' => !empty($this['scraped_at']['new'])
+                ? Carbon::parse($this['scraped_at']['new'])->format('Y-m-d')
                 : null,
         ];
     }
