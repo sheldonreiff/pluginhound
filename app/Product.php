@@ -161,6 +161,7 @@ class Product extends Model implements Auditable
     public static function bestDeals()
     {
         $withRank = DB::table('products')
+        ->whereNull('deleted_at')
         ->selectRaw('products.*, percent_rank() OVER (ORDER BY cached_discount) as discount_rank');
 
         return DB::table(DB::raw("({$withRank->toSql()}) as withRank"))
