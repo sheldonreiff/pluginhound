@@ -36,14 +36,18 @@ class Alert extends Mailable
      */
     public function build()
     {
-        $currencyChange = $this->changes->get('currency_change') * -1;
-        $percentChange = round($this->changes->get('percent_change')) * -1;
+        $currencyChange = abs($this->changes->get('currency_change'));
+        $percentChange = abs(round($this->changes->get('percent_change')));
+        $decrease = $this->changes->get('currency_change') < 0;
 
-        return $this->subject("Price Changed! - {$this->product->name} - down $$currencyChange ($percentChange%)")
+        $changeLanguage = $decrease ? 'down' : 'up';
+
+        return $this->subject("Price Changed! - {$this->product->name} -  $changeLanguage $currencyChange ($percentChange%)")
         ->markdown('mail.product_alert', [
             'product' => $this->product,
             'currencyChange' => $currencyChange,
             'percentChange' => $percentChange,
+            'decrease' => $decrease,
             'alerts' => $this->alerts,
             'productUrl' => config('app.url')."/product/{$this->product->sku}",
         ]);

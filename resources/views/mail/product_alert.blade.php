@@ -2,7 +2,7 @@
 # Price Changed!
 
 @component('mail::panel')
-<b>{{ $product->name }}</b> decreased by ${{ $currencyChange }} ({{ $percentChange }}%) to <b>${{ $product->sale_price }}</b>
+<b>{{ $product->name }}</b> {{ $decrease ? 'decreased' : 'increased' }} by ${{ $currencyChange }} ({{ $percentChange }}%) to <b>${{ $product->sale_price }}</b>
 <img src="{{ $product->thumbnail_url }}" style='display:inline-block'>
 @component('mail.product', ['url' => $productUrl, 'color' => 'primary'])
 View Product

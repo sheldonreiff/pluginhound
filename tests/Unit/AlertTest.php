@@ -91,6 +91,7 @@ class AlertTest extends TestCase
             $mailData = $notification->toMail($user)->build();
 
             $this->assertStringContainsString("Price Changed", $mailData->subject);
+            $this->assertStringContainsString("down", $mailData->subject);
             $this->assertStringContainsString($testProduct->name, $mailData->subject);
 
             return true;
