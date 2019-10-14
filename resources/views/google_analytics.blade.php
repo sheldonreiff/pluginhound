@@ -1,11 +1,11 @@
+@if(config('services.google_analytics.property'))
 <!-- Global site tag (gtag.js) - Google Analytics -->
-@if(config('google_analytics.property'))
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ config('google_analytics.property') }}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.property') }}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '{{ config('google_analytics.property') }}');
+  gtag('config', '{{ config("services.google_analytics.property") }}');
 </script>
 @endif
