@@ -25,4 +25,6 @@
         <div id="root"></div>
         <script src="{{ mix('/js/index.js') }}"></script>
     </body>
+
+    @include('google_analytics')
 </html>

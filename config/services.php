@@ -46,5 +46,9 @@ return [
 
     'apify' => [
         'endpoint' => env('APIFY_ENDPOINT', 'https://api.apify.com/v2'),
-    ]
+    ],
+
+    'google_analytics' => [
+        'property' => env('GA_PROPERTY'),
+    ],
 ];
