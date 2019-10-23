@@ -4,6 +4,12 @@
 
 Buying Waves plugins can be frustrating sometimes because you never know if this week's price is a good one. This solves that problem and lets you see price history and create custom price alerts.
 
+## Shortcuts
+- [Font-end app](./resources/js)
+- [Front-end tests](./cypress)
+- [Back-end app](./app)
+- [Back-end tests](./tests)
+
 ## Development
 ### Configure environment
 Copy `.env.sample` to `.env` and modify as needed
