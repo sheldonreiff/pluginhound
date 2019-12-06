@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 use App\Product;
+use App\Jobs\ImportProducts as ImportProductsJob;
 
 class ImportProducts extends Command
 {
@@ -43,6 +44,6 @@ class ImportProducts extends Command
      */
     public function handle(Product $product)
     {
-        $product->import($this->argument('act_id'), $this->argument('run_id'));
+        ImportProductsJob::dispatch($this->argument('act_id'), $this->argument('run_id'));
     }
 }
