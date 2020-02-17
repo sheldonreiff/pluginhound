@@ -94,9 +94,9 @@ jobs:
             sudo apt update
             sudo docker-php-ext-install zip pdo pdo_mysql bcmath
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-            sudo python get-pip.py
-            sudo pip install awscli --upgrade
-            sudo pip install awsebcli --upgrade
+            sudo python3 get-pip.py
+            sudo pip3 install awscli --upgrade
+            sudo pip3 install awsebcli --upgrade
             sudo curl -sL https://sentry.io/get-cli/ | bash
 
       - run:
@@ -133,8 +133,8 @@ jobs:
           command: |
             sudo apt-get -y -qq update
             sudo apt-get install python-pip python-dev build-essential
-            sudo pip install --upgrade setuptools
-            sudo pip install awsebcli --upgrade
+            sudo pip3 install --upgrade setuptools
+            sudo pip3 install awsebcli --upgrade
 
       - run:
           name: Deploying
