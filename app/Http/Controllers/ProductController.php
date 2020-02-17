@@ -40,8 +40,10 @@ class ProductController extends Controller
             $query->where('name', 'like', "%$request->q%");
         });
 
+        $paginated = $products->paginate($request->perPage);
+
         return ProductResource::collection(
-            $products->paginate($request->perPage)
+            $this->hydratePaginationResults($paginated, Product::class)
         );
     }
 
